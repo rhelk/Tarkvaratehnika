@@ -17,6 +17,8 @@ function getData() {
     })
 };
 
+
+
 console.log(string);
 
 
