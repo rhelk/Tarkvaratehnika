@@ -18,6 +18,7 @@ public class Property {
     @SequenceGenerator(name = "p_seq", sequenceName = "property_sequence", allocationSize = 1)
     private long property_id;
 
+    String title;
     String description;
     String address;
     String pic_url;
