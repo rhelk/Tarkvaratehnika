@@ -11,6 +11,7 @@ create table users (
 
 create table property (
  property_id bigint NOT NULL PRIMARY KEY,
+ title VARCHAR(255),
  description CLOB,
  address VARCHAR(255),
  pic_url VARCHAR(255),
