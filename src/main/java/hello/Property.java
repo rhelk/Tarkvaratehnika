@@ -19,11 +19,14 @@ public class Property {
     private long property_id;
 
     String description;
-    String adress;
+    String address;
     String pic_url;
 
+    int room_count;
+    int bed_count;
+
+    Long owner_id;
     // Price is in cents
     Long price;
-    int bed_count;
-    int room_count;
+
 }

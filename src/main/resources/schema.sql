@@ -13,8 +13,10 @@ create table property (
  property_id bigint NOT NULL PRIMARY KEY,
  description CLOB,
  address VARCHAR(255),
+ pic_url VARCHAR(255),
  room_count SMALLINT,
  bed_count SMALLINT,
  owner_id BIGINT,
+ price BIGINT,
  FOREIGN KEY(owner_id) REFERENCES users
 );
