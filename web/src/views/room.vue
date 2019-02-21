@@ -2,49 +2,40 @@
   <div>
     <div id="price">
       <h2>Price</h2>
-      <p>Price per night: {{details.price}}</p>
+      <p>Price per night: {{roomDetails.price}}</p>
     </div>
     <div id="roomProfile">
-      <img :src="details.image">
+      <img :src="roomDetails.pic_url">
     </div>
     <div id="houseDetails">
-      <h1>{{details.name}}</h1>
-      <p>Location: {{details.location}}</p>
-      <p>Rooms: {{details.rooms}}</p>
-      <p>Beds: {{details.beds}}</p>
-      <p>Description: {{details.description}}</p>
+      <h1>{{roomDetails.title}}</h1>
+      <p>Location: {{roomDetails.address}}</p>
+      <p>Rooms: {{roomDetails.room_count}}</p>
+      <p>Beds: {{roomDetails.bed_count}}</p>
+      <p>Description: {{roomDetails.description}}</p>
     </div>
   </div>
 
 </template>
 
 <script>
-  import image from "./room.jpg"
-
 
   export default {
     data: function () {
       return {
-        details:{
-          image: image,
-          name: 'Best room ever!',
-          location: 'Somewhere in EU',
-          rooms: 100,
-          beds: 7,
-          description: 'Located in the heart of sth, near to the center. Very best of the best.',
-          price: 1000 + '€',
-          roomDetails: []
-        }
-
+        roomDetails: [],
+        id: this.$route.params.id,
       }
     },
     created() {
-      fetch("").then(function (data) {
-        this.details.roomDetails = data;
-        //do v-for and add data to fields?
-        //v get päring??
+      //this.$http.get('https://jsonplaceholder.typicode.com/posts').then(function (data2) {
+      //this.test = data2.body.slice(0,1);
+      //console.log(data2)
 
-      })
+      this.$http.get('http://localhost:8080/api/property/get/' + this.id).then(function (data) {
+        this.roomDetails = data.body;
+      });
+
     }
   }
 </script>
@@ -72,7 +63,7 @@
     padding: 20px;
   }
 
-  #price{
+  #price {
     align-content: center;
     width: 100%;
     max-width: 400px;
@@ -80,7 +71,7 @@
     background: whitesmoke;
     padding: 30px;
     margin: 60px;
-    float:right;
+    float: right;
   }
 
 </style>

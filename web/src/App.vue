@@ -1,7 +1,7 @@
 <template>
   <div>
     <app-header></app-header>
-    <app-room></app-room>
+    <router-view></router-view>
     <app-footer></app-footer>
 
   </div>
@@ -10,6 +10,7 @@
 <script>
 
   import room from './views/room.vue';
+  import allRooms from './views/allRooms.vue';
   import header from './components/header.vue';
   import footer from './components/footer.vue';
 
@@ -18,6 +19,7 @@
       'app-room': room,
       'app-header': header,
       'app-footer': footer,
+      'all-rooms': allRooms
     },
 
   }
