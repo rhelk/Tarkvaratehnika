@@ -2,8 +2,8 @@
   <div id="allRooms">
     <h1> Find your perfect RentDeck room</h1>
     <div v-for="room in rooms" class="oneRoom">
+      <img :src="room.pic_url">
       <router-link v-bind:to="/room/ + room.property_id"><h2>{{room.title}}</h2></router-link>
-      <article>{{room.body}}</article>
     </div>
   </div>
 </template>
@@ -35,6 +35,10 @@
     box-sizing: border-box;
     background: whitesmoke;
     border-radius: 20px;
+  }
+  .oneRoom img{
+   width: 20%;
+    float: right;
   }
 
   a{
