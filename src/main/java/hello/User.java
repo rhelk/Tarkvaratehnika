@@ -11,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class User {
 
