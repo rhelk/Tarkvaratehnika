@@ -1,7 +1,7 @@
 create sequence users_sequence start with 1;
 create sequence property_sequence start with 1;
 
-create table users (
+create table user (
  user_id BIGINT NOT NULL PRIMARY KEY,
  first_name VARCHAR(50),
  last_name VARCHAR(50),
@@ -19,5 +19,5 @@ create table property (
  bed_count SMALLINT,
  owner_id BIGINT,
  price BIGINT,
- FOREIGN KEY(owner_id) REFERENCES users
+ FOREIGN KEY(owner_id) REFERENCES user
 );

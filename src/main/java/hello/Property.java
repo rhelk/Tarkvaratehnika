@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 @Data
@@ -26,6 +28,8 @@ public class Property {
     int room_count;
     int bed_count;
 
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")
     Long owner_id;
     // Price is in cents
     Long price;
