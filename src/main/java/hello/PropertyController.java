@@ -13,7 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:9000")
 @RestController
 public class PropertyController {
 
