@@ -1,7 +1,8 @@
-package rentdeck;
+package rentdeck.model;
 
 
 import lombok.Data;
+import rentdeck.model.User;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;

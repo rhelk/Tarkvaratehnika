@@ -1,4 +1,4 @@
-package rentdeck;
+package rentdeck.model;
 
 import lombok.Data;
 
