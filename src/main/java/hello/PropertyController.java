@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @CrossOrigin
 @RestController
 public class PropertyController {
@@ -29,7 +31,7 @@ public class PropertyController {
     }
 
     @GetMapping("api/properties")
-    public Iterable<Property> getAllProperty() {
+    public List<Property> getAllProperty() {
         return propertyDao.findAll();
     }
 }
