@@ -1,4 +1,5 @@
-package hello;
+package rentdeck;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,20 +11,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @CrossOrigin(origins = "http://localhost:9000")
 @RestController
-public class UserController {
+public class PropertyController {
 
     @Autowired
-    private UserDao userDao;
+    private PropertyDao propertyDao;
 
-    @PostMapping("api/user/add")
-    public Long addUser(@RequestBody User user) {
-        return userDao.save(user).getUser_id();
+    @PostMapping("api/property/add")
+    public Property addProperty(@RequestBody Property property) {
+        return propertyDao.save(property);
     }
 
-    @GetMapping("api/user/get/{id}")
-    public User getUserById(@PathVariable Long id) {
-        return userDao.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    @GetMapping("api/property/get/{id}")
+    public Property getPropertyById(@PathVariable Long id) {
+        return propertyDao.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("api/properties")
+    public List<Property> getAllProperty() {
+        return propertyDao.findAll();
     }
 }

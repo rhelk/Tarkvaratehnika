@@ -1,4 +1,4 @@
-package hello;
+package rentdeck;
 
 import org.springframework.data.repository.CrudRepository;
 
