@@ -1,12 +1,16 @@
-package hello;
+package rentdeck.model;
 
 
 import lombok.Data;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 @Data
@@ -26,7 +30,10 @@ public class Property {
     int room_count;
     int bed_count;
 
-    Long owner_id;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "owner_id")
+    User user;
+
     // Price is in cents
     Long price;
 
