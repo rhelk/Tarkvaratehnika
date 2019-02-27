@@ -28,9 +28,6 @@
       }
     },
     created() {
-      //this.$http.get('https://jsonplaceholder.typicode.com/posts').then(function (data2) {
-      //this.test = data2.body.slice(0,1);
-      //console.log(data2)
 
       this.$http.get('http://localhost:8080/api/property/get/' + this.id).then(function (data) {
         this.roomDetails = data.body;
