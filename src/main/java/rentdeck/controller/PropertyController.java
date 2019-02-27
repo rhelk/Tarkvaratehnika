@@ -28,11 +28,15 @@ public class PropertyController {
 
     @GetMapping("api/property/get/{id}")
     public Property getPropertyById(@PathVariable Long id) {
-        return propertyDao.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Property property = propertyDao.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        property.getUser().setPassword(null);
+        return property;
     }
 
     @GetMapping("api/properties")
     public List<Property> getAllProperty() {
-        return propertyDao.findAll();
+        List<Property> properties = propertyDao.findAll();
+        properties.forEach(property -> property.getUser().setPassword(null));
+        return properties;
     }
 }
