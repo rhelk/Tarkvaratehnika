@@ -1,5 +1,6 @@
 package rentdeck.controller;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import rentdeck.model.User;
 import rentdeck.dao.UserDao;
+
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:9000")
 @RestController
@@ -26,6 +29,9 @@ public class UserController {
 
     @GetMapping("api/user/get/{id}")
     public User getUserById(@PathVariable Long id) {
-        return userDao.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        User user = userDao.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        user.setPassword(null);
+        return user;
     }
+
 }
