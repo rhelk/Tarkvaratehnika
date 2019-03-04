@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface PropertyDao extends JpaRepository<Property, Long> {
 
-    @Query("SELECT u FROM User u WHERE u.price BETWEEN :start AND :end")
+    @Query("SELECT u FROM Property u WHERE u.price BETWEEN :start AND :end")
     List<Property> searchByPrice(int start, int end);
 }
