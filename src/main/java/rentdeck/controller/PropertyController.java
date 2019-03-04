@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import rentdeck.model.Property;
@@ -38,5 +39,10 @@ public class PropertyController {
         List<Property> properties = propertyDao.findAll();
         properties.forEach(property -> property.getUser().setPassword(null));
         return properties;
+    }
+
+    @GetMapping("api/properties/prices")
+    public List<Property> searchByPrice(@RequestParam("start")int start, @RequestParam("end") int end) {
+        return propertyDao.searchByPrice(start, end);
     }
 }
