@@ -42,7 +42,7 @@ public class PropertyController {
     }
 
     @GetMapping("api/properties/prices")
-    public List<Property> searchByPrice(@RequestParam("start")int start, @RequestParam("end") int end) {
+    public List<Property> searchByPrice(@RequestParam("start")long start, @RequestParam("end") long end) {
         return propertyDao.searchByPrice(start, end);
     }
 }
