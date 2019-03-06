@@ -15,7 +15,7 @@ import rentdeck.dao.PropertyDao;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:9000")
+@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 public class PropertyController {
 
@@ -29,16 +29,12 @@ public class PropertyController {
 
     @GetMapping("api/property/get/{id}")
     public Property getPropertyById(@PathVariable Long id) {
-        Property property = propertyDao.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        property.getUser().setPassword(null);
-        return property;
+        return propertyDao.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("api/properties")
     public List<Property> getAllProperty() {
-        List<Property> properties = propertyDao.findAll();
-        properties.forEach(property -> property.getUser().setPassword(null));
-        return properties;
+        return propertyDao.findAll();
     }
 
     @GetMapping("api/properties/prices")

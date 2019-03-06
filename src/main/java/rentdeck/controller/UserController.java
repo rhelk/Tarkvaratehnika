@@ -26,9 +26,7 @@ public class UserController {
 
     @GetMapping("api/user/get/{id}")
     public User getUserById(@PathVariable Long id) {
-        User user = userDao.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        user.setPassword(null);
-        return user;
+        return userDao.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
 }

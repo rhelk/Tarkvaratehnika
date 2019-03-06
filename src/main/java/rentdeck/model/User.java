@@ -1,5 +1,6 @@
 package rentdeck.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -22,6 +23,8 @@ public class User {
     String first_name;
     String last_name;
     String email;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     String password;
 
 }
