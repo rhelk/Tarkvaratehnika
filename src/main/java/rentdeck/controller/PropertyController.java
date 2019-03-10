@@ -15,7 +15,7 @@ import rentdeck.dao.PropertyDao;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:9000")
 @RestController
 public class PropertyController {
 
