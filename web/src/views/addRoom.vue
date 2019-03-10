@@ -8,7 +8,7 @@
       <input type="file" accept="image/*" id="file-input">
       <label>Location of your property: </label>
       <div id="InAadressDiv" style="width: 600px; height: 450px"></div>
-      <input type="hidden" id="aadress" name="aadress">
+      <input type="hidden" id="address" name="address">
       <label>Count of rooms: </label>
       <input type="number" v-model="roomProperty.room_count" required/>
       <label>Count of beds: </label>
@@ -55,12 +55,19 @@
             "appartment": 0,
             "ihist": "1993"
           });
+
+          document.addEventListener('addressSelected', function(e){
+            inAadress.hideResult();
+          });
+
+          document.addEventListener('addressSelected', function(e){
+            let aadress = e.detail[0].aadress;
+            aadress = aadress.split(", ").reverse().join(", ");
+            inAadress.setAddress(aadress);
+          });
+
           document.addEventListener('addressSelected', function (e) {
-            //this.roomProperty.address = e.detail[0].aadress;
-            //console.log(e.detail[0].aadress);
-            document.getElementById("aadress").value = e.detail[0].aadress;
-            //this.roomAddress = e.detail[0].aadress;
-            //console.log(this.roomAddress);
+            document.getElementById("address").value = e.detail[0].aadress;
 
           });
 
@@ -73,7 +80,7 @@
       post: function () {
         this.$http.post("http://localhost:8080/api/property/add", {
           title: this.roomProperty.title,
-          address: document.getElementById("aadress").value,
+          address: document.getElementById("address").value,
           room_count: this.roomProperty.room_count,
           bed_count: this.roomProperty.bed_count,
           description: this.roomProperty.description,
