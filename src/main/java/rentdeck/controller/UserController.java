@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import rentdeck.model.User;
+import rentdeck.model.Users;
 import rentdeck.dao.UserDao;
 
 @CrossOrigin(origins = "http://localhost:9000")
@@ -20,12 +20,12 @@ public class UserController {
     private UserDao userDao;
 
     @PostMapping("api/user/add")
-    public Long addUser(@RequestBody User user) {
-        return userDao.save(user).getUser_id();
+    public Long addUser(@RequestBody Users users) {
+        return userDao.save(users).getUser_id();
     }
 
     @GetMapping("api/user/get/{id}")
-    public User getUserById(@PathVariable Long id) {
+    public Users getUserById(@PathVariable Long id) {
         return userDao.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 

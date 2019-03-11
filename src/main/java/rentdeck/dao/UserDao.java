@@ -1,6 +1,6 @@
 package rentdeck.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import rentdeck.model.User;
+import rentdeck.model.Users;
 
-public interface UserDao extends JpaRepository<User, Long> {}
+public interface UserDao extends JpaRepository<Users, Long> {}
