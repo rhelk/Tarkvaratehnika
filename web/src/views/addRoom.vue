@@ -5,7 +5,7 @@
       <label>Name of your property: </label>
       <input type="text" v-model="roomProperty.title" required/>
       <label>Add picture: </label>
-      <input type="file" accept="image/*" id="file-input">
+      <input type="file" class="file-select" @change="handleFileUploadChange" accept="image/*" id="file-input">
       <label>Location of your property: </label>
       <div id="InAadressDiv" style="width: 600px; height: 450px"></div>
       <input type="hidden" id="address" name="address">
@@ -17,13 +17,14 @@
       <input type="text" v-model="roomProperty.description" required/>
       <label>Price per night: </label>
       <input type="number" v-model="roomProperty.price" required/>
-      <button v-on:click.prevent="post">Add Property</button>
+      <button v-on:click.prevent="handler" class="file-submit">Add Property</button>
     </form>
   </div>
 </template>
 
 <script>
   import axios from 'axios';
+  import {DataSnapshot as storageRef} from "firebase";
   //import {required, minLength} from 'vuelidate/lib/validators'
 
   export default {
@@ -39,6 +40,7 @@
           price: "",
           description: "",
           pic_url: "",
+          pic_name: "",
 
         },
 
@@ -66,32 +68,77 @@
             inAadress.setAddress(aadress);
           });
 
-          document.addEventListener('addressSelected', function (e) {
-            document.getElementById("address").value = e.detail[0].aadress;
+          document.addEventListener('addressSelected', (e) => {
+            const self = this;
+            //document.getElementById("address").value = e.detail[0].aadress;
+            self.roomProperty.address = e.detail[0].aadress;
+            console.log(e.detail[0].aadress);
+            console.log(e.detail[0].maakond);
+            console.log(e.detail[0].omavalitsus);
+            console.log(e.detail[0].asustusyksus);
+            console.log(e.detail[0].liikluspind);
+            console.log(e.detail[0].aadress_nr);
 
           });
 
         })
 
-
     },
 
     methods: {
+      handler: function() { //Syntax assuming its in the 'methods' option of Vue instance
+        this.handleFileUploadSubmit();
+        //this.post();
+      },
       post: function () {
         this.$http.post("http://localhost:8080/api/property/add", {
           title: this.roomProperty.title,
-          address: document.getElementById("address").value,
+          //address: document.getElementById("address").value,
+          address: this.roomProperty.address,
           room_count: this.roomProperty.room_count,
           bed_count: this.roomProperty.bed_count,
           description: this.roomProperty.description,
           owner_id: 1,
           price: this.roomProperty.price,
-          pic_url: null,
+          pic_url: this.roomProperty.pic_url,
         }).then(function (data) {
           console.log(data);
           //say that submitted
         })
       },
+
+      handleFileUploadChange(e) {
+        this.roomProperty.pic_name = e.target.files[0];
+        console.log(this.roomProperty.pic_name)
+      },
+      handleFileUploadSubmit(e) {
+        const storageService = firebase.storage();
+        const storageRef = storageService.ref();
+        const uploadTask = storageRef.child(`images/${this.roomProperty.pic_name.name}`).put(this.roomProperty.pic_name); //create a child directory called images, and place the file inside this directory
+       // this.roomProperty.pic_url =  storageRef.child('images/' + this.roomProperty.pic_name.name).getDownloadURL().toString();
+        uploadTask.on('state_changed', (snapshot) => {
+          // Observe state change events such as progress, pause, and resume
+        }, (error) => {
+          // Handle unsuccessful uploads
+          console.log(error);
+        }, () => {
+          // Do something once upload is complete
+          console.log('success');
+          /*const getPicUrl = storageRef.child('images/' + this.roomProperty.pic_name.name).getDownloadURL();
+          console.log(getPicUrl);
+          //this.roomProperty.pic_url = getPicUrl;
+            this.post();*/
+          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+            //after uploading picture, get picture url and then post it to database
+            const self = this;
+            console.log('File available at', downloadURL);
+            self.roomProperty.pic_url = downloadURL;
+            this.post();
+          });
+        });
+
+
+      }
       /*uploadImage(event) {
         this.pic_url = event.target.files[0]
 
