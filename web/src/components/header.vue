@@ -3,6 +3,7 @@
     <ul>
       <li>
         <router-link to = '/' exact> Home </router-link>
+        <router-link to = '/add' exact> Add property </router-link>
       </li>
     </ul>
   </nav>
