@@ -32,7 +32,7 @@ public class Property {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_id")
-    User user;
+    Users users;
 
     // Price is in cents
     Long price;

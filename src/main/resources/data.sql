@@ -1,7 +1,7 @@
-insert into user values (next value for users_sequence,
-                    'Karl', 'Peresau', 'peresau@aaa.ee', 'parool');
-insert into user values (next value for users_sequence,
-                    'Jill', 'Jacobs', 'jj@mail.ru', 'eiutle');
+insert into users values (next value for users_sequence,
+                    'Karl', 'Peresau', 'peresau@aaa.ee', '$2a$10$yCjgU8s7hMnalFdBope4BerXCtkOWkGooF04AZmsesMfbRaDq5G6W', TRUE);
+insert into users values (next value for users_sequence,
+                    'Jill', 'Jacobs', 'jj@mail.ru', '$2a$10$wbU5UYNt4Yp6xSbk/fdiLuMS38M/8vSJPiC.WJ.jbFTbBQJZ.Fs9i', TRUE);
 insert into property values (next value for property_sequence, 'Time of your life', 'Something this', 'uus tn. 5',
                     'http://dijkstra.cs.ttu.ee/~egpalk/tehnika/1.jpg', 3, 2, 1, 200);
 insert into property values (next value for property_sequence, 'Best room for best price', 'Lovely room', 'Tallinn',
@@ -10,3 +10,5 @@ insert into property values (next value for property_sequence, 'Have to Love thi
                     'Lootuse tee','http://dijkstra.cs.ttu.ee/~egpalk/tehnika/3.jpg', 3, 2, 1, 300);
 insert into property values (next value for property_sequence, 'Good place for a company', 'Some description', 'Vanalinn',
                     'http://dijkstra.cs.ttu.ee/~egpalk/tehnika/4.jpg', 3, 2, 1, 500);
+INSERT INTO authorities VALUES ('peresau@aaa.ee', 'ROLE_USER');
+INSERT INTO authorities VALUES ('jj@mail.ru', 'ROLE_ADMIN');

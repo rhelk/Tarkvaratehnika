@@ -3,15 +3,13 @@ package rentdeck.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Entity
-public class User {
+public class Users implements Serializable {
 
 
 
@@ -22,9 +20,17 @@ public class User {
 
     String first_name;
     String last_name;
-    String email;
+    String username;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     String password;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "authorities",
+            joinColumns = @JoinColumn(name = "username",
+                    referencedColumnName = "username")
+    )
+    List<Authority> authorityList;
 
 }

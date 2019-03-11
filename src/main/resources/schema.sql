@@ -1,12 +1,13 @@
 create sequence users_sequence start with 1;
 create sequence property_sequence start with 1;
 
-create table user (
+create table users (
  user_id BIGINT NOT NULL PRIMARY KEY,
  first_name VARCHAR(50),
  last_name VARCHAR(50),
- email VARCHAR(50) UNIQUE,
- password VARCHAR(255)
+ username VARCHAR(50) NOT NULL UNIQUE,
+ password VARCHAR(255) NOT NULL,
+ enabled BOOLEAN NOT NULL,
 );
 
 create table property (
@@ -19,5 +20,12 @@ create table property (
  bed_count SMALLINT,
  owner_id BIGINT,
  price BIGINT,
- FOREIGN KEY(owner_id) REFERENCES user
+ FOREIGN KEY(owner_id) REFERENCES users
+);
+
+CREATE TABLE authorities (
+  username VARCHAR(50) NOT NULL,
+  authority VARCHAR(50) NOT NULL,
+  FOREIGN KEY (username)
+    REFERENCES users (username) ON DELETE CASCADE
 );
