@@ -20,15 +20,15 @@ public class Property {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "p_seq")
     @SequenceGenerator(name = "p_seq", sequenceName = "property_sequence", allocationSize = 1)
-    private long property_id;
+    private Long property_id;
 
     String title;
     String description;
     String address;
     String pic_url;
 
-    int room_count;
-    int bed_count;
+    Integer room_count;
+    Integer bed_count;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_id")

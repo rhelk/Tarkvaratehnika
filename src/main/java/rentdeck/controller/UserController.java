@@ -12,7 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import rentdeck.model.Users;
 import rentdeck.dao.UserDao;
 
-@CrossOrigin(origins = "http://localhost:9000")
+@CrossOrigin
 @RestController
 public class UserController {
 

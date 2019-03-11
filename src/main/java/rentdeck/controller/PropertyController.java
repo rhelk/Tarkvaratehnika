@@ -1,6 +1,7 @@
 package rentdeck.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,7 @@ import rentdeck.dao.PropertyDao;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:9000")
+@CrossOrigin
 @RestController
 public class PropertyController {
 
@@ -41,4 +42,11 @@ public class PropertyController {
     public List<Property> searchByPrice(@RequestParam("start")long start, @RequestParam("end") long end) {
         return propertyDao.searchByPrice(start, end);
     }
+
+    @GetMapping("api/properties/search")
+    public List<Property> searchProperties( Property property) {
+        return propertyDao.findAll(Example.of(property));
+    }
+
+
 }

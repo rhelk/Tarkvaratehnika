@@ -1,0 +1,55 @@
+<template>
+  <div>
+    <h2>Login</h2>
+    <form>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="text" v-model="input.username" class="form-control" />
+        <!--<div v-show="submitted && !username" class="invalid-feedback">Username is required</div>-->
+      </div>
+      <div class="form-group">
+        <label htmlFor="password">Password</label>
+        <input type="password" v-model="input.password" class="form-control" />
+        <!--<div v-show="submitted && !password" class="invalid-feedback">Password is required</div>-->
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary" v-on:click.prevent="login">Login</button>
+        <router-link to="/register" class="btn btn-link">Register</router-link>
+      </div>
+    </form>
+  </div>
+</template>
+
+<script>
+    export default {
+        name: "login",
+        data() {
+          return {
+            input: {
+              username: "",
+              password: ""
+            }
+          }
+        },
+        methods: {
+          login() {
+            this.$http.post('http://localhost:8080/api/login',{
+              username: 'peresau@aaa.ee',
+              password: 'user'
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            }).then(function (data) {
+              console.log(data);
+            });
+            console.log(this.input.username + " and " + this.input.password);
+          }
+        }
+    }
+</script>
+
+<style scoped>
+
+</style>

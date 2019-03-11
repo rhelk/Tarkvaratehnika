@@ -31,6 +31,7 @@ public class Users implements Serializable {
             joinColumns = @JoinColumn(name = "username",
                     referencedColumnName = "username")
     )
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     List<Authority> authorityList;
 
 }
