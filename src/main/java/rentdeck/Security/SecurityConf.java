@@ -28,6 +28,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/login").permitAll()
                 .antMatchers("/api/logout").permitAll()
                 .antMatchers("/api/properties/**").permitAll()
+                .antMatchers("/api/property/**").permitAll()
                 .antMatchers("/api/**").hasAnyRole("USER", "ADMIN");
 
         http.exceptionHandling().authenticationEntryPoint(new ApiEntryPoint());

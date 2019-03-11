@@ -12,6 +12,7 @@
   import room from './views/room.vue';
   import allRooms from './views/allRooms.vue';
   import addRooms from './views/addRoom.vue';
+  import login from './views/login.vue';
   import header from './components/header.vue';
   import footer from './components/footer.vue';
 
@@ -22,6 +23,7 @@
       'app-footer': footer,
       'all-rooms': allRooms,
       'add-room': addRooms,
+      'login': login,
     },
 
   }
