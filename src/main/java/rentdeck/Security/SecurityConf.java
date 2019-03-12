@@ -56,10 +56,5 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
         builder.jdbcAuthentication()
                 .passwordEncoder(new BCryptPasswordEncoder())
                 .dataSource(dataSource);
-//                .usersByUsernameQuery("SELECT (email, password, enabled) FROM users WHERE email = ?")
-//                .authoritiesByUsernameQuery("SELECT (email, authority) FROM authorities WHERE email = ?");
-
     }
 }
-
-//join use_user on use_user.use_id = usr_user_role.usr_use_id where use_user.use_username=?

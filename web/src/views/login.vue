@@ -33,18 +33,24 @@
         },
         methods: {
           login() {
-            this.$http.post('http://localhost:8080/api/login',{
-              username: 'peresau@aaa.ee',
-              password: 'user'
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json'
+            const self = this;
+
+            let resource = self.$resource('someItem{/id}', {}, {
+                post: {method: 'POST', url: 'http://localhost:8080/api/login'}
+              });
+
+              // POST someItem/baz
+              resource.post({
+                username: self.input.username,
+                password: self.input.password
               }
-            }).then(function (data) {
-              console.log(data);
-            });
-            console.log(this.input.username + " and " + this.input.password);
+            ).then(response => {
+                console.log(response);
+                console.log("succcess");
+              }, response => {
+                console.log(response);
+              });
+            console.log(self.input.username + " and " + self.input.password);
           }
         }
     }

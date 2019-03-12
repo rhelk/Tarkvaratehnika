@@ -1,5 +1,5 @@
 insert into users values (next value for users_sequence,
-                    'Karl', 'Peresau', 'peresau@aaa.ee', '$2a$10$yCjgU8s7hMnalFdBope4BerXCtkOWkGooF04AZmsesMfbRaDq5G6W', TRUE);
+                    'Karl', 'Peresau', 'peresau@aaa.ee', '$2a$10$BQM1ZoLmDfkR9H2YCDkjDuWs3UTtJHyQY/5K1luYtkp0VuQ45KIZC', TRUE);
 insert into users values (next value for users_sequence,
                     'Jill', 'Jacobs', 'jj@mail.ru', '$2a$10$wbU5UYNt4Yp6xSbk/fdiLuMS38M/8vSJPiC.WJ.jbFTbBQJZ.Fs9i', TRUE);
 insert into property values (next value for property_sequence, 'Time of your life', 'Something this', 'uus tn. 5',
