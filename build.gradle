@@ -18,7 +18,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-rest'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-security-jwt'
+    implementation 'org.springframework.security.oauth:spring-security-oauth2'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.hsqldb:hsqldb'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    compile("com.auth0:java-jwt:3.4.0")
 }
