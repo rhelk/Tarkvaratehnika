@@ -12,6 +12,10 @@ import org.springframework.web.server.ResponseStatusException;
 import rentdeck.model.Users;
 import rentdeck.dao.UserDao;
 
+import java.security.Principal;
+
+import static rentdeck.util.PasswordEncoder.encodePassword;
+
 @CrossOrigin
 @RestController
 public class UserController {
@@ -21,6 +25,7 @@ public class UserController {
 
     @PostMapping("api/user/add")
     public Long addUser(@RequestBody Users users) {
+        users.setPassword(encodePassword(users.getPassword()));
         return userDao.save(users).getUser_id();
     }
 
@@ -28,5 +33,12 @@ public class UserController {
     public Users getUserById(@PathVariable Long id) {
         return userDao.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
+
+    @GetMapping("api/secureTest")
+    public String secureResponse(Principal principal) {
+        return "Hello, " + principal.getName() + ". You have the token";
+    }
+
+
 
 }

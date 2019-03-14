@@ -15,9 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static rentdeck.SecurityConstants.HEADER_STRING;
-import static rentdeck.SecurityConstants.TOKEN_PREFIX;
-import static rentdeck.SecurityConstants.SECRET;
+import static rentdeck.Security.SecurityConstants.*;
 
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
@@ -53,6 +51,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                     .getSubject();
 
             if (user != null) {
+                System.out.println(user);
                 return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
             }
             return null;

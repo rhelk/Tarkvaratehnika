@@ -7,12 +7,14 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import rentdeck.Security.JWTAuthenticationFilter;
+import rentdeck.Security.JWTAuthorizationFilter;
 import rentdeck.Security.handlers.*;
 
 import javax.servlet.Filter;
@@ -37,9 +39,14 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/api/**").permitAll();
                 .antMatchers("/api/logout").permitAll()
                 .antMatchers("/api/login").permitAll()
+                .antMatchers("/api/register").permitAll()
                 .antMatchers("/api/properties/**").permitAll()
                 .antMatchers("/api/property/**").permitAll()
-                .antMatchers("/api/**").hasAnyRole("USER", "ADMIN");
+                .anyRequest().authenticated()
+                .and()
+                .addFilter(new JWTAuthorizationFilter(authenticationManager()))
+                // this disables session creation on Spring Security
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 
         http.exceptionHandling().authenticationEntryPoint(new ApiEntryPoint());
@@ -49,7 +56,6 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 
         http.addFilterAfter(apiLoginFilter("/api/login"), LogoutFilter.class);
     }
-
 
     public Filter apiLoginFilter(String url) throws Exception {
         JWTAuthenticationFilter filter = new JWTAuthenticationFilter(url);
