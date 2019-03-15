@@ -1,39 +1,62 @@
 <template>
   <div id="addRoom">
     <h1>Add your amazing property!</h1>
-    <form>
-      <label>Name of your property: </label>
-      <input type="text" v-model="roomProperty.title" required/>
-      <label>Add picture: </label>
-      <input type="file" class="file-select" @change="handleFileUploadChange" accept="image/*" id="file-input">
+
+    <b-form v-if="!submitted">
+      <b-form-input required data-vv-name="title" type="text" v-model="roomProperty.title"
+                    placeholder="Name of your property"
+                    v-validate="{ required: true, min:4 }"
+                    :state="validateState('roomProperty.title')"/>
+      <b-form-text><span style="color: red">{{ errors.first('title') }}</span></b-form-text>
+
       <label>Location of your property: </label>
       <div id="InAadressDiv" style="width: 600px; height: 450px"></div>
-      <input type="hidden" id="address" name="address">
-      <label>Count of rooms: </label>
-      <input type="number" v-model="roomProperty.room_count" required/>
-      <label>Count of beds: </label>
-      <input type="number" v-model="roomProperty.bed_count" required/>
-      <label>Description your property: </label>
-      <input type="text" v-model="roomProperty.description" required/>
-      <label>Price per night: </label>
-      <input type="number" v-model="roomProperty.price" required/>
-      <button v-on:click.prevent="handler" class="file-submit">Add Property</button>
-    </form>
+
+      <b-form-input data-vv-name="rooms" type="number" v-model="roomProperty.room_count" placeholder="Count of rooms"
+                    required
+                    v-validate="{ required: true, min_value:1}"
+                    :state="validateState('roomProperty.room_count')"/>
+      <b-form-text><span style="color: red">{{ errors.first('rooms') }}</span></b-form-text>
+
+      <b-form-input data-vv-name="beds" type="number" v-model="roomProperty.bed_count" placeholder="Count of beds"
+                    required
+                    v-validate="{ required: true, min_value:1}"
+                    :state="validateState('roomProperty.bed_count')"/>
+      <b-form-text><span style="color: red">{{ errors.first('beds') }}</span></b-form-text>
+
+      <b-form-input type="text" v-model="roomProperty.description" placeholder="Description your property"/>
+      <b-form-input data-vv-name="price" type="number" v-model="roomProperty.price" placeholder="Price for one nigh"
+                    required
+                    v-validate="{ required: true, min_value:5}"
+                    :state="validateState('roomProperty.price')"/>
+      <b-form-text><span style="color: red">{{ errors.first('price') }}</span></b-form-text>
+
+      <b-form-file required data-vv-name="pic" v-model="file" type="file" class="file-select"
+                   @change="handleFileUploadChange"
+                   accept="image/*" id="file-input"
+                   v-validate="{ required: true}"
+                   :state="validateState(file)"
+                   placeholder="Choose a picture..."/>
+      <b-form-text><span style="color: red">{{ errors.first('pic') }}</span></b-form-text>
+      <p></p>
+      <b-button type="submit" variant="primary" :disabled="errors.any() || !isComplete" class="btn btn-primary" v-on:click.prevent="handler">Add Property
+      </b-button>
+    </b-form>
+
   </div>
 </template>
 
 <script>
-  import axios from 'axios';
-  import {DataSnapshot as storageRef} from "firebase";
-  //import {required, minLength} from 'vuelidate/lib/validators'
+
 
   export default {
 
     data() {
       return {
-        roomAddress: "",
+        file: null,
+        submitted: false,
         roomProperty: {
-          title: null,
+          title: "",
           address: "",
           room_count: "",
           bed_count: "",
@@ -46,6 +69,11 @@
 
       }
     },
+    computed: {
+      isComplete () {
+        return this.roomProperty.address;
+      }
+    },
     mounted() {
       this.$loadScript("http://inaadress.maaamet.ee/inaadress/js/inaadress.min.js")
         .then(() => {
@@ -55,45 +83,55 @@
             "nocss": false,
             "lang": "en",
             "appartment": 0,
-            "ihist": "1993"
+            "ihist": "1993",
+            "searchLayers": ["TANAV"]
           });
 
-          document.addEventListener('addressSelected', function(e){
-            inAadress.hideResult();
-          });
 
-          document.addEventListener('addressSelected', function(e){
-            let aadress = e.detail[0].aadress;
+          document.addEventListener('addressSelected', function (e) {
+            let aadress = e.detail.aadress;
             aadress = aadress.split(", ").reverse().join(", ");
             inAadress.setAddress(aadress);
+            inAadress.hideResult();
+            console.log(aadress)
           });
 
           document.addEventListener('addressSelected', (e) => {
             const self = this;
-            //document.getElementById("address").value = e.detail[0].aadress;
-            self.roomProperty.address = e.detail[0].aadress;
-            console.log(e.detail[0].aadress);
-            console.log(e.detail[0].maakond);
-            console.log(e.detail[0].omavalitsus);
-            console.log(e.detail[0].asustusyksus);
-            console.log(e.detail[0].liikluspind);
-            console.log(e.detail[0].aadress_nr);
+            self.roomProperty.address = e.detail.aadress;
+            console.log(e.detail.aadress);
+            console.log(e.detail.maakond);
+            console.log(e.detail.omavalitsus);
+            console.log(e.detail.asustusyksus);
+            console.log(e.detail.liikluspind);
+            //console.log(e.detail[0].aadress_nr);
 
           });
 
-        })
+        });
+      this.$loadScript("https://www.gstatic.com/firebasejs/5.8.6/firebase.js")
+        .then(() => {
+          let config = {
+            apiKey: "AIzaSyCvQ34crBffoj4X3cHf82IH86l8aBTyM1s",
+            authDomain: "tarkvaratehnika-1551709647803.firebaseapp.com",
+            databaseURL: "https://tarkvaratehnika-1551709647803.firebaseio.com",
+            projectId: "tarkvaratehnika-1551709647803",
+            storageBucket: "tarkvaratehnika-1551709647803.appspot.com",
+            messagingSenderId: "805114248870"
+          };
+          firebase.initializeApp(config);
+        });
 
     },
-
     methods: {
-      handler: function() { //Syntax assuming its in the 'methods' option of Vue instance
+      handler: function () { //Syntax assuming its in the 'methods' option of Vue instance
         this.handleFileUploadSubmit();
         //this.post();
       },
+
       post: function () {
         this.$http.post("http://localhost:8080/api/property/add", {
           title: this.roomProperty.title,
-          //address: document.getElementById("address").value,
           address: this.roomProperty.address,
           room_count: this.roomProperty.room_count,
           bed_count: this.roomProperty.bed_count,
@@ -103,19 +141,19 @@
           pic_url: this.roomProperty.pic_url,
         }).then(function (data) {
           console.log(data);
-          //say that submitted
+          this.submitted = true;
         })
       },
 
       handleFileUploadChange(e) {
         this.roomProperty.pic_name = e.target.files[0];
         console.log(this.roomProperty.pic_name)
+
       },
       handleFileUploadSubmit(e) {
         const storageService = firebase.storage();
         const storageRef = storageService.ref();
         const uploadTask = storageRef.child(`images/${this.roomProperty.pic_name.name}`).put(this.roomProperty.pic_name); //create a child directory called images, and place the file inside this directory
-       // this.roomProperty.pic_url =  storageRef.child('images/' + this.roomProperty.pic_name.name).getDownloadURL().toString();
         uploadTask.on('state_changed', (snapshot) => {
           // Observe state change events such as progress, pause, and resume
         }, (error) => {
@@ -124,10 +162,6 @@
         }, () => {
           // Do something once upload is complete
           console.log('success');
-          /*const getPicUrl = storageRef.child('images/' + this.roomProperty.pic_name.name).getDownloadURL();
-          console.log(getPicUrl);
-          //this.roomProperty.pic_url = getPicUrl;
-            this.post();*/
           uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
             //after uploading picture, get picture url and then post it to database
             const self = this;
@@ -137,26 +171,14 @@
           });
         });
 
-
-      }
-      /*uploadImage(event) {
-        this.pic_url = event.target.files[0]
-
       },
-      uploadPic() {
-        let config = {
-          header: {
-            'Content-Type': 'image/png',
+      validateState(ref) {
 
-          }
+        if (this.veeFields[ref] && (this.veeFields[ref].dirty || this.veeFields[ref].validated)) {
+          return !this.errors.has(ref)
         }
-        const fd = new FormData();
-        fd.append('image', this.pic_url, this.pic_url.name)
-        axios.post('http://dijkstra.cs.ttu.ee/~egpalk/tehnika', fd, config).then(res => {
-          console.log(res)
-        })
-
-      },*/
+        return null;
+      },
 
     }
   }
