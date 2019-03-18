@@ -30,7 +30,12 @@ public class PropertyController {
 
     @PostMapping("api/property/add")
     public Property addProperty(@RequestBody Property property, Principal principal) {
-        property.setUsers(userDao.findByUsername(principal.getName()));
+        System.out.println("In here");
+        if (principal != null){
+            property.setUsers(userDao.findByUsername(principal.getName()));
+        } else {
+            System.out.println("Principal is " + principal);
+        }
         return propertyDao.save(property);
     }
 
