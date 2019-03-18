@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+import rentdeck.dao.UserDao;
 import rentdeck.model.Property;
 import rentdeck.dao.PropertyDao;
+import rentdeck.model.Users;
 
+import java.security.Principal;
 import java.util.List;
 
 @CrossOrigin
@@ -22,9 +25,12 @@ public class PropertyController {
 
     @Autowired
     private PropertyDao propertyDao;
+    @Autowired
+    private UserDao userDao;
 
     @PostMapping("api/property/add")
-    public Property addProperty(@RequestBody Property property) {
+    public Property addProperty(@RequestBody Property property, Principal principal) {
+        property.setUsers(userDao.findByUsername(principal.getName()));
         return propertyDao.save(property);
     }
 

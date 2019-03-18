@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping("api/user/get/{id}")
-    public Users getUserById(@PathVariable Long id) {
+    public Users getUserById(@PathVariable Long id, Principal principal) {
         return userDao.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
