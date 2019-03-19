@@ -42,7 +42,6 @@
     width:100%;
   }
 
-
   a {
     color: black;
     text-decoration: none;
