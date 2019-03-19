@@ -69,7 +69,6 @@
     height: 200px;
     margin-top: 60px;
 
-
   }
 
 </style>
