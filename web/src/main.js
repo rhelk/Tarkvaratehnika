@@ -15,6 +15,8 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import VeeValidate from 'vee-validate'
 
+
+
 Vue.use(BootstrapVue)
 Vue.use(Vuetify);
 Vue.use(Firebase);
@@ -38,6 +40,7 @@ const config = {
 Vue.use(VeeValidate, config);
 
 
+
 //Vue.use(VueAxios, axios);
 //Vue.prototype.$http = axios;
 
@@ -50,4 +53,5 @@ new Vue({
   el: '#app',
   render: h => h(App),
   router: router
+
 })

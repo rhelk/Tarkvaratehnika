@@ -32,25 +32,15 @@
           }
         },
         methods: {
-          login() {
-            const self = this;
+          login:function () {
 
-            let resource = self.$resource('someItem{/id}', {}, {
-                post: {method: 'POST', url: 'http://localhost:8080/api/login'}
-              });
-
-              // POST someItem/baz
-              resource.post({
-                username: self.input.username,
-                password: self.input.password
-              }
-            ).then(response => {
-                console.log(response);
-                console.log("succcess");
-              }, response => {
-                console.log(response);
-              });
-            console.log(self.input.username + " and " + self.input.password);
+            this.$http.post("http://localhost:8080/api/login", {
+              title:this.input.username,
+              body: this.input.password,
+              userId: 1,
+            }).then(function(data){
+              console.log(data);
+            })
           }
         }
     }

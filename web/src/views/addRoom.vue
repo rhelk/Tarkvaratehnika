@@ -7,11 +7,16 @@
                     placeholder="Name of your property"
                     v-validate="{ required: true, min:4 }"
                     :state="validateState('roomProperty.title')"/>
+
       <b-form-text><span style="color: red">{{ errors.first('title') }}</span></b-form-text>
 
-      <label>Location of your property: </label>
       <div id="InAadressDiv" style="width: 600px; height: 450px"></div>
 
+      <small class="form-text text-muted">
+       Location of your property
+      </small>
+
+      <p></p>
       <b-form-input data-vv-name="rooms" type="number" v-model="roomProperty.room_count" placeholder="Count of rooms"
                     required
                     v-validate="{ required: true, min_value:1}"
@@ -24,7 +29,7 @@
                     :state="validateState('roomProperty.bed_count')"/>
       <b-form-text><span style="color: red">{{ errors.first('beds') }}</span></b-form-text>
 
-      <b-form-input type="text" v-model="roomProperty.description" placeholder="Description your property"/>
+
       <b-form-input data-vv-name="price" type="number" v-model="roomProperty.price" placeholder="Price for one nigh"
                     required
                     v-validate="{ required: true, min_value:5}"
@@ -38,6 +43,7 @@
                    :state="validateState(file)"
                    placeholder="Choose a picture..."/>
       <b-form-text><span style="color: red">{{ errors.first('pic') }}</span></b-form-text>
+      <b-form-textarea type="text" v-model="roomProperty.description" placeholder="Description your property"/>
       <p></p>
       <b-button type="submit" variant="primary" :disabled="errors.any() || !isComplete" class="btn btn-primary" v-on:click.prevent="handler">Add Property
       </b-button>
@@ -205,13 +211,9 @@
     padding: 12px 20px;
     margin: 8px 0;
     box-sizing: border-box;
-    border: 2px solid gray;
     border-radius: 4px;
   }
 
-  #file-input {
-    border: none;
-    box-sizing: border-box;
-  }
+
 
 </style>

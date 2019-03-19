@@ -1,7 +1,7 @@
 package rentdeck.Security;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
+//import com.auth0.jwt.JWT;
+//import com.auth0.jwt.algorithms.Algorithm;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,7 +45,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         String token = request.getHeader(HEADER_STRING);
         if (token != null) {
             // parse the token.
-            String user = JWT.require(Algorithm.HMAC512(SECRET.getBytes()))
+            /*String user = JWT.require(Algorithm.HMAC512(SECRET.getBytes()))
                     .build()
                     .verify(token.replace(TOKEN_PREFIX, ""))
                     .getSubject();
@@ -53,7 +53,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             if (user != null) {
                 System.out.println(user);
                 return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
-            }
+            }*/
             return null;
         }
         return null;

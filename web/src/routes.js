@@ -2,12 +2,15 @@ import allRooms from './views/allRooms.vue'
 import room from './views/room.vue'
 import addProperty from './views/addRoom.vue'
 import login from './views/login.vue'
-import register from "./views/register";
+import register from "./views/register"
+import home from "./views/home.vue"
+
 
 export default [
   {path: "/", component: allRooms },
   {path: '/room/:id', component: room},
-  {path: '/add', component: addProperty},
+  {path: '/property/add', component: addProperty},
   {path: '/login', component: login},
   {path: '/register', component: register},
+  {path: '/home', component: home},
 ]
