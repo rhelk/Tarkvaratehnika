@@ -1,6 +1,6 @@
 package rentdeck.Security;
 
-//import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 
-//import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
+import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 import static rentdeck.Security.SecurityConstants.*;
 
 public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
@@ -63,10 +63,10 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
                                             FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
 
-       /* String token = JWT.create()
+       String token = JWT.create()
                 .withSubject(((User) auth.getPrincipal()).getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(HMAC512(SECRET.getBytes()));
-        res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);*/
+        res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
     }
 }
