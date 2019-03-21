@@ -4,15 +4,14 @@ import addProperty from './views/addRoom.vue'
 import login from './views/login.vue'
 import register from "./views/register"
 import home from "./views/home.vue"
-import allRoomsSearch from './views/allRoomsSearch.vue'
 
 
 export default [
-  {path: "/", component: allRooms },
+  {path: "/all/:id", component: allRooms },
+  {path: "/all", component: allRooms },
   {path: '/room/:id', component: room},
   {path: '/property/add', component: addProperty},
   {path: '/login', component: login},
   {path: '/register', component: register},
-  {path: '/home', component: home},
-  {path: '/search/:id', component: allRoomsSearch},
+  {path: '/', component: home},
 ]
