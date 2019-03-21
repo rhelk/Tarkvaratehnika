@@ -1,6 +1,5 @@
 package rentdeck.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -25,9 +24,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = UserController.class, secure = false)
 public class UserControllerTest {
-
-    @Autowired
-    ObjectMapper objectMapper;
 
     @Autowired
     private MockMvc mockMvc;
