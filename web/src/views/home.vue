@@ -79,8 +79,15 @@
     methods:{
       searchByCity: function () {
         this.$http.get('http://localhost:8080/api/properties/search').then(function (data) {
-          //how it works
-          //router link to all properties
+          if(data.body.length !== 0) {
+            this.$router.push({path: `/all/${this.search}`});
+            this.$router.go();
+          }
+          else{
+            //do nothing
+
+          }
+
         });
 
       }
