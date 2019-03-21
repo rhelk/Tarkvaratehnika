@@ -8,12 +8,11 @@ import allRoomsSearch from './views/allRoomsSearch.vue'
 
 
 export default [
-  {path: "/:id", component: allRooms },
   {path: "/", component: allRooms },
   {path: '/room/:id', component: room},
   {path: '/property/add', component: addProperty},
   {path: '/login', component: login},
   {path: '/register', component: register},
   {path: '/home', component: home},
-
+  {path: '/search/:id', component: allRoomsSearch},
 ]
