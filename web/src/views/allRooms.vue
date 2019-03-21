@@ -23,14 +23,29 @@
       return {
         rooms: [],
         search: "",
-        price: ""
+        price: "",
+        id: this.$route.params.id,
 
       }
     },
     created() {
-      this.$http.get('http://localhost:8080/api/properties').then(function (data) {
-        this.rooms = data.body;
-      })
+      console.log(this.id);
+      if(this.id === undefined || this.id === "" ){
+      //if(this.id === "all" ){
+          console.log("here 2");
+          this.$http.get('http://localhost:8080/api/properties').then(function (data) {
+            this.rooms = data.body;
+        })
+      }
+
+      else{
+        console.log("here 1");
+        this.$http.get('http://localhost:8080/api/properties/search?address=' + this.id).then(function (data) {
+          console.log(data);
+          this.rooms = data.body;
+          this.id = "";
+
+      })}
     },
   }
 </script>
