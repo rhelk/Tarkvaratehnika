@@ -14,7 +14,7 @@
       <div class="col-md-2"></div>
       <div id="houseDetails" class="col-md-6">
         <h1>{{roomDetails.title}}</h1>
-        <p>Location: {{roomDetails.address}}</p>
+        <p>Location: {{roomDetails.county  + ", " +  roomDetails.municipality  + ", " + roomDetails.settlement  + ", " + roomDetails.street }}</p>
         <p>Rooms: {{roomDetails.room_count}}</p>
         <p>Beds: {{roomDetails.bed_count}}</p>
         <p>Description: {{roomDetails.description}}</p>
