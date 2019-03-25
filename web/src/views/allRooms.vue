@@ -36,7 +36,7 @@
       const that = this;
       if (this.id === undefined || this.id === "") {
         //console.log("here 2");
-        this.$store.dispatch('doGet', {url: "properties"}).then(data => {
+        this.$store.dispatch('doGet', {url: "property/all"}).then(data => {
           //console.log("p2ringus")
           //console.log(data)
           that.rooms = data.data;
@@ -47,7 +47,7 @@
 
       } else {
         console.log("here 1");
-        this.$store.dispatch('doGet', {url: 'properties/search?address=' + this.id}).then(data => {
+        this.$store.dispatch('doGet', {url: 'property/search?address=' + this.id}).then(data => {
           that.rooms = data.data;
         })
       }

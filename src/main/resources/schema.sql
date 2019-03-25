@@ -7,7 +7,7 @@ create table users (
  last_name VARCHAR(50),
  username VARCHAR(50) NOT NULL UNIQUE,
  password VARCHAR(255) NOT NULL,
- enabled BOOLEAN NOT NULL,
+ enabled BOOLEAN DEFAULT TRUE,
 );
 
 create table property (
@@ -29,7 +29,7 @@ create table property (
 
 CREATE TABLE authorities (
   username VARCHAR(50) NOT NULL,
-  authority VARCHAR(50) NOT NULL,
+  authority VARCHAR(50) DEFAULT 'ROLE_USER',
   FOREIGN KEY (username)
     REFERENCES users (username) ON DELETE CASCADE
 );

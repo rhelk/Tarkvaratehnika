@@ -41,8 +41,6 @@
           this.login();
       },
       login: function () {
-        let username = this.input.username;
-        let password = this.input.password;
         // console.log(username, password);
         this.$store.dispatch('login', {
           username: this.input.username,

@@ -28,7 +28,7 @@ public class PropertyController {
     @Autowired
     private UserDao userDao;
 
-    @PostMapping("api/property/add")
+    @PostMapping("api/secure/property/add")
     public Property addProperty(@RequestBody Property property, Principal principal) {
         if (principal != null){
             property.setUsers(userDao.findByUsername(principal.getName()));
@@ -43,17 +43,17 @@ public class PropertyController {
         return propertyDao.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("api/properties")
+    @GetMapping("api/property/all")
     public List<Property> getAllProperty() {
         return propertyDao.findAll();
     }
 
-    @GetMapping("api/properties/prices")
+    @GetMapping("api/property/prices")
     public List<Property> searchByPrice(@RequestParam("start")long start, @RequestParam("end") long end) {
         return propertyDao.searchByPrice(start, end);
     }
 
-    @GetMapping("api/properties/search")
+    @GetMapping("api/property/search")
     public List<Property> searchProperties( Property property) {
         return propertyDao.findAll(Example.of(property));
     }
