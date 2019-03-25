@@ -44,16 +44,19 @@
                    @change="handleFileUploadChange"
                    accept="image/*" id="file-input"
                    v-validate="{ required: true}"
-                   :state="validateState(file)"
+                   ref="myFileInput"
+                   :state="validateState('file')"
                    placeholder="Choose a picture..."/>
       <b-form-text><span style="color: red">{{ errors.first('pic') }}</span></b-form-text>
 
       <small><label><b>Description of your property</b></label></small>
       <b-form-textarea type="text" v-model="roomProperty.description" placeholder="Description your property"/>
       <p></p>
-      <b-button type="submit" variant="dark" :disabled="errors.any() || !isComplete" class="btn btn-primary" v-on:click.prevent="handler">Add Property
+      <b-button type="submit" variant="dark" :disabled="errors.any() || !isComplete" class="btn btn-primary"
+                v-on:click.prevent="handler">Add Property
       </b-button>
     </b-form>
+
 
   </div>
 </template>
@@ -70,6 +73,10 @@
         roomProperty: {
           title: "",
           address: "",
+          county: "",
+          municipality: "",
+          settlement: "",
+          street: "",
           room_count: "",
           bed_count: "",
           price: "",
@@ -82,45 +89,68 @@
       }
     },
     computed: {
-      isComplete () {
+      isComplete() {
         return this.roomProperty.address;
+      }, isAuthenticated() {
+        /*if(!this.$store.getters.isLoggedIn){
+          this.$router.push({path: `/`});
+          this.$router.go();
+          return false;
+        }
+        else{*/
+        return this.$store.getters.isLoggedIn;
       }
+      //}
+    },
+    beforeCreate() {
+      if (!this.$store.getters.isLoggedIn) {
+        this.$router.push({path: `/login`});
+        this.$router.go();
+
+      }
+
     },
     mounted() {
-      this.$loadScript("http://inaadress.maaamet.ee/inaadress/js/inaadress.min.js")
-        .then(() => {
-          let inAadress = new InAadress({
-            "container": "InAadressDiv",
-            "mode": "3",
-            "nocss": false,
-            "lang": "en",
-            "appartment": 0,
-            "ihist": "1993",
-            "searchLayers": ["TANAV"]
+      if (this.$store.getters.isLoggedIn) {
+        this.$loadScript("http://inaadress.maaamet.ee/inaadress/js/inaadress.min.js")
+          .then(() => {
+            let inAadress = new InAadress({
+              "container": "InAadressDiv",
+              "mode": "3",
+              "nocss": false,
+              "lang": "en",
+              "appartment": 0,
+              "ihist": "1993",
+              "searchLayers": ["TANAV"]
+            });
+
+
+            document.addEventListener('addressSelected', function (e) {
+              let aadress = e.detail.aadress;
+              aadress = aadress.split(", ").reverse().join(", ");
+              inAadress.setAddress(aadress);
+              inAadress.hideResult();
+              //console.log(aadress)
+            });
+
+            document.addEventListener('addressSelected', (e) => {
+              const self = this;
+              self.roomProperty.address = e.detail.aadress;
+              self.roomProperty.county = e.detail.maakond;
+              self.roomProperty.municipality = e.detail.omavalitsus;
+              self.roomProperty.settlement = e.detail.asustusyksus;
+              self.roomProperty.street = e.detail.liikluspind;
+              console.log(e.detail.aadress);
+              console.log(e.detail.maakond);
+              console.log(e.detail.omavalitsus);
+              console.log(e.detail.asustusyksus);
+              console.log(e.detail.liikluspind);
+              //console.log(e.detail[0].aadress_nr);
+
+            });
+
           });
-
-
-          document.addEventListener('addressSelected', function (e) {
-            let aadress = e.detail.aadress;
-            aadress = aadress.split(", ").reverse().join(", ");
-            inAadress.setAddress(aadress);
-            inAadress.hideResult();
-            //console.log(aadress)
-          });
-
-          document.addEventListener('addressSelected', (e) => {
-            const self = this;
-            self.roomProperty.address = e.detail.aadress;
-            console.log(e.detail.aadress);
-            console.log(e.detail.maakond);
-            console.log(e.detail.omavalitsus);
-            console.log(e.detail.asustusyksus);
-            console.log(e.detail.liikluspind);
-            //console.log(e.detail[0].aadress_nr);
-
-          });
-
-        });
+      }
       this.$loadScript("https://www.gstatic.com/firebasejs/5.8.6/firebase.js")
         .then(() => {
           let config = {
@@ -136,12 +166,42 @@
 
     },
     methods: {
+
       handler: function () { //Syntax assuming its in the 'methods' option of Vue instance
         this.handleFileUploadSubmit();
         //this.post();
       },
+      redirect: function () {
+        this.$router.push({path: `/`});
+        this.$router.go();
+      },
 
       post: function () {
+
+        const that = this;
+        this.$store.dispatch('doPost', {
+          url: 'property/add/', body:
+            {
+              title: this.roomProperty.title,
+              address: this.roomProperty.address,
+              county: this.roomProperty.county,
+              municipality: this.roomProperty.municipality,
+              settlement: this.roomProperty.settlement,
+              street: this.roomProperty.street,
+              room_count: this.roomProperty.room_count,
+              bed_count: this.roomProperty.bed_count,
+              description: this.roomProperty.description,
+              price: this.roomProperty.price,
+              pic_url: this.roomProperty.pic_url,
+            }
+        }).then(data => {
+          console.log("tehtud");
+          that.submitted = true;
+        })
+      },
+
+
+      /*post: function () {
         this.$http.post("http://localhost:8080/api/property/add", {
           title: this.roomProperty.title,
           address: this.roomProperty.address,
@@ -155,17 +215,33 @@
           console.log(data);
           this.submitted = true;
         })
-      },
+      },*/
 
       handleFileUploadChange(e) {
-        this.roomProperty.pic_name = e.target.files[0];
+
+        if (e.target.files[0].size > 307200) {
+          alert("File is too big!");
+          this.file = null;
+          this.roomProperty.pic_name = "";
+          document.getElementById("file-input").value = "";
+        } else {
+          this.roomProperty.pic_name = e.target.files[0];
+        }
         console.log(this.roomProperty.pic_name)
 
       },
       handleFileUploadSubmit(e) {
+        let d = new Date();
+        let h = d.getHours().toString();
+        let m = d.getMinutes().toString();
+        let s = d.getSeconds().toString();
+        let ms = d.getMilliseconds().toString();
+        let day = d.getDay().toString();
+        let nr = s+day+ms+h+m;
+
         const storageService = firebase.storage();
         const storageRef = storageService.ref();
-        const uploadTask = storageRef.child(`images/${this.roomProperty.pic_name.name}`).put(this.roomProperty.pic_name); //create a child directory called images, and place the file inside this directory
+        const uploadTask = storageRef.child(`images/${nr + this.roomProperty.pic_name.name}`).put(this.roomProperty.pic_name); //create a child directory called images, and place the file inside this directory
         uploadTask.on('state_changed', (snapshot) => {
           // Observe state change events such as progress, pause, and resume
         }, (error) => {
@@ -219,7 +295,6 @@
     box-sizing: border-box;
     border-radius: 4px;
   }
-
 
 
 </style>
