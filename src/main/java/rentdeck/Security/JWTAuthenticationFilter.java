@@ -57,6 +57,9 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
                     loginCredentials.getUsername(),
                         loginCredentials.getPassword());
 
+        System.out.println(authRequest.toString());
+        System.out.println(authRequest.getPrincipal().toString());
+        System.out.println(authRequest.getCredentials().toString());
         return this.getAuthenticationManager().authenticate(authRequest);
     }
 
