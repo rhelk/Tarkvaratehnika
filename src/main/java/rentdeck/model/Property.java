@@ -25,6 +25,10 @@ public class Property {
     String title;
     String description;
     String address;
+    String county;
+    String municipality;
+    String settlement;
+    String street;
     String pic_url;
 
     Integer room_count;
