@@ -1,28 +1,30 @@
 <template>
   <div id="addRoom">
     <h1>Add your amazing property!</h1>
-
+    <div style="margin-bottom: 50px"></div>
     <b-form v-if="!submitted">
+      <small><label><b>Name of your property</b></label></small>
       <b-form-input required data-vv-name="title" type="text" v-model="roomProperty.title"
                     placeholder="Name of your property"
-                    v-validate="{ required: true, min:4 }"
+                    v-validate="{ required: true, min:4, max: 15 }"
                     :state="validateState('roomProperty.title')"/>
 
       <b-form-text><span style="color: red">{{ errors.first('title') }}</span></b-form-text>
 
+      <small><label><b>Location of your property</b></label></small>
       <div id="InAadressDiv" style="width: 600px; height: 450px"></div>
 
-      <small class="form-text text-muted">
-       Location of your property
-      </small>
 
       <p></p>
+
+      <small><label><b>Count of rooms</b></label></small>
       <b-form-input data-vv-name="rooms" type="number" v-model="roomProperty.room_count" placeholder="Count of rooms"
                     required
                     v-validate="{ required: true, min_value:1}"
                     :state="validateState('roomProperty.room_count')"/>
       <b-form-text><span style="color: red">{{ errors.first('rooms') }}</span></b-form-text>
 
+      <small><label><b>Count of beds</b></label></small>
       <b-form-input data-vv-name="beds" type="number" v-model="roomProperty.bed_count" placeholder="Count of beds"
                     required
                     v-validate="{ required: true, min_value:1}"
@@ -30,12 +32,14 @@
       <b-form-text><span style="color: red">{{ errors.first('beds') }}</span></b-form-text>
 
 
+      <small><label><b>Price for one night</b></label></small>
       <b-form-input data-vv-name="price" type="number" v-model="roomProperty.price" placeholder="Price for one nigh"
                     required
                     v-validate="{ required: true, min_value:5}"
                     :state="validateState('roomProperty.price')"/>
       <b-form-text><span style="color: red">{{ errors.first('price') }}</span></b-form-text>
 
+      <small><label><b>Choose a picture for your property</b></label></small>
       <b-form-file required data-vv-name="pic" v-model="file" type="file" class="file-select"
                    @change="handleFileUploadChange"
                    accept="image/*" id="file-input"
@@ -43,9 +47,11 @@
                    :state="validateState(file)"
                    placeholder="Choose a picture..."/>
       <b-form-text><span style="color: red">{{ errors.first('pic') }}</span></b-form-text>
+
+      <small><label><b>Description of your property</b></label></small>
       <b-form-textarea type="text" v-model="roomProperty.description" placeholder="Description your property"/>
       <p></p>
-      <b-button type="submit" variant="primary" :disabled="errors.any() || !isComplete" class="btn btn-primary" v-on:click.prevent="handler">Add Property
+      <b-button type="submit" variant="dark" :disabled="errors.any() || !isComplete" class="btn btn-primary" v-on:click.prevent="handler">Add Property
       </b-button>
     </b-form>
 
@@ -99,7 +105,7 @@
             aadress = aadress.split(", ").reverse().join(", ");
             inAadress.setAddress(aadress);
             inAadress.hideResult();
-            console.log(aadress)
+            //console.log(aadress)
           });
 
           document.addEventListener('addressSelected', (e) => {
