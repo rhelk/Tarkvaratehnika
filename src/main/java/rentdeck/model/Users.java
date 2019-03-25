@@ -25,7 +25,7 @@ public class Users implements Serializable {
     String last_name;
     String username;
 
-//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
