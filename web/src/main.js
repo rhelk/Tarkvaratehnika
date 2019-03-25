@@ -6,6 +6,7 @@ import Routes from './routes'
 import VueRouter from 'vue-router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import { store } from './store/store'
 import LoadScript from 'vue-plugin-load-script'
 import Vuetify from  'vuetify'
 import Firebase from 'firebase/app'
@@ -50,6 +51,7 @@ const router = new VueRouter({
 });
 
 new Vue({
+  store: store,
   el: '#app',
   render: h => h(App),
   router: router

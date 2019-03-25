@@ -89,6 +89,8 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
         configuration.setAllowedHeaders(Arrays.asList("*"));
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
+        // This allow us to expose the headers
+        configuration.setExposedHeaders(Arrays.asList("Access-Control-Allow-Headers", "Authorization"));
         return source;
     }
 }

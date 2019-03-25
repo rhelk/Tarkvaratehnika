@@ -32,6 +32,8 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
 
         LoginCredentials loginCredentials;
 
+        System.out.println("login request...");
+
         try {
 //            BufferedReader buffer = new BufferedReader(new InputStreamReader(request.getInputStream()));
 //            System.out.println(buffer.lines().collect(Collectors.joining("\n")) + "  tryCatch");
@@ -68,5 +70,6 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(HMAC512(SECRET.getBytes()));
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
+
     }
 }

@@ -5,15 +5,15 @@
       <div class="form-group">
         <label>Email</label>
         <input type="text" v-model="input.username" class="form-control" />
-        <!--<div v-show="submitted && !username" class="invalid-feedback">Username is required</div>-->
+        <!--<div v-show="submitted && !input.username" class="invalid-feedback">Username is required</div>-->
       </div>
       <div class="form-group">
-        <label htmlFor="password">Password</label>
+        <label type="password">Password</label>
         <input type="password" v-model="input.password" class="form-control" />
-        <!--<div v-show="submitted && !password" class="invalid-feedback">Password is required</div>-->
+        <!--<div v-show="submitted && !input.password" class="invalid-feedback">Password is required</div>-->
       </div>
       <div class="form-group">
-        <button class="btn btn-primary" v-on:click.prevent="login">Login</button>
+        <button class="btn btn-primary" v-on:click.prevent="loginPreCheck">Login</button>
         <router-link to="/register" class="btn btn-link">Register</router-link>
       </div>
     </form>
@@ -21,29 +21,33 @@
 </template>
 
 <script>
-    export default {
-        name: "login",
-        data() {
-          return {
-            input: {
-              username: "",
-              password: ""
-            }
-          }
-        },
-        methods: {
-          login:function () {
 
-            this.$http.post("http://localhost:8080/api/login", {
-              title:this.input.username,
-              body: this.input.password,
-              userId: 1,
-            }).then(function(data){
-              console.log(data);
-            })
-          }
-        }
+  export default {
+    data() {
+      return {
+        input: {
+          username: "",
+          password: ""
+        },
+        submitted: false
+      }
+    },
+    methods: {
+      loginPreCheck: function () {
+        this.submitted = true;
+        if (this.input.username && this.input.password)
+          this.login();
+      },
+      login: function () {
+        let username = this.input.username;
+        let password = this.input.password;
+        // console.log(username, password);
+        this.$store.dispatch('login', {username, password})
+          .then(() => this.$router.push('/'))
+          .catch(err => console.log(err))
+      }
     }
+  }
 </script>
 
 <style scoped>

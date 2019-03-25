@@ -4,14 +4,15 @@
       <a class="navbar-brand">RentDeck</a>
       <b-navbar>
         <b-nav-form>
-          <b-form-input v-model="search" class="mr-sm-2 " type="text" placeholder="Search"/>
-          <b-button variant="dark" class="my-2 my-sm-0" type="submit" v-on:click.prevent="searchProperties">Search</b-button>
+          <b-form-input class="mr-sm-2 " type="text" placeholder="Search"/>
+          <b-button variant="dark" class="my-2 my-sm-0" type="submit">Search</b-button>
         </b-nav-form>
       </b-navbar>
       <b-navbar-nav class="ml-auto">
         <router-link  to='/' exact> Home </router-link>
         <a href="/all">All properties</a>
-        <router-link to='/property/add' exact> Add property</router-link>
+        <router-link v-if="authenticated" to='/property/add' exact> Add property</router-link>
+        <router-link v-if="authenticated" to="/login" v-on:click.native="logout()" replace>Logout</router-link>
       </b-navbar-nav>
     </div>
   </b-navbar>
@@ -19,12 +20,11 @@
 
 <script>
 
-  //<router-link  to='/all' exact> All properties</router-link>>
-
   export default {
     data() {
       return {
         search: "",
+        authenticated: false
       }
     },
     methods: {
@@ -39,7 +39,18 @@
 
           }
 
-        })},
+      })},
+      auth: function () {
+        this.$store.dispatch('login2')
+          .then((res) => console.log(res.data))
+          .catch(() => console.log("not logged in"))
+      },
+      logout: function () {
+        this.$store.dispatch('logout')
+          .then(() => {
+            this.$router.push('/login')
+          })
+      }
     }
   }
 </script>
