@@ -35,10 +35,11 @@
       }
     },
     created() {
+      const that = this;
+      this.$store.dispatch('doGet', {url: 'property/get/' + this.id}).then(data => {
+        that.roomDetails = data.data;
+      })
 
-      this.$http.get('http://localhost:8080/api/property/get/' + this.id).then(function (data) {
-        this.roomDetails = data.body;
-      });
 
     }
   }
