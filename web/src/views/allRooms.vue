@@ -22,6 +22,7 @@
     data() {
       return {
         rooms: [],
+        testrooms: [],
         search: "",
         price: "",
         id: this.$route.params.id,
@@ -30,15 +31,20 @@
     },
     created() {
       console.log(this.id);
+      const that = this
       if(this.id === undefined || this.id === "" ){
       //if(this.id === "all" ){
           console.log("here 2");
-          this.$http.get('http://localhost:8080/api/properties').then(function (data) {
-            this.rooms = data.body;
-        })
-      }
+          this.$store.dispatch('doGet',{url: "properties"}).then(data => {
+            console.log("p2ringus")
+            console.log(data)
+            that.rooms = data.data;
 
-      else{
+            console.log("allRooms");
+            console.log(that);
+          })
+
+      }else{
         console.log("here 1");
         this.$http.get('http://localhost:8080/api/properties/search?address=' + this.id).then(function (data) {
           console.log(data);
@@ -46,6 +52,7 @@
           this.id = "";
 
       })}
+      console.log("juba siin")
     },
   }
 </script>

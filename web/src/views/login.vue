@@ -21,6 +21,8 @@
 </template>
 
 <script>
+  import sha from 'js-sha256'
+
 
   export default {
     data() {
@@ -42,7 +44,10 @@
         let username = this.input.username;
         let password = this.input.password;
         // console.log(username, password);
-        this.$store.dispatch('login', {username, password})
+        this.$store.dispatch('login', {
+          username: this.input.username,
+          password: sha.sha256(this.input.password)
+        })
           .then(() => this.$router.push('/'))
           .catch(err => console.log(err))
       }

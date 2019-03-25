@@ -9,7 +9,7 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
   state: {
     status: '',
-    token: '',
+    token: localStorage.getItem('token') || '',
     loginAddress: 'http://localhost:8080/api/login',
     apiAddress: 'http://localhost:8080/api/',
     apiAddress2: 'http://localhost:8080/api/secureTest'
@@ -18,6 +18,7 @@ export const store = new Vuex.Store({
     isLoggedIn: state => !!state.token,
     getToken: state => {return state.token},
     authStatus: state => state.status,
+    getApiAddress: state => {return state.apiAddress}
   },
   mutations: {
     auth_request(state){
@@ -33,27 +34,25 @@ export const store = new Vuex.Store({
     logout(state){
       state.status = '';
       state.token = ''
-    },
+    }
   },
   actions: {
     login: (context, payload) => {
       console.log("logging in..., ");
       context.commit('auth_request');
       return new Promise((resolve, reject) => {
-        axios.post(context.state.apiAddress + "login", {
-          username: payload.username,
-          password: sha.sha256(payload.password)
-        })
+        axios.post(context.state.apiAddress + "login", payload
+        )
           .then(res => {
-            console.log(res.headers.authorization);
             const token = res.headers.authorization;
+            localStorage.setItem('token', token)
             context.commit('auth_success', token);
             axios.defaults.headers.common['Authorization'] = token;
             resolve(res);
           })
           .catch(err => {
             context.commit('auth_error');
-            // localStorage.removeItem('token');
+            localStorage.removeItem('token');
             reject(err);
           })
       })
@@ -72,7 +71,8 @@ export const store = new Vuex.Store({
     },
     logout: (context) => {
       context.commit('logout');
-      console.log("you are logged out")
+      console.log("you are logged out");
+      localStorage.removeItem('token');
     },
     register: (context, payload) => {
       return new Promise((resolve, reject) => {
@@ -95,6 +95,23 @@ export const store = new Vuex.Store({
           })
       })
     },
+    doPost: (context, payload) => {
+      return new Promise(((resolve, reject) => {
+        axios.post(context.getters.getApiAddress + payload.url, payload.body)
+          .then(resp => resolve(resp))
+          .catch(reason => reject(reason))
+      }))
+    },
+    doGet: (context, payload) => {
+      return new Promise(((resolve, reject) => {
+        axios.get(context.getters.getApiAddress + payload.url)
+          .then(resp => {
+            console.log(resp);
+            resolve(resp)
+          })
+          .catch(reason => reject(reason))
+      }))
+    }
   }
 })
 
