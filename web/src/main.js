@@ -39,7 +39,11 @@ const config = {
 };
 
 Vue.use(VeeValidate, config);
-
+const token = localStorage.getItem('token')
+console.log(token)
+if (token) {
+  axios.defaults.headers.common['Authorization'] = token
+}
 
 
 //Vue.use(VueAxios, axios);

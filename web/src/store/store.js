@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import sha from 'js-sha256'
-
 
 Vue.use(Vuex);
 
@@ -57,18 +55,6 @@ export const store = new Vuex.Store({
           })
       })
     },
-    login2: (context) => {
-      return new Promise((resolve, reject) => {
-        axios.get(context.state.apiAddress2)
-          .then(res => {
-            resolve(res)
-          })
-          .catch(err => {
-            console.log(err)
-            reject(err)
-          })
-      })
-    },
     logout: (context) => {
       context.commit('logout');
       console.log("you are logged out");
@@ -76,20 +62,18 @@ export const store = new Vuex.Store({
     },
     register: (context, payload) => {
       return new Promise((resolve, reject) => {
-        context.commit('auth_request')
-        axios.post(context.state.apiAddress + "login", {
-
-        })
+        context.commit('auth_request');
+        axios.post(context.state.apiAddress + "register", payload)
           .then(resp => {
-            const token = resp.data.token
-            const user = resp.data.user
+            const token = resp.headers.authorisation;
+            // const user = resp.data.user
             localStorage.setItem('token', token)
             axios.defaults.headers.common['Authorization'] = token
-            commit('auth_success', token, user)
+            context.commit('auth_success', token)
             resolve(resp)
           })
           .catch(err => {
-            commit('auth_error', err)
+            context.commit('auth_error', err)
             localStorage.removeItem('token')
             reject(err)
           })
@@ -106,11 +90,17 @@ export const store = new Vuex.Store({
       return new Promise(((resolve, reject) => {
         axios.get(context.getters.getApiAddress + payload.url)
           .then(resp => {
-            console.log(resp);
+            // console.log(resp);
             resolve(resp)
           })
           .catch(reason => reject(reason))
       }))
+    }
+  },
+  created(context){
+    if (context.token) {
+      Vue.prototype.$http.defaults.headers.common['Authorization'] = context.token
+      console.log("token lisatud")
     }
   }
 })

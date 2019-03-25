@@ -40,7 +40,6 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/logout").permitAll()
                 .antMatchers("/api/login").permitAll()
                 .antMatchers("/api/register").permitAll()
-                .antMatchers("/api/properties/**").permitAll()
                 .antMatchers("/api/property/**").permitAll()
                 .anyRequest().authenticated()
                 .and()

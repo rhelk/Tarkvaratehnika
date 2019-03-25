@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import rentdeck.util.JsonWebToken;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -65,10 +66,7 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
                                             FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
 
-       String token = JWT.create()
-                .withSubject(((User) auth.getPrincipal()).getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .sign(HMAC512(SECRET.getBytes()));
+       String token = JsonWebToken.genJWT(((User) auth.getPrincipal()).getUsername());
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
 
     }
