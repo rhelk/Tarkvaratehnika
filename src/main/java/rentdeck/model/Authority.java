@@ -6,7 +6,8 @@ import javax.persistence.Table;
 @Embeddable
 @Table(name = "authorities")
 public class Authority {
-    private String authority;
+
+    private String authority = new String("ROLE_USER");
 
     public Authority() {
     }

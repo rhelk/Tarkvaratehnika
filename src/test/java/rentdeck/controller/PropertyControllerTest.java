@@ -6,6 +6,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Example;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,6 +22,7 @@ import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -39,13 +41,18 @@ public class PropertyControllerTest {
     @MockBean
     UserDao userDao;
 
-    @Test
-    public void getPropertyByIdTest() throws Exception {
+    Property mockedProperty;
 
-        Property mockedProperty = new Property();
+    public PropertyControllerTest() {
+        mockedProperty = new Property();
         mockedProperty.setAddress("abba 1");
         mockedProperty.setPrice(300L);
         mockedProperty.setProperty_id(-1L);
+
+    }
+
+    @Test
+    public void getPropertyByIdTest() throws Exception {
 
         when(propertyDao.findById(-1L)).thenReturn(Optional.of(mockedProperty));
 
@@ -60,14 +67,9 @@ public class PropertyControllerTest {
     @Test
     public void getAllPropertyTest() throws Exception {
 
-        Property mockedProperty = new Property();
-        mockedProperty.setAddress("abba 1");
-        mockedProperty.setPrice(300L);
-        mockedProperty.setProperty_id(-1L);
-
         when(propertyDao.findAll()).thenReturn(Arrays.asList(mockedProperty, mockedProperty, mockedProperty));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/properties")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/property/all")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)));
@@ -76,11 +78,6 @@ public class PropertyControllerTest {
     @Test
     public void addPropertyTest() throws Exception {
 
-        Property mockedProperty = new Property();
-        mockedProperty.setAddress("abba 1");
-        mockedProperty.setPrice(300L);
-        mockedProperty.setProperty_id(-1L);
-
         String propJson = "{\"property_id\":-1,\"title\":null,\"description\":null,\"address\":\"abba 1\",\"pic_url\":null,\"room_count\":null,\"bed_count\":null,\"users\":null,\"price\":300}";
 
         Principal mockedPrincipal = Mockito.mock(Principal.class);
@@ -88,12 +85,37 @@ public class PropertyControllerTest {
 
         when(propertyDao.save(any(Property.class))).thenReturn(mockedProperty);
 
-        mockMvc.perform(post("/api/property/add")
+        mockMvc.perform(post("/api/secure/property/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(propJson)
                 .principal(mockedPrincipal))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("property_id").value(-1));
+    }
+
+    @Test
+    public void searchPropertiesTest() throws Exception {
+
+        when(propertyDao.findAll(any(Example.class))).thenReturn(Arrays.asList(mockedProperty, mockedProperty, mockedProperty));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/property/search")
+                .param("county", "Tallinn")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(3)));
+    }
+
+    @Test
+    public void searchByPriceTest() throws Exception {
+        when(propertyDao.searchByPrice(anyLong(), anyLong())).thenReturn(Arrays.asList(mockedProperty, mockedProperty, mockedProperty));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/property/prices")
+                .param("start", "200")
+                .param("end", "400")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(3)));
+
     }
 
 }

@@ -62,13 +62,13 @@ public class UserControllerTest {
 
         Mockito.when(userDao.save(any(Users.class))).thenReturn(user);
 
-        MvcResult result = mockMvc.perform(post("/api/user/add")
+        MvcResult result = mockMvc.perform(post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(userJson))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertEquals(result.getResponse().getContentAsString(), "-1");
+        assertEquals(result.getResponse().getContentAsString().substring(11, 14), "-1,");
 
     }
 
