@@ -10,6 +10,6 @@ public interface AuthorityDao extends JpaRepository<Users, Long> {
 
     @Transactional
     @Modifying
-    @Query(value = "INSERT INTO authorities VALUES (?1, 'ROLE_USER'))", nativeQuery = true)
+    @Query(value = "INSERT INTO authorities (username) VALUES (?1)", nativeQuery = true)
     void addUserToUserRole(String username);
 }

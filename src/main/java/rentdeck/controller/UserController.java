@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import rentdeck.dao.AuthorityDao;
+import rentdeck.model.Authority;
 import rentdeck.model.Users;
 import rentdeck.dao.UserDao;
 import rentdeck.util.JsonWebToken;
@@ -37,19 +38,16 @@ public class UserController {
     private AuthorityDao authorityDao;
 
     @PostMapping("api/register")
-    public String addUser(@RequestBody Users users, HttpServletResponse res) {
-        System.out.println(users.getPassword());
+    public Users addUser(@RequestBody Users users, HttpServletResponse res) {
+
         String token = JsonWebToken.genJWT(users.getUsername());
-//        System.out.println(token);
-//        System.out.println(users.toString());
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
+
         users.setPassword(encodePassword(users.getPassword()));
-        String tempo = userDao.save(users).toString();
+        Users result = userDao.save(users);
+        authorityDao.addUserToUserRole(result.getUsername());
 
-//        return userDao.save(users).toString();
-
-        System.out.println(tempo);
-        return tempo;
+        return result;
     }
 
     @GetMapping("api/user/get/{id}")

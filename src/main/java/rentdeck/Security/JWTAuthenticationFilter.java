@@ -60,6 +60,11 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
         System.out.println(authRequest.toString());
         System.out.println(authRequest.getPrincipal().toString());
         System.out.println(authRequest.getCredentials().toString());
+        Authentication authie = this.getAuthenticationManager().authenticate(authRequest);
+        System.out.println("Now for rest:");
+        System.out.println("Authorities: " + authie.getAuthorities().toString());
+        System.out.println("Is authed: " + authie.isAuthenticated());
+        System.out.println(authie.toString());
         return this.getAuthenticationManager().authenticate(authRequest);
     }
 
