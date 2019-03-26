@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import rentdeck.dao.AuthorityDao;
 import rentdeck.model.Authority;
 import rentdeck.model.Users;
 import rentdeck.dao.UserDao;
@@ -19,7 +18,7 @@ import rentdeck.util.JsonWebToken;
 
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
@@ -34,9 +33,6 @@ public class UserController {
     @Autowired
     private UserDao userDao;
 
-    @Autowired
-    private AuthorityDao authorityDao;
-
     @PostMapping("api/register")
     public Users addUser(@RequestBody Users users, HttpServletResponse res) {
 
@@ -44,10 +40,9 @@ public class UserController {
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
 
         users.setPassword(encodePassword(users.getPassword()));
-        Users result = userDao.save(users);
-        authorityDao.addUserToUserRole(result.getUsername());
+        users.setAuthorityList(Arrays.asList(new Authority()));
 
-        return result;
+        return userDao.save(users);
     }
 
     @GetMapping("api/user/get/{id}")
