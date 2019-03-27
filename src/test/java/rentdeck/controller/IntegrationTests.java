@@ -20,8 +20,12 @@ import rentdeck.dao.UserDao;
 import rentdeck.model.Property;
 import rentdeck.model.Users;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 //@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -139,6 +143,58 @@ public class IntegrationTests {
         Property property = new ObjectMapper().readValue(mvcResult.getResponse().getContentAsString(), Property.class);
         assertThat(property.getProperty_id()).isEqualTo(1L);
         assertThat(property.getPrice()).isEqualTo(200);
+
+    }
+
+    @Test
+    public void propertyByWrongIdTest() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/property/get/{id}", 25L)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
+                .andReturn();
+    }
+
+    @Test
+    public void getAllPropertiesTest() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/property/all")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<Property> properties = Arrays.asList(new ObjectMapper()
+                .readValue(mvcResult.getResponse().getContentAsString(), Property[].class));
+
+        assertThat(properties.size()).isEqualTo(4);
+        assertThat(properties.get(3).getProperty_id()).isEqualTo(4);
+        assertThat(properties.get(2).getPic_url()).isNotNull();
+
+    }
+
+    @Test
+    public void validSearchPriceRangeTest() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/property/prices")
+                .param("start", "200")
+                .param("end", "400")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<Property> properties = Arrays.asList(new ObjectMapper()
+                .readValue(mvcResult.getResponse().getContentAsString(), Property[].class));
+
+        assertThat(properties.size()).isEqualTo(2);
+        assertThat(properties.stream().allMatch(a -> a.getPrice() >= 200 && a.getPrice() <= 400)).isTrue();
+    }
+
+    @Test
+    public void SearchPriceRangeZeroTest() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/property/prices")
+                .param("start", "330")
+                .param("end", "370")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("[]"));
 
     }
 
