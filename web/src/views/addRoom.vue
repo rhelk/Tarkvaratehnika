@@ -180,7 +180,7 @@
 
         const that = this;
         this.$store.dispatch('doPost', {
-          url: 'property/add/', body:
+          url: 'secure/property/add/', body:
             {
               title: this.roomProperty.title,
               address: this.roomProperty.address,
