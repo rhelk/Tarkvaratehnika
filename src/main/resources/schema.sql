@@ -24,6 +24,7 @@ create table property (
  bed_count SMALLINT,
  owner_id BIGINT,
  price BIGINT,
+ visibility VARCHAR(10) DEFAULT 'visible',
  FOREIGN KEY(owner_id) REFERENCES users
 );
 
