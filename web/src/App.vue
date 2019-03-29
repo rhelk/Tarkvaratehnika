@@ -27,6 +27,9 @@
       'login': login,
       'register': register,
     },
+    created() {
+        this.$store.dispatch("getUser").catch();
+    }
 
   }
 </script>

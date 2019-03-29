@@ -33,6 +33,7 @@
     },
     created() {
       console.log(this.id);
+      // console.log("allRooms: user id on " + this.$store.getters.getUser_id);
       const that = this;
       if (this.id === undefined || this.id === "") {
         //console.log("here 2");
