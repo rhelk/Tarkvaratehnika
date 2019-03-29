@@ -279,6 +279,8 @@ public class IntegrationTests {
 
         String json = mapper.writeValueAsString(property);
 
+        System.out.println(json);
+
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/secure/property/add")
                 .header("Authorization", authString)
                 .contentType(MediaType.APPLICATION_JSON)

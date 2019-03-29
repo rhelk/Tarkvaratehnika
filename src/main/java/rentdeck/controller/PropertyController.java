@@ -2,6 +2,7 @@ package rentdeck.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,8 +45,8 @@ public class PropertyController {
     }
 
     @GetMapping("api/property/all")
-    public List<Property> getAllProperty() {
-        return propertyDao.findAll();
+    public List<Property> getAllVisibleProperty() {
+        return propertyDao.findByVisibility(Property.Visibility.VISIBLE);
     }
 
     @GetMapping("api/property/prices")
@@ -55,7 +56,12 @@ public class PropertyController {
 
     @GetMapping("api/property/search")
     public List<Property> searchProperties( Property property) {
-        return propertyDao.findAll(Example.of(property));
+        return propertyDao.findAll(Example.of(property, ExampleMatcher.matchingAll().withIgnoreCase()));
+    }
+
+    @PostMapping("api/property/rent")
+    public Boolean rentProperty(@RequestParam("ID") Long id) {
+        return propertyDao.setHidden(id) == 1;
     }
 
 
