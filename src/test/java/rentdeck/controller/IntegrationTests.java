@@ -1,5 +1,7 @@
 package rentdeck.controller;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -117,7 +119,7 @@ public class IntegrationTests {
     public void registerUserTest() throws Exception {
 
         String userjson = "{ \"first_name\" : \"Petter\", \"last_name\" : \"Iss\", \"username\" : \"a@a\", \"password\": \"d74ff0ee8da3b9806b18c877dbf29bbde50b5bd8e4dad7a3a725000feb82e8f1\"}";
-        System.out.println(userjson);
+//        System.out.println(userjson);
 
         MvcResult mvcResult = mockMvc.perform(post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -182,7 +184,7 @@ public class IntegrationTests {
         List<Property> properties = Arrays.asList(new ObjectMapper()
                 .readValue(mvcResult.getResponse().getContentAsString(), Property[].class));
 
-        assertThat(properties.size()).isEqualTo(2);
+        assertThat(properties.size()).isEqualTo(3);
         assertThat(properties.stream().allMatch(a -> a.getPrice() >= 200 && a.getPrice() <= 400)).isTrue();
     }
 
@@ -195,6 +197,105 @@ public class IntegrationTests {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string("[]"));
+
+    }
+
+    @Test
+    public void SearchPriceRangeWrongWayTest() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/property/prices")
+                .param("start", "400")
+                .param("end", "200")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("[]"));
+
+    }
+
+    @Test
+    public void queryByExampleSingleFieldTest() throws Exception {
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<Property> results = null;
+
+        //Price check
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/property/search")
+                .param("price", "100")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        results = Arrays.asList(mapper.readValue(mvcResult.getResponse().getContentAsString(), Property[].class));
+
+        assertThat(results.size()).isEqualTo(1);
+        assertThat(results.get(0).getPrice()).isEqualTo(100);
+        assertThat(results.get(0).getProperty_id()).isEqualTo(2);
+
+
+        // Bed_Count
+        mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/property/search")
+                .param("bed_count", "2")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        results = Arrays.asList(mapper.readValue(mvcResult.getResponse().getContentAsString(), Property[].class));
+
+        assertThat(results.size()).isEqualTo(4);
+        assertThat(results.get(0).getBed_count()).isEqualTo(2);
+        assertThat(results.get(2).getProperty_id()).isEqualTo(3);
+
+        //room_count
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/property/search")
+                .param("room_count", "6")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("[]"));
+
+        mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/property/search")
+                .param("room_count", "3")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        results = Arrays.asList(mapper.readValue(mvcResult.getResponse().getContentAsString(), Property[].class));
+
+        assertThat(results.size()).isEqualTo(3);
+
+    }
+
+    @Test
+    public void insertPropertyTest() throws Exception {
+
+        Property property = new Property();
+        property.setPrice(300L);
+        property.setBed_count(7);
+        property.setRoom_count(5);
+        property.setPic_url("url");
+        property.setTitle("Something");
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
+        String json = mapper.writeValueAsString(property);
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/secure/property/add")
+                .header("Authorization", authString)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        Property result = mapper.readValue(mvcResult.getResponse().getContentAsString(), Property.class);
+
+        assertThat(result.getProperty_id()).isEqualTo(5L);
+        assertThat(result.getUsers().getUser_id()).isEqualTo(1);
+
+        // After asserting values add them to property so can do FieldByField comparison
+        property.setProperty_id(5L);
+        property.setUsers(result.getUsers());
+
+        assertThat(result).isEqualToComparingFieldByField(property);
 
     }
 

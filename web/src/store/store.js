@@ -65,7 +65,7 @@ export const store = new Vuex.Store({
         context.commit('auth_request');
         axios.post(context.state.apiAddress + "register", payload)
           .then(resp => {
-            const token = resp.headers.authorisation;
+            const token = resp.headers.authorization;
             // const user = resp.data.user
             localStorage.setItem('token', token)
             axios.defaults.headers.common['Authorization'] = token
