@@ -52,7 +52,7 @@
             </div>
             <div class="ml-3 w-50">
               <div>
-                <a class="btn btn-dark btn-lg btn-block" href="#" role="button">Start here</a>
+                <button type="button" class="btn btn-dark btn-lg btn-block"  v-on:click.prevent=addProperty role="button">Start here</button>
               </div>
             </div>
           </div>
@@ -90,7 +90,19 @@
           }
         })
 
+      },
+      addProperty: function () {
+        if(this.$store.getters.isLoggedIn){
+          this.$router.push({path: `/property/add`});
+          this.$router.go();
+        }
+        else{
+          this.$router.push({path: `/login`});
+          this.$router.go();
+        }
       }
+
+
     }
   }
 </script>

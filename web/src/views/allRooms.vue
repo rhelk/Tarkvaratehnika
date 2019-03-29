@@ -47,7 +47,8 @@
 
       } else {
         console.log("here 1");
-        this.$store.dispatch('doGet', {url: 'property/search?address=' + this.id}).then(data => {
+        //this.$store.dispatch('doGet', {url: 'property/' + this.id}).then(data => {
+        this.$store.dispatch('doGet', {url: 'property/search?municipality=' + this.id}).then(data => {
           that.rooms = data.data;
         })
       }

@@ -4,6 +4,8 @@ import addProperty from './views/addRoom.vue'
 import login from './views/login.vue'
 import register from "./views/register"
 import home from "./views/home.vue"
+import changeProperty from './views/changeProperty.vue'
+import myRooms from './views/myRooms.vue'
 
 
 export default [
@@ -14,4 +16,6 @@ export default [
   {path: '/login', component: login},
   {path: '/register', component: register},
   {path: '/', component: home},
+  {path: '/change/:id', component: changeProperty},
+  {path: '/my/rooms', component: myRooms},
 ]

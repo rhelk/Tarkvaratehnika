@@ -1,12 +1,12 @@
 <template>
   <div id="addRoom">
-    <h1>Add your amazing property!</h1>
+    <h1>Change your property</h1>
     <div style="margin-bottom: 50px"></div>
     <b-form v-if="!submitted">
       <small><label><b>Name of your property</b></label></small>
-      <b-form-input required data-vv-name="title" type="text" v-model="roomProperty.title"
-                    placeholder="Name of your property"
-                    v-validate="{ required: true, min:4, max: 25 }"
+      <b-form-input data-vv-name="title" type="text" v-model="roomProperty.title"
+                    :placeholder= "roomProperty.title"
+                    v-validate="{min:4, max: 25}"
                     :state="validateState('roomProperty.title')"/>
 
       <b-form-text><span style="color: red">{{ errors.first('title') }}</span></b-form-text>
@@ -14,46 +14,41 @@
       <small><label><b>Location of your property</b></label></small>
       <div id="InAadressDiv" style="width: 600px; height: 450px"></div>
 
-
       <p></p>
 
       <small><label><b>Count of rooms</b></label></small>
-      <b-form-input data-vv-name="rooms" type="number" v-model="roomProperty.room_count" placeholder="Count of rooms"
-                    required
-                    v-validate="{ required: true, min_value:1}"
+      <b-form-input data-vv-name="rooms" type="number" v-model="roomProperty.room_count" :placeholder = roomProperty.room_count.toString()
+                    v-validate="{min_value:1}"
                     :state="validateState('roomProperty.room_count')"/>
       <b-form-text><span style="color: red">{{ errors.first('rooms') }}</span></b-form-text>
 
       <small><label><b>Count of beds</b></label></small>
-      <b-form-input data-vv-name="beds" type="number" v-model="roomProperty.bed_count" placeholder="Count of beds"
-                    required
-                    v-validate="{ required: true, min_value:1}"
+      <b-form-input data-vv-name="beds" type="number" v-model="roomProperty.bed_count" :placeholder=roomProperty.bed_count.toString()
+                    v-validate="{min_value:1}"
                     :state="validateState('roomProperty.bed_count')"/>
       <b-form-text><span style="color: red">{{ errors.first('beds') }}</span></b-form-text>
 
 
       <small><label><b>Price for one night</b></label></small>
-      <b-form-input data-vv-name="price" type="number" v-model="roomProperty.price" placeholder="Price for one nigh"
-                    required
-                    v-validate="{ required: true, min_value:5}"
+      <b-form-input data-vv-name="price" type="number" v-model="roomProperty.price" :placeholder=roomProperty.price.toString()
+                    v-validate="{min_value:5}"
                     :state="validateState('roomProperty.price')"/>
       <b-form-text><span style="color: red">{{ errors.first('price') }}</span></b-form-text>
 
       <small><label><b>Choose a picture for your property</b></label></small>
-      <b-form-file required data-vv-name="pic" v-model="file" type="file" class="file-select"
+      <b-form-file data-vv-name="pic" v-model="file" type="file" class="file-select"
                    @change="handleFileUploadChange"
                    accept="image/*" id="file-input"
-                   v-validate="{ required: true}"
-                   ref="myFileInput"
                    :state="validateState('file')"
                    placeholder="Choose a picture..."/>
       <b-form-text><span style="color: red">{{ errors.first('pic') }}</span></b-form-text>
 
       <small><label><b>Description of your property</b></label></small>
-      <b-form-textarea type="text" v-model="roomProperty.description" placeholder="Description your property"/>
+      <b-form-textarea type="text" v-model="roomProperty.description" :placeholder=roomProperty.description
+      />
       <p></p>
-      <b-button type="submit" variant="dark" :disabled="errors.any() || !isComplete" class="btn btn-primary"
-                v-on:click.prevent="handler" v-bind:disabled="hasClicked">Add Property
+      <b-button type="submit" variant="dark" :disabled="errors.any()" class="btn btn-primary"
+                v-on:click.prevent="handler" v-bind:disabled="hasClicked">Change Property
       </b-button>
     </b-form>
 
@@ -63,14 +58,16 @@
 
 <script>
 
+  //we need to get property id and new api to post?
 
   export default {
 
     data() {
       return {
-        hasClicked: false, //disable button to prevent double click
+        hasClicked: false,
         file: null,
         submitted: false,
+        id: this.$route.params.id,
         roomProperty: {
           title: "",
           address: "",
@@ -89,21 +86,31 @@
 
       }
     },
-    computed: {
-      isComplete() {
-        return this.roomProperty.address;
-      }
-    },
-    beforeCreate() {
-      if (!this.$store.getters.isLoggedIn) {
+    beforeCreate(){
+      //TODO CHECK IF PROPERTY IS OWNED BY USER
+      if(!this.$store.getters.isLoggedIn){
         this.$router.push({path: `/login`});
         this.$router.go();
-
       }
+
+    },
+    created() {
+      //To get placeholder values
+      //TODO GET THE PROPERTY ID
+      const that = this;
+      this.$store.dispatch('doGet', {url: 'property/get/' + this.id}).then(data => {
+        that.roomProperty.title= data.data.title;
+        that.roomProperty.room_count = data.data.room_count;
+        that.roomProperty.bed_count = data.data.bed_count;
+        that.roomProperty.price = data.data.price;
+        that.roomProperty.description = data.data.description;
+        console.log(data.data.title)
+      })
+
 
     },
     mounted() {
-      if (this.$store.getters.isLoggedIn) {
+      if(this.$store.getters.isLoggedIn){
         this.$loadScript("http://inaadress.maaamet.ee/inaadress/js/inaadress.min.js")
           .then(() => {
             let inAadress = new InAadress({
@@ -115,6 +122,8 @@
               "ihist": "1993",
               "searchLayers": ["TANAV"]
             });
+
+            //inAadress.setAddress(roomProperty.address)
 
 
             document.addEventListener('addressSelected', function (e) {
@@ -135,8 +144,7 @@
 
             });
 
-          });
-      }
+          });}
       this.$loadScript("https://www.gstatic.com/firebasejs/5.8.6/firebase.js")
         .then(() => {
           let config = {
@@ -155,10 +163,13 @@
 
       handler: function () {
         this.hasClicked = true;
+        if(this.file === null){
+          this.post()
+        }
         this.handleFileUploadSubmit();
-        //this.post();
       },
-      redirect: function () {
+
+      redirect: function(){
         this.$router.push({path: `/`});
         this.$router.go();
       },
@@ -167,10 +178,9 @@
 
         const that = this;
         this.$store.dispatch('doPost', {
-          url: 'secure/property/add', body:
+          url: 'secure/property/add/', body:
             {
               title: this.roomProperty.title,
-              address: this.roomProperty.address,
               county: this.roomProperty.county,
               municipality: this.roomProperty.municipality,
               settlement: this.roomProperty.settlement,
@@ -180,13 +190,13 @@
               description: this.roomProperty.description,
               price: this.roomProperty.price,
               pic_url: this.roomProperty.pic_url,
+              property_id: this.id,
             }
         }).then(data => {
           console.log("tehtud");
           that.submitted = true;
         })
       },
-
 
 
       handleFileUploadChange(e) {
@@ -197,12 +207,14 @@
           this.roomProperty.pic_name = "";
           document.getElementById("file-input").value = "";
         } else {
-          this.roomProperty.pic_name = e.target.files[0];
+          this.roomProperty.pic_name =  e.target.files[0];
+
         }
         console.log(this.roomProperty.pic_name)
 
       },
       handleFileUploadSubmit(e) {
+
         let d = new Date();
         let h = d.getHours().toString();
         let m = d.getMinutes().toString();
