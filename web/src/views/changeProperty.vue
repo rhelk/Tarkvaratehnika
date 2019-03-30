@@ -58,16 +58,17 @@
 
 <script>
 
-  //we need to get property id and new api to post?
 
   export default {
 
     data() {
       return {
+        rooms: [],
         hasClicked: false,
         file: null,
         submitted: false,
         id: this.$route.params.id,
+        userCanChange: false,
         roomProperty: {
           title: "",
           address: "",
@@ -87,16 +88,31 @@
       }
     },
     beforeCreate(){
-      //TODO CHECK IF PROPERTY IS OWNED BY USER
+      //next will check if owner_id === user_id
+      const that = this;
+      this.$store.dispatch('doGet', {url: 'property/search?users.user_id=' + this.$store.getters.getUser_id}).then(data => {
+        if (data.data.length !== 0) {
+          that.rooms = data.data;
+          if(data.data.property_id === that.id){
+            that.userCanChange = true;
+          }
+          that.userCanChange = false;
+        } else {
+          that.userCanChange = false;
+        }
+      })
+
       if(!this.$store.getters.isLoggedIn){
         this.$router.push({path: `/login`});
+        this.$router.go();
+      } else if(!userCanChange){
+        this.$router.push({path: `/my/rooms`});
         this.$router.go();
       }
 
     },
     created() {
       //To get placeholder values
-      //TODO GET THE PROPERTY ID
       const that = this;
       this.$store.dispatch('doGet', {url: 'property/get/' + this.id}).then(data => {
         that.roomProperty.title= data.data.title;
@@ -122,9 +138,6 @@
               "ihist": "1993",
               "searchLayers": ["TANAV"]
             });
-
-            //inAadress.setAddress(roomProperty.address)
-
 
             document.addEventListener('addressSelected', function (e) {
               let aadress = e.detail.aadress;

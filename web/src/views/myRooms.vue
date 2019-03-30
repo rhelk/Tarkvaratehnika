@@ -33,16 +33,13 @@
         rooms: [],
         search: "",
         price: "",
-        id: this.$route.params.id,
         user_has_properties: true,
 
       }
     },
     created() {
-      console.log(this.id);
       const that = this;
-      //TODO GET THE LOGGED IN USER
-      this.$store.dispatch('doGet', {url: 'property/search?users.user_id=' + "1"}).then(data => {
+      this.$store.dispatch('doGet', {url: 'property/search?users.user_id=' + this.$store.getters.getUser_id}).then(data => {
         if (data.data.length !== 0) {
           that.rooms = data.data;
         } else {
