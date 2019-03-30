@@ -88,28 +88,10 @@
       }
     },
     beforeCreate(){
-      //next will check if owner_id === user_id
-      const that = this;
-      this.$store.dispatch('doGet', {url: 'property/search?users.user_id=' + this.$store.getters.getUser_id}).then(data => {
-        if (data.data.length !== 0) {
-          that.rooms = data.data;
-          if(data.data.property_id === that.id){
-            that.userCanChange = true;
-          }
-          that.userCanChange = false;
-        } else {
-          that.userCanChange = false;
-        }
-      })
-
       if(!this.$store.getters.isLoggedIn){
         this.$router.push({path: `/login`});
         this.$router.go();
-      } else if(!userCanChange){
-        this.$router.push({path: `/my/rooms`});
-        this.$router.go();
       }
-
     },
     created() {
       //To get placeholder values
@@ -121,6 +103,13 @@
         that.roomProperty.price = data.data.price;
         that.roomProperty.description = data.data.description;
         console.log(data.data.title)
+        if(data.data.users.user_id === this.$store.getters.getUser_id){
+          that.userCanChange=true;
+          console.log(that.userCanChange)
+        }else if(data.data.users.user_id !== this.$store.getters.getUser_id){
+          this.$router.push({path: `/my/rooms`});
+          this.$router.go();
+        }
       })
 
 
