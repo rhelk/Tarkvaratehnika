@@ -6,7 +6,7 @@ insert into property (property_id, title, description, address, county, municipa
                       street, pic_url, room_count, bed_count, owner_id, price)
        values (next value for property_sequence, 'Time of your life', 'Something this', 'uus tn. 5',
                       'Harjumaa', 'Tallinn', 'Nõmme', 'Mai',
-                      'https://firebasestorage.googleapis.com/v0/b/tarkvaratehnika-1551709647803.appspot.com/o/images%2Ffdkjgflkfdmlkgmlkfjygkjtrkjgkrkgmn%2Cds%2Cf%2C.jpg?alt=media&token=6b67b60c-6316-4145-8115-89010a7be338', 3, 2, 1, 200);
+                      'https://firebasestorage.googleapis.com/v0/b/tarkvaratehnika-1551709647803.appspot.com/o/images%2Ffdkjgflkfdmlkgmlkfjygkjtrkjgkrkgmn%2Cds%2Cf%2C.jpg?alt=media&token=6b67b60c-6316-4145-8115-89010a7be338', 3, 2, 2, 200);
 insert into property (property_id, title, description, address, county, municipality, settlement,
                       street, pic_url, room_count, bed_count, owner_id, price)
        values (next value for property_sequence, 'Best room for best price', 'Lovely room', 'Tallinn',
