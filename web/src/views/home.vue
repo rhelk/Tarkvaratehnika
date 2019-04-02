@@ -83,7 +83,7 @@
         this.$store.dispatch('doGet', {url: 'property/search?municipality=' + this.search}).then(data => {
           if(data.data.length !== 0){
             this.$router.push({path: `/all/${this.search}`});
-            this.$router.go();
+            //this.$router.go();
           }
           else{
             //do nothing
@@ -94,11 +94,11 @@
       addProperty: function () {
         if(this.$store.getters.isLoggedIn){
           this.$router.push({path: `/property/add`});
-          this.$router.go();
+          //this.$router.go();
         }
         else{
           this.$router.push({path: `/login`});
-          this.$router.go();
+          //this.$router.go();
         }
       }
 

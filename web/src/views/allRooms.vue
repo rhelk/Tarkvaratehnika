@@ -32,29 +32,32 @@
       }
     },
     created() {
-      console.log(this.id);
-      // console.log("allRooms: user id on " + this.$store.getters.getUser_id);
-      const that = this;
-      if (this.id === undefined || this.id === "") {
-        //console.log("here 2");
-        this.$store.dispatch('doGet', {url: "property/all"}).then(data => {
-          //console.log("p2ringus")
-          //console.log(data)
-          that.rooms = data.data;
+      this.fetchData();
 
-          //console.log("allRooms");
-          //console.log(that);
-        })
-
-      } else {
-        console.log("here 1");
-        //this.$store.dispatch('doGet', {url: 'property/' + this.id}).then(data => {
-        this.$store.dispatch('doGet', {url: 'property/search?municipality=' + this.id}).then(data => {
-          that.rooms = data.data;
-        })
-      }
 
     },
+    watch: {
+      '$route': 'fetchData'
+    },
+    methods:{
+
+      fetchData () {
+        this.id = this.$route.params.id;
+        console.log("here");
+        console.log(this.id);
+        const that = this;
+        if (this.id === undefined || this.id === "") {
+          this.$store.dispatch('doGet', {url: "property/all"}).then(data => {
+            that.rooms = data.data;
+          })
+
+        } else {
+          this.$store.dispatch('doGet', {url: 'property/search?municipality=' + this.id}).then(data => {
+            that.rooms = data.data;
+          })
+        }
+      }
+    }
   }
 </script>
 

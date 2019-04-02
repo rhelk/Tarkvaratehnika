@@ -10,7 +10,8 @@
       </b-navbar>
       <b-navbar-nav class="ml-auto">
         <router-link  to='/' exact> Home </router-link>
-        <a href="/all">All properties</a>
+        <!--<a href="/all">All properties</a>-->
+        <router-link  to='/all' exact> All properties </router-link>
         <router-link v-if="isAuthenticated" to='/property/add' exact> Add property</router-link>
         <router-link v-if="isAuthenticated" to='/my/rooms' exact> My properties</router-link>
         <router-link v-if="!isAuthenticated" to="/login" replace>Login</router-link>
@@ -34,7 +35,7 @@
         this.$store.dispatch('doGet', {url: 'property/search?municipality=' + this.search}).then(data => {
           if(data.data.length !== 0){
             this.$router.push({path: `/all/${this.search}`});
-            this.$router.go();
+            //this.$router.go();
           }
           else{
             //do nothing

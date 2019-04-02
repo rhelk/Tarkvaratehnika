@@ -8,6 +8,7 @@
       <div id="price" class="col-md-4">
         <h2>Price</h2>
         <p>Price per night: {{roomDetails.price}}</p>
+        <b-button variant="dark" class="my-2 my-sm-0" type="submit" v-on:click.prevent="rentProperty">Rent</b-button>
       </div>
     </div>
     <div class="row">
@@ -41,6 +42,27 @@
       })
 
 
+    },
+    methods: {
+      rentProperty: function () {
+        if (!this.$store.getters.isLoggedIn) {
+          this.$router.push({path: `/login`});
+          this.$router.go();
+        }
+        const that = this;
+        this.$store.dispatch('doPost', {
+          url: 'property/rent/', body:
+            {
+              ID: this.id,
+            }
+        }).then(data => {
+          console.log("tehtud");
+          this.$router.push({path: `/all`});
+          //this.$router.go();
+        })
+
+
+      }
     }
   }
 </script>
