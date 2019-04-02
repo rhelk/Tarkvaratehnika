@@ -60,7 +60,7 @@ public class PropertyController {
     }
 
     @PostMapping("api/property/rent")
-    public Boolean rentProperty(@RequestParam("ID") Long id) {
+    public Boolean rentProperty(@RequestBody Long id) {
         return propertyDao.setHidden(id) == 1;
     }
 
