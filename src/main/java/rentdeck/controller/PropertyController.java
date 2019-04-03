@@ -19,6 +19,8 @@ import rentdeck.model.Users;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @CrossOrigin
 @RestController
@@ -55,7 +57,20 @@ public class PropertyController {
     }
 
     @GetMapping("api/property/search")
-    public List<Property> searchProperties( Property property) {
+    public List<Property> searchProperties( Property property, Principal principal) {
+        System.out.println("Property is " + property);
+        if (Stream.of(property.getPrice(), property.getAddress(), property.getBed_count(), property.getCounty(),
+                  property.getDescription(), property.getMunicipality(), property.getPic_url(), property.getProperty_id(),
+                  property.getRoom_count(), property.getSettlement(), property.getStreet(), property.getTitle())
+//                .peek(System.out::println)
+                .allMatch(Objects::isNull)) {
+            if (property.getUsers().getUser_id() == null) {
+                property.setUsers(userDao.findByUsername(principal.getName()));
+                System.out.println("NOW " + property.getUsers());
+            }
+            System.out.println("All Null");
+        }
+
         return propertyDao.findAll(Example.of(property, ExampleMatcher.matchingAll().withIgnoreCase()));
     }
 
