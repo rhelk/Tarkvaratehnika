@@ -1,5 +1,6 @@
 package rentdeck.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -14,12 +15,15 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import rentdeck.dao.UserDao;
 import rentdeck.model.Users;
+
+import java.security.Principal;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = UserController.class, secure = false)
@@ -68,8 +72,31 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertEquals(result.getResponse().getContentAsString().substring(11, 14), "-1,");
+//        assertEquals(result.getResponse().getContentAsString().substring(11, 14), "-1,");
+        assertThat(result.getResponse().getContentAsString().substring(11, 14)).isEqualTo("-1,");
 
+    }
+
+    @Test
+    public void authCheckTest() throws Exception{
+
+        Users user = new Users();
+        user.setUser_id(-1L);
+
+        Principal mockedPrincipal = Mockito.mock(Principal.class);
+
+        Mockito.when(mockedPrincipal.getName()).thenReturn("asha");
+        Mockito.when(userDao.findByUsername("asha")).thenReturn(user);
+
+        MvcResult mvcResult = mockMvc.perform(get("/api/user/authCheck")
+                .contentType(MediaType.APPLICATION_JSON)
+                .principal(mockedPrincipal))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        Users resultUser = new ObjectMapper().readValue(mvcResult.getResponse().getContentAsString(), Users.class);
+
+        assertThat(resultUser.getUser_id()).isEqualTo(user.getUser_id());
     }
 
 }

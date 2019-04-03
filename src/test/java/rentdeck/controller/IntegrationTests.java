@@ -9,15 +9,14 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import rentdeck.dao.PropertyDao;
 import rentdeck.dao.UserDao;
 import rentdeck.model.Property;
 import rentdeck.model.Users;
@@ -26,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,7 +44,25 @@ public class IntegrationTests {
     UserDao uDao;
 
     @Autowired
+    PropertyDao propertyDao;
+
+    @Autowired
     private MockMvc mockMvc;
+
+    @Test
+    public void AuthCheckFailureTest() throws Exception {
+        mockMvc.perform(get("/api/user/authCheck"))
+                .andExpect(status().is(401));
+
+    }
+
+    @Test
+    public void RentNoAuthTest() throws Exception {
+        mockMvc.perform(post("/api/property/rent")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("1"))
+                .andExpect(status().is(401));
+    }
 
     // FIRST LOGIN TESTS -- Also saves Authentication token.
 
@@ -59,7 +77,7 @@ public class IntegrationTests {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        this.authString = mvcResult.getResponse().getHeader("Authorization");
+        authString = mvcResult.getResponse().getHeader("Authorization");
 
         assertThat(authString).isNotNull();
         assertThat(authString.substring(0,6)).isEqualTo("Bearer");
@@ -92,6 +110,17 @@ public class IntegrationTests {
 
         String checking = mvcResult.getResponse().getHeader("Authorization");
         assertThat(checking).isNull();
+    }
+
+    @Test
+    public void authCheckIntegrationTest() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/api/user/authCheck")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", authString))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        Users user = new ObjectMapper().readValue(mvcResult.getResponse().getContentAsString(), Users.class);
     }
 
     @Test
@@ -189,7 +218,7 @@ public class IntegrationTests {
     }
 
     @Test
-    public void SearchPriceRangeZeroTest() throws Exception {
+    public void searchPriceRangeZeroTest() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/property/prices")
                 .param("start", "330")
@@ -201,7 +230,7 @@ public class IntegrationTests {
     }
 
     @Test
-    public void SearchPriceRangeWrongWayTest() throws Exception {
+    public void searchPriceRangeWrongWayTest() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/property/prices")
                 .param("start", "400")
@@ -298,6 +327,42 @@ public class IntegrationTests {
         property.setUsers(result.getUsers());
 
         assertThat(result).isEqualToComparingFieldByField(property);
+
+    }
+
+    @Test
+    public void rentIntegerationTest() throws Exception{
+
+        int before = propertyDao.findByVisibility(Property.Visibility.VISIBLE).size();
+
+        mockMvc.perform(post("/api/property/rent")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", authString)
+                .content("1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
+
+        int after = propertyDao.findByVisibility(Property.Visibility.VISIBLE).size();
+
+        assertThat(before).isEqualTo(after + 1);
+
+    }
+
+    @Test
+    public void rentWrongIdTest() throws Exception {
+
+        int before = propertyDao.findByVisibility(Property.Visibility.VISIBLE).size();
+
+        mockMvc.perform(post("/api/property/rent")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", authString)
+                .content("-1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("false"));
+
+        int after = propertyDao.findByVisibility(Property.Visibility.VISIBLE).size();
+
+        assertThat(before).isEqualTo(after);
 
     }
 

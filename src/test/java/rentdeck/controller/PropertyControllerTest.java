@@ -25,6 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -67,7 +68,7 @@ public class PropertyControllerTest {
     @Test
     public void getAllPropertyTest() throws Exception {
 
-        when(propertyDao.findAll()).thenReturn(Arrays.asList(mockedProperty, mockedProperty, mockedProperty));
+        when(propertyDao.findByVisibility(Property.Visibility.VISIBLE)).thenReturn(Arrays.asList(mockedProperty, mockedProperty, mockedProperty));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/property/all")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -116,6 +117,17 @@ public class PropertyControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)));
 
+    }
+
+    @Test
+    public void rentTest() throws Exception {
+        when(propertyDao.setHidden(1L)).thenReturn(1);
+
+        mockMvc.perform(post("/api/property/rent")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
     }
 
 }

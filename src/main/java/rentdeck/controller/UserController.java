@@ -54,10 +54,10 @@ public class UserController {
         return user;
     }
 
-    @GetMapping("api/users")
-    public List<Users> getAllUsers() {
-        return userDao.findAll();
-    }
+//    @GetMapping("api/users")
+//    public List<Users> getAllUsers() {
+//        return userDao.findAll();
+//    }
 
     @GetMapping("api/user/authCheck")
     public Users authCheck(Principal principal) {
