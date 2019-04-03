@@ -61,7 +61,7 @@ public class PropertyController {
 
     @PostMapping("api/property/rent")
     public Boolean rentProperty(@RequestBody String id) {
-        id = id.replaceAll("[{}\"]","");
+        id = id.replaceAll("[{}=\"]","");
         return propertyDao.setHidden(Long.valueOf(id)) == 1;
     }
 
