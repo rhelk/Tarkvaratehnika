@@ -154,8 +154,13 @@
     methods: {
 
       handler: function () {
-        this.hasClicked = true;
-        this.handleFileUploadSubmit();
+        this.$validator.validateAll().then((result) => {
+          if (result) {
+            this.hasClicked = true;
+            this.handleFileUploadSubmit();
+          }
+        });
+
         //this.post();
       },
       redirect: function () {
