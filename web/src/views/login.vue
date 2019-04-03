@@ -1,21 +1,31 @@
 <template>
-  <div>
+  <div class="container">
     <h2>Login</h2>
     <form>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="text" v-model="input.username" class="form-control" />
-        <!--<div v-show="submitted && !input.username" class="invalid-feedback">Username is required</div>-->
+      <div class="form-group col-md-4">
+        <label for="formUsername">Email:</label>
+        <input type="text"
+               name="email"
+               class="form-control"
+               id="formUsername"
+               placeholder="ex: example@example.com"
+               v-model="input.username"
+               v-validate="'required'">
+        <span v-show="errors.has('email')" class="text-danger">{{ errors.first('email') }}</span>
       </div>
-      <div class="form-group">
-        <label type="password">Password</label>
-        <input type="password" v-model="input.password" class="form-control" />
-        <!--<div v-show="submitted && !input.password" class="invalid-feedback">Password is required</div>-->
+      <div class="form-group col-md-4">
+        <label for="formPassword">Password:</label>
+        <input type="password"
+               name="password"
+               class="form-control"
+               id="formPassword"
+               placeholder="Password"
+               v-model="input.password"
+               v-validate="'required'">
+        <span v-show="errors.has('password')" class="text-danger">{{ errors.first('password') }}</span>
       </div>
-      <div class="form-group">
-        <button class="btn btn-primary" v-on:click.prevent="loginPreCheck">Login</button>
-        <router-link to="/register" class="btn btn-link">Register</router-link>
-      </div>
+      <button class="btn btn-primary" v-on:click.prevent="validateBeforeSubmit">Login</button>
+      <router-link to="/register" class="btn btn-link">Register</router-link>
     </form>
   </div>
 </template>
@@ -35,19 +45,24 @@
       }
     },
     methods: {
-      loginPreCheck: function () {
-        this.submitted = true;
-        if (this.input.username && this.input.password)
-          this.login();
+      validateBeforeSubmit() {
+        this.$validator.validateAll().then((result) => {
+          if (result)
+            this.login()
+        });
       },
-      login: function () {
+      login() {
         // console.log(username, password);
         this.$store.dispatch('login', {
           username: this.input.username,
           password: sha.sha256(this.input.password)
         })
-          .then(() => this.$router.push('/'))
-          .catch(err => console.log(err))
+          .then((resp) => {
+            this.$router.push('/')
+          })
+          .catch(err => {
+            console.log(err);
+          })
       }
     }
   }
