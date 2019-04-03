@@ -17,6 +17,7 @@ import rentdeck.model.Property;
 import rentdeck.dao.PropertyDao;
 import rentdeck.model.Users;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
@@ -32,13 +33,12 @@ public class PropertyController {
     private UserDao userDao;
 
     @PostMapping("api/secure/property/add")
-    public Property addProperty(@RequestBody Property property, Principal principal) {
+    public Property addProperty(@Valid @RequestBody Property property, Principal principal) {
         if (principal != null){
             property.setUsers(userDao.findByUsername(principal.getName()));
-        } else {
-            System.out.println("Principal is " + principal);
+            return propertyDao.save(property);
         }
-        return propertyDao.save(property);
+        return null;
     }
 
     @GetMapping("api/property/get/{id}")

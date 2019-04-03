@@ -8,7 +8,7 @@
       <div id="price" class="col-md-4">
         <h2>Price</h2>
         <p>Price per night: {{roomDetails.price}}</p>
-        <b-button variant="dark" class="my-2 my-sm-0" type="submit" v-on:click.prevent="rentProperty">Rent</b-button>
+        <b-button v-if="userCanRent" v-bind:disabled="hasClicked" variant="dark" class="my-2 my-sm-0" type="submit" v-on:click.prevent="rentProperty">Rent</b-button>
       </div>
     </div>
     <div class="row">
@@ -31,6 +31,8 @@
   export default {
     data: function () {
       return {
+        userCanRent: true,
+        hasClicked: false,
         roomDetails: [],
         id: this.$route.params.id,
       }
@@ -39,27 +41,31 @@
       const that = this;
       this.$store.dispatch('doGet', {url: 'property/get/' + this.id}).then(data => {
         that.roomDetails = data.data;
+        if(data.data.users.user_id === this.$store.getters.getUser_id){
+          that.userCanRent=false;
+          console.log(that.userCanChange)
+        }
       })
 
 
     },
     methods: {
       rentProperty: function () {
+        this.hasClicked = true;
         if (!this.$store.getters.isLoggedIn) {
           this.$router.push({path: `/login`});
           this.$router.go();
-        }
+        }else{
         const that = this;
         this.$store.dispatch('doPost', {
           url: 'property/rent/', body:
-            {
-              ID: this.id,
-            }
+              this.id,
+
         }).then(data => {
           console.log("tehtud");
           this.$router.push({path: `/all`});
           //this.$router.go();
-        })
+        })}
 
 
       }
