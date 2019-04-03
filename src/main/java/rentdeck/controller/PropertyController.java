@@ -28,6 +28,7 @@ public class PropertyController {
 
     @Autowired
     private PropertyDao propertyDao;
+
     @Autowired
     private UserDao userDao;
 
@@ -36,7 +37,7 @@ public class PropertyController {
         if (principal != null){
             property.setUsers(userDao.findByUsername(principal.getName()));
         } else {
-            System.out.println("Principal is " + principal);
+//            System.out.println("Principal is " + principal);
         }
         return propertyDao.save(property);
     }
@@ -66,9 +67,9 @@ public class PropertyController {
                 .allMatch(Objects::isNull)) {
             if (property.getUsers().getUser_id() == null) {
                 property.setUsers(userDao.findByUsername(principal.getName()));
-                System.out.println("NOW " + property.getUsers());
+//                System.out.println("NOW " + property.getUsers());
             }
-            System.out.println("All Null");
+//            System.out.println("All Null");
         }
 
         return propertyDao.findAll(Example.of(property, ExampleMatcher.matchingAll().withIgnoreCase()));
