@@ -58,14 +58,25 @@ public class PropertyController {
 
     @GetMapping("api/property/search")
     public List<Property> searchProperties( Property property, Principal principal) {
-        if (property.getUsers() == null || property.getUsers().getUsername().equals(principal.getName())) {
-            return propertyDao.findAll(Example.of(property, ExampleMatcher.matchingAll().withIgnoreCase()));
-        }
-        return null;
+        if (property.getUsers() != null) throw new ResponseStatusException((HttpStatus.FORBIDDEN));
+        return propertyDao.findAll(Example.of(property, ExampleMatcher.matchingAll().withIgnoreCase()));
     }
 
+     @GetMapping("api/property/mine")
+     public List<Property> myProperties(Principal principal) {
+
+        if (principal == null) {throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);}
+
+        Property property = new Property();
+        property.setUsers(userDao.findByUsername(principal.getName()));
+
+        return propertyDao.findAll(Example.of(property, ExampleMatcher.matchingAll().withIgnoreCase()));
+
+     }
+
     @PostMapping("api/property/rent")
-    public Boolean rentProperty(@RequestBody String id) {
+    public Boolean rentProperty(@RequestBody String id, Principal principal) {
+        if (principal == null) throw new ResponseStatusException((HttpStatus.FORBIDDEN));
         id = id.replaceAll("[{}=\"]","");
         return propertyDao.setHidden(Long.valueOf(id)) == 1;
     }

@@ -127,8 +127,13 @@ public class PropertyControllerTest {
     public void rentTest() throws Exception {
         when(propertyDao.setHidden(1L)).thenReturn(1);
 
+        Principal mockedPrincipal = Mockito.mock(Principal.class);
+        when(mockedPrincipal.getName()).thenReturn("asha");
+
+
         mockMvc.perform(post("/api/property/rent")
                 .contentType(MediaType.APPLICATION_JSON)
+                .principal(mockedPrincipal)
                 .content("1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));
