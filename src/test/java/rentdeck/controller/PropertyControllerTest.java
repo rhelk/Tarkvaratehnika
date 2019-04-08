@@ -1,5 +1,6 @@
 package rentdeck.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -79,10 +80,13 @@ public class PropertyControllerTest {
     @Test
     public void addPropertyTest() throws Exception {
 
-        String propJson = "{\"property_id\":-1,\"title\":null,\"description\":null,\"address\":\"abba 1\",\"pic_url\":null,\"room_count\":null,\"bed_count\":null,\"users\":null,\"price\":300}";
+        String propJson = "{\"property_id\":-1,\"title\":\"testing\",\"description\":null,\"address\":\"abba 1\",\"pic_url\":\"somethingsae\",\"room_count\":9,\"bed_count\":9,\"users\":null,\"price\":700}";
 
         Principal mockedPrincipal = Mockito.mock(Principal.class);
         when(mockedPrincipal.getName()).thenReturn("asha");
+
+        System.out.println(propJson);
+        System.out.println(new ObjectMapper().readValue(propJson, Property.class));
 
         when(propertyDao.save(any(Property.class))).thenReturn(mockedProperty);
 

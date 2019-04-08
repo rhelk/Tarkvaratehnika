@@ -48,9 +48,9 @@ public class UserController {
     @GetMapping("api/user/get/{id}")
     public Users getUserById(@PathVariable Long id, Principal principal) {
         Users user = userDao.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        System.out.println(user.getPassword());
-        System.out.println(user.getAuthorityList());
-        System.out.println(user.toString());
+//        System.out.println(user.getPassword());
+//        System.out.println(user.getAuthorityList());
+//        System.out.println(user.toString());
         return user;
     }
 
@@ -61,8 +61,8 @@ public class UserController {
 
     @GetMapping("api/user/authCheck")
     public Users authCheck(Principal principal) {
-        System.out.println("authCheck");
-        System.out.println(principal.getName());
+//        System.out.println("authCheck");
+//        System.out.println(principal.getName());
         return userDao.findByUsername(principal.getName());}
 
 }

@@ -1,58 +1,66 @@
 <template>
-  <div id="addRoom">
-    <h1>Change your property</h1>
-    <div style="margin-bottom: 50px"></div>
-    <b-form v-if="!submitted">
-      <small><label><b>Name of your property</b></label></small>
-      <b-form-input data-vv-name="title" type="text" v-model="roomProperty.title"
-                    :placeholder= "roomProperty.title"
-                    v-validate="{min:4, max: 25}"
-                    :state="validateState('roomProperty.title')"/>
+  <div class="container">
+    <div>
+      <div v-if="!submitted">
+        <h1>Change your property</h1>
+        <div style="margin-bottom: 50px"></div>
+        <b-form>
+          <small><label><b>Name of your property</b></label></small>
+          <b-form-input data-vv-name="title" type="text" v-model="roomProperty.title"
+                        :placeholder="roomProperty.title"
+                        v-validate="{min:4, max: 25}"
+                        :state="validateState('roomProperty.title')"/>
 
-      <b-form-text><span style="color: red">{{ errors.first('title') }}</span></b-form-text>
+          <b-form-text><span style="color: red">{{ errors.first('title') }}</span></b-form-text>
 
-      <small><label><b>Location of your property</b></label></small>
-      <div id="InAadressDiv" style="width: 600px; height: 450px"></div>
+          <small><label><b>Location of your property</b></label></small>
+          <div id="InAadressDiv" style="width: 600px; height: 450px"></div>
 
-      <p></p>
+          <p></p>
 
-      <small><label><b>Count of rooms</b></label></small>
-      <b-form-input data-vv-name="rooms" type="number" v-model="roomProperty.room_count" :placeholder = roomProperty.room_count.toString()
-                    v-validate="{min_value:1}"
-                    :state="validateState('roomProperty.room_count')"/>
-      <b-form-text><span style="color: red">{{ errors.first('rooms') }}</span></b-form-text>
+          <small><label><b>Count of rooms</b></label></small>
+          <b-form-input data-vv-name="rooms" type="number" v-model="roomProperty.room_count"
+                        :placeholder=roomProperty.room_count.toString()
+                        v-validate="{min_value:1}"
+                        :state="validateState('roomProperty.room_count')"/>
+          <b-form-text><span style="color: red">{{ errors.first('rooms') }}</span></b-form-text>
 
-      <small><label><b>Count of beds</b></label></small>
-      <b-form-input data-vv-name="beds" type="number" v-model="roomProperty.bed_count" :placeholder=roomProperty.bed_count.toString()
-                    v-validate="{min_value:1}"
-                    :state="validateState('roomProperty.bed_count')"/>
-      <b-form-text><span style="color: red">{{ errors.first('beds') }}</span></b-form-text>
-
-
-      <small><label><b>Price for one night</b></label></small>
-      <b-form-input data-vv-name="price" type="number" v-model="roomProperty.price" :placeholder=roomProperty.price.toString()
-                    v-validate="{min_value:5}"
-                    :state="validateState('roomProperty.price')"/>
-      <b-form-text><span style="color: red">{{ errors.first('price') }}</span></b-form-text>
-
-      <small><label><b>Choose a picture for your property</b></label></small>
-      <b-form-file data-vv-name="pic" v-model="file" type="file" class="file-select"
-                   @change="handleFileUploadChange"
-                   accept="image/*" id="file-input"
-                   :state="validateState('file')"
-                   placeholder="Choose a picture..."/>
-      <b-form-text><span style="color: red">{{ errors.first('pic') }}</span></b-form-text>
-
-      <small><label><b>Description of your property</b></label></small>
-      <b-form-textarea type="text" v-model="roomProperty.description" :placeholder=roomProperty.description
-      />
-      <p></p>
-      <b-button type="submit" variant="dark" :disabled="errors.any()" class="btn btn-primary"
-                v-on:click.prevent="handler" v-bind:disabled="hasClicked">Change Property
-      </b-button>
-    </b-form>
+          <small><label><b>Count of beds</b></label></small>
+          <b-form-input data-vv-name="beds" type="number" v-model="roomProperty.bed_count"
+                        :placeholder=roomProperty.bed_count.toString()
+                        v-validate="{min_value:1}"
+                        :state="validateState('roomProperty.bed_count')"/>
+          <b-form-text><span style="color: red">{{ errors.first('beds') }}</span></b-form-text>
 
 
+          <small><label><b>Price for one night</b></label></small>
+          <b-form-input data-vv-name="price" type="number" v-model="roomProperty.price"
+                        :placeholder=roomProperty.price.toString()
+                        v-validate="{min_value:5}"
+                        :state="validateState('roomProperty.price')"/>
+          <b-form-text><span style="color: red">{{ errors.first('price') }}</span></b-form-text>
+
+          <small><label><b>Choose a picture for your property</b></label></small>
+          <b-form-file data-vv-name="pic" v-model="file" type="file" class="file-select"
+                       @change="handleFileUploadChange"
+                       accept="image/*" id="file-input"
+                       :state="validateState('file')"
+                       placeholder="Choose a picture..."/>
+          <b-form-text><span style="color: red">{{ errors.first('pic') }}</span></b-form-text>
+
+          <small><label><b>Description of your property</b></label></small>
+          <b-form-textarea type="text" v-model="roomProperty.description" :placeholder=roomProperty.description
+          />
+          <p></p>
+          <b-button type="submit" variant="dark" :disabled="errors.any()" class="btn btn-primary"
+                    v-on:click.prevent="handler" v-bind:disabled="hasClicked">Change Property
+          </b-button>
+        </b-form>
+      </div>
+      <div v-else>
+        <h1>Property has been changed</h1>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -82,40 +90,43 @@
           description: "",
           pic_url: "",
           pic_name: "",
-
         },
-
       }
     },
-    beforeCreate(){
-      if(!this.$store.getters.isLoggedIn){
+    beforeCreate() {
+      if (!this.$store.getters.isLoggedIn) {
         this.$router.push({path: `/login`});
-        this.$router.go();
+        //this.$router.go();
       }
     },
     created() {
       //To get placeholder values
       const that = this;
       this.$store.dispatch('doGet', {url: 'property/get/' + this.id}).then(data => {
-        that.roomProperty.title= data.data.title;
+        that.roomProperty.title = data.data.title;
         that.roomProperty.room_count = data.data.room_count;
         that.roomProperty.bed_count = data.data.bed_count;
         that.roomProperty.price = data.data.price;
         that.roomProperty.description = data.data.description;
-        console.log(data.data.title)
-        if(data.data.users.user_id === this.$store.getters.getUser_id){
-          that.userCanChange=true;
-          console.log(that.userCanChange)
-        }else if(data.data.users.user_id !== this.$store.getters.getUser_id){
+        that.roomProperty.municipality = data.data.municipality;
+        that.roomProperty.county = data.data.county;
+        that.roomProperty.settlement = data.data.settlement;
+        that.roomProperty.street = data.data.street;
+        that.roomProperty.pic_url = data.data.pic_url;
+        //console.log(data.data.title);
+        if (data.data.users.user_id === this.$store.getters.getUser_id) {
+          that.userCanChange = true;
+          //console.log(that.userCanChange)
+        } else if (data.data.users.user_id !== this.$store.getters.getUser_id) {
           this.$router.push({path: `/my/rooms`});
-          this.$router.go();
+          //this.$router.go();
         }
       })
 
 
     },
     mounted() {
-      if(this.$store.getters.isLoggedIn){
+      if (this.$store.getters.isLoggedIn) {
         this.$loadScript("http://inaadress.maaamet.ee/inaadress/js/inaadress.min.js")
           .then(() => {
             let inAadress = new InAadress({
@@ -133,7 +144,6 @@
               aadress = aadress.split(", ").reverse().join(", ");
               inAadress.setAddress(aadress);
               inAadress.hideResult();
-              //console.log(aadress)
             });
 
             document.addEventListener('addressSelected', (e) => {
@@ -146,7 +156,8 @@
 
             });
 
-          });}
+          });
+      }
       this.$loadScript("https://www.gstatic.com/firebasejs/5.8.6/firebase.js")
         .then(() => {
           let config = {
@@ -157,7 +168,9 @@
             storageBucket: "tarkvaratehnika-1551709647803.appspot.com",
             messagingSenderId: "805114248870"
           };
-          firebase.initializeApp(config);
+          if (!firebase.apps.length) {
+            firebase.initializeApp(config);
+          }
         });
 
     },
@@ -165,15 +178,10 @@
 
       handler: function () {
         this.hasClicked = true;
-        if(this.file === null){
+        if (this.file === null) {
           this.post()
         }
         this.handleFileUploadSubmit();
-      },
-
-      redirect: function(){
-        this.$router.push({path: `/`});
-        this.$router.go();
       },
 
       post: function () {
@@ -195,26 +203,22 @@
               property_id: this.id,
             }
         }).then(data => {
-          console.log("tehtud");
           that.submitted = true;
         })
       },
 
 
       handleFileUploadChange(e) {
-
         if (e.target.files[0].size > 307200) {
           alert("File is too big!");
           this.file = null;
           this.roomProperty.pic_name = "";
           document.getElementById("file-input").value = "";
         } else {
-          this.roomProperty.pic_name =  e.target.files[0];
-
+          this.roomProperty.pic_name = e.target.files[0];
         }
-        console.log(this.roomProperty.pic_name)
-
       },
+
       handleFileUploadSubmit(e) {
 
         let d = new Date();
@@ -223,7 +227,7 @@
         let s = d.getSeconds().toString();
         let ms = d.getMilliseconds().toString();
         let day = d.getDay().toString();
-        let nr = s+day+ms+h+m;
+        let nr = s + day + ms + h + m;
 
         const storageService = firebase.storage();
         const storageRef = storageService.ref();
@@ -260,14 +264,12 @@
 
 <style scoped>
 
-  #addRoom {
-    box-sizing: border-box;
+  @media (min-width: 1200px) {
+    .container {
+      max-width: 630px;
+    }
   }
 
-  #addRoom {
-    margin: 20px auto;
-    max-width: 600px;
-  }
 
   lable {
     display: block;

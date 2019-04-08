@@ -5,7 +5,9 @@
       <div class="row">
         <div class="col-md-4" v-for="room in rooms">
           <div class="thumbnail">
-            <img :src="room.pic_url">
+            <router-link v-bind:to="/room/ + room.property_id">
+              <img :src="room.pic_url">
+            </router-link>
             <div class="caption">
               <p style="margin-top: 20px">
                 <router-link v-bind:to="/change/ + room.property_id"><b>
@@ -40,6 +42,7 @@
     created() {
       const that = this;
       this.$store.dispatch('doGet', {url: 'property/search?users.user_id=' + this.$store.getters.getUser_id}).then(data => {
+        console.log(that.$store.getters.getUser_id);
         if (data.data.length !== 0) {
           that.rooms = data.data;
         } else {

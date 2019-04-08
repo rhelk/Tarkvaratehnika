@@ -56,6 +56,8 @@ export const store = new Vuex.Store({
             localStorage.setItem('token', token)
             context.commit('auth_success', token);
             axios.defaults.headers.common['Authorization'] = token;
+            context.dispatch("getUser").catch();
+            // this.$store.dispatch("getUser").catch();
             resolve(res);
           })
           .catch(err => {
@@ -80,6 +82,7 @@ export const store = new Vuex.Store({
             localStorage.setItem('token', token)
             axios.defaults.headers.common['Authorization'] = token
             context.commit('auth_success', token)
+            context.dispatch("getUser").catch();
             resolve(resp)
           })
           .catch(err => {
