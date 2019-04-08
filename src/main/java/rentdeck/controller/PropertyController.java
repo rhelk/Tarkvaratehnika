@@ -58,20 +58,10 @@ public class PropertyController {
 
     @GetMapping("api/property/search")
     public List<Property> searchProperties( Property property, Principal principal) {
-        System.out.println("Property is " + property);
-        if (Stream.of(property.getPrice(), property.getAddress(), property.getBed_count(), property.getCounty(),
-                  property.getDescription(), property.getMunicipality(), property.getPic_url(), property.getProperty_id(),
-                  property.getRoom_count(), property.getSettlement(), property.getStreet(), property.getTitle())
-//                .peek(System.out::println)
-                .allMatch(Objects::isNull)) {
-            if (property.getUsers().getUser_id() == null) {
-                property.setUsers(userDao.findByUsername(principal.getName()));
-                System.out.println("NOW " + property.getUsers());
-            }
-            System.out.println("All Null");
+        if (property.getUsers() == null || property.getUsers().getUsername().equals(principal.getName())) {
+            return propertyDao.findAll(Example.of(property, ExampleMatcher.matchingAll().withIgnoreCase()));
         }
-
-        return propertyDao.findAll(Example.of(property, ExampleMatcher.matchingAll().withIgnoreCase()));
+        return null;
     }
 
     @PostMapping("api/property/rent")
