@@ -139,4 +139,20 @@ public class PropertyControllerTest {
                 .andExpect(content().string("true"));
     }
 
+    @Test
+    public void myPropertiesTest() throws Exception {
+
+        Principal mockedPrincipal = Mockito.mock(Principal.class);
+        when(mockedPrincipal.getName()).thenReturn("asha");
+
+        when(propertyDao.findAll(any(Example.class)))
+                .thenReturn(Arrays.asList(mockedProperty, mockedProperty, mockedProperty));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/property/mine")
+                .principal(mockedPrincipal)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(3)));
+    }
+
 }

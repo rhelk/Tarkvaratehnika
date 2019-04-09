@@ -366,5 +366,32 @@ public class IntegrationTests {
 
     }
 
+    @Test
+    public void myPropertiesNoAuthorizationTest() throws Exception {
+
+        mockMvc.perform(get("/api/property/mine")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void myPropertiesIntegrationTest() throws Exception {
+
+        MvcResult mvcResult = mockMvc.perform(get("/api/property/mine")
+                .header("Authorization", authString)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<Property> properties = Arrays.asList(new ObjectMapper()
+                .readValue(mvcResult.getResponse().getContentAsString(), Property[].class));
+
+        System.out.println("Size is " + properties.size());
+        properties.forEach(System.out::println);
+
+        assertThat(properties.size()).isEqualTo(4);
+        assertThat(properties.stream().allMatch(a -> a.getUsers().getUser_id() == 1)).isTrue();
+    }
+
 
 }
