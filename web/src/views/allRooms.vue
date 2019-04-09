@@ -48,6 +48,12 @@
         const that = this;
         if (this.id === undefined || this.id === "") {
           this.$store.dispatch('doGet', {url: "property/all"}).then(data => {
+
+            // Example, replace 200 and 400 with values you want. Will need some way to access those variables however
+            // Maybe can be in data part or something.
+            let filteredData = data.data.filter(single => single.price >= 200 && single.price <= 400);
+            console.log('Filtered is ' + filteredData);
+
             that.rooms = data.data;
           })
 
