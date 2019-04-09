@@ -53,6 +53,7 @@
             // Maybe can be in data part or something.
             let filteredData = data.data.filter(single => single.price >= 200 && single.price <= 400);
             console.log('Filtered is ' + filteredData);
+            console.log('F1 ' + filteredData[0].price + '  F2 ' + filteredData[1].price);
 
             that.rooms = data.data;
           })
