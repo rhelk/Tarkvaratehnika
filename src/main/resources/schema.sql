@@ -7,7 +7,7 @@ create table users (
  last_name VARCHAR(50),
  username VARCHAR(50) NOT NULL UNIQUE,
  password VARCHAR(255) NOT NULL,
- enabled BOOLEAN DEFAULT TRUE,
+ enabled BOOLEAN DEFAULT TRUE
 );
 
 create table property (
@@ -25,7 +25,7 @@ create table property (
  owner_id BIGINT,
  price BIGINT,
  visibility VARCHAR(10) DEFAULT 'VISIBLE',
- FOREIGN KEY(owner_id) REFERENCES users
+ FOREIGN KEY(owner_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE authorities (
