@@ -41,7 +41,7 @@
     },
     created() {
       const that = this;
-      this.$store.dispatch('doGet', {url: 'property/search?users.user_id=' + this.$store.getters.getUser_id}).then(data => {
+      this.$store.dispatch('doGet', {url: 'property/mine'}).then(data => {
         console.log(that.$store.getters.getUser_id);
         if (data.data.length !== 0) {
           that.rooms = data.data;
