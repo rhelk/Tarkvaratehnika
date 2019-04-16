@@ -1,1 +1,0 @@
-SELECT * FROM Property WHERE property_id = -2;

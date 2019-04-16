@@ -1,14 +1,14 @@
 
 import Vue from 'vue'
 import App from './App.vue'
-import VueResource from 'vue-resource'
+
 import Routes from './routes'
 import VueRouter from 'vue-router'
 import axios from 'axios'
-import VueAxios from 'vue-axios'
+
 import { store } from './store/store'
+
 import LoadScript from 'vue-plugin-load-script'
-import Vuetify from  'vuetify'
 import Firebase from 'firebase/app'
 import 'firebase/storage'
 import BootstrapVue from 'bootstrap-vue'
@@ -19,10 +19,9 @@ import VeeValidate from 'vee-validate'
 
 
 Vue.use(BootstrapVue)
-Vue.use(Vuetify);
-Vue.use(Firebase);
 Vue.use(LoadScript);
-Vue.use(VueResource);
+Vue.use(Firebase);
+
 Vue.use(VueRouter);
 
 const config = {
