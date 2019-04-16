@@ -8,7 +8,7 @@
       <div id="price" class="col-md-4">
         <h2>Price</h2>
         <p>Price per night: {{roomDetails.price}}</p>
-        <HotelDatePicker style="margin-bottom: 30px" format="DD/MM/YYYY"
+        <HotelDatePicker v-if="userCanRent" style="margin-bottom: 30px" format="DD/MM/YYYY"
                          @check-in-changed="setCheckinDate"
                          @check-out-changed="setCheckOutDate"
         >
