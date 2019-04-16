@@ -1,17 +1,33 @@
 <template>
-  <div class="container" style="margin-top: 20px">
-    <div class="row">
-      <div class="col-md-4" v-for="room in rooms">
-        <div class="thumbnail">
-          <router-link v-bind:to="/room/ + room.property_id">
-            <img :src="room.pic_url">
-            <div class="caption">
-              <p>
-                <router-link v-bind:to="/room/ + room.property_id"><h2>{{room.title}}</h2></router-link>
-                .
-              </p>
-            </div>
-          </router-link>
+  <div>
+    <div class="container-fluid">
+      <div class="row">
+        <div style="margin-left: 25px; margin-top: 10px">
+          <p>Price</p>
+        </div>
+        <div style="margin-top: 15px" class="col-md-2">
+          <vue-slider v-model="value"
+                      :order="false"
+                      v-bind="options"
+                      @change="filterByPrice"/>
+        </div>
+
+      </div>
+    </div>
+    <div class="container" style="margin-top: 20px">
+      <div class="row">
+        <div class="col-md-4" v-for="room in rooms">
+          <div class="thumbnail">
+            <router-link v-bind:to="/room/ + room.property_id">
+              <img :src="room.pic_url">
+              <div class="caption">
+                <p>
+                  <router-link v-bind:to="/room/ + room.property_id"><h2>{{room.title}}</h2></router-link>
+                  .
+                </p>
+              </div>
+            </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -20,11 +36,23 @@
   </div>
 </template>
 
+
 <script>
+  import VueSlider from 'vue-slider-component'
+  import 'vue-slider-component/theme/antd.css'
+
   export default {
+    components: {
+      VueSlider
+    },
     data() {
       return {
+        options: {
+          max: 2000,
+        },
+        value: [0, 2000],
         rooms: [],
+        rooms2: [],
         search: "",
         price: "",
         id: this.$route.params.id,
@@ -39,9 +67,9 @@
     watch: {
       '$route': 'fetchData'
     },
-    methods:{
+    methods: {
 
-      fetchData () {
+      fetchData() {
         this.id = this.$route.params.id;
         console.log("here");
         console.log(this.id);
@@ -51,11 +79,12 @@
 
             // Example, replace 200 and 400 with values you want. Will need some way to access those variables however
             // Maybe can be in data part or something.
-            // let filteredData = data.data.filter(single => single.price >= 200 && single.price <= 400);
-            // console.log('Filtered is ' + filteredData);
-            // console.log('F1 ' + filteredData[0].price + '  F2 ' + filteredData[1].price);
+            //let filteredData = data.data.filter(single => single.price >= 200 && single.price <= 300);
+            //console.log('Filtered is ' + filteredData);
+            //console.log('F1 ' + filteredData[0].price + '  F2 ' + filteredData[1].price);
 
             that.rooms = data.data;
+            that.rooms2 = data.data;
           })
 
         } else {
@@ -63,6 +92,11 @@
             that.rooms = data.data;
           })
         }
+      },
+      filterByPrice() {
+        this.rooms = this.rooms2;
+        let filteredData = this.rooms.filter(single => single.price >= this.value[0] && single.price <= this.value[1]);
+        this.rooms = filteredData;
       }
     }
   }
