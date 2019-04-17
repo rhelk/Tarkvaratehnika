@@ -29,6 +29,7 @@
     },
     created() {
         this.$store.dispatch("getUser").catch();
+      console.log("seis on " + process.env.VUE_APP_BASE_URI)
     }
 
   }

@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import {consoleError} from "vuetify/lib/util/console";
 
 Vue.use(Vuex);
 
@@ -10,9 +9,9 @@ export const store = new Vuex.Store({
     status: '',
     user_id: '',
     token: '',
-    loginAddress: 'http://localhost:8080/api/login',
-    apiAddress: 'http://localhost:8080/api/',
-    apiAddress2: 'http://localhost:8080/api/user/authCheck'
+    loginAddress: process.env.VUE_APP_BASE_URI + '/login',
+    apiAddress: process.env.VUE_APP_BASE_URI,
+    apiAddress2: process.env.VUE_APP_BASE_URI + '/user/authCheck'
   },
   getters : {
     isLoggedIn: state => !!state.token,
