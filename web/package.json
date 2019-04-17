@@ -18,7 +18,9 @@
     "bootstrap-vue": "^2.0.0-rc.14",
     "firebase": "^5.8.6",
     "js-sha256": "^0.9.0",
-    "vee-validate": "^2.1.7"
+    "vee-validate": "^2.1.7",
+    "vue-hotel-datepicker": "^2.6.4",
+    "vue-slider-component": "^3.0.26"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.6.0",
