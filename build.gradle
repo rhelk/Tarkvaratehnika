@@ -29,3 +29,21 @@ dependencies {
 test {
     include '**/*ApplicationTest*'
 }
+
+task taskX {
+    dependsOn 'taskY'
+    doLast {
+        println 'taskX'
+    }
+}
+task taskY {
+    doLast {
+        println 'taskY'
+    }
+}
+
+task hello {
+    doLast {
+        println 'lahe'
+    }
+}
