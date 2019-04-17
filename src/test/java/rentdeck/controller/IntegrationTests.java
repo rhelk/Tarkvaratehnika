@@ -1,7 +1,6 @@
 package rentdeck.controller;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -12,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -21,6 +21,7 @@ import rentdeck.dao.UserDao;
 import rentdeck.model.Property;
 import rentdeck.model.Users;
 
+import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,6 +37,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 //@WebMvcTest
+@ActiveProfiles("test")
+@Transactional
 public class IntegrationTests {
 
     private static String authString;
@@ -213,7 +216,7 @@ public class IntegrationTests {
         List<Property> properties = Arrays.asList(new ObjectMapper()
                 .readValue(mvcResult.getResponse().getContentAsString(), Property[].class));
 
-        assertThat(properties.size()).isEqualTo(3);
+        assertThat(properties.size()).isEqualTo(2);
         assertThat(properties.stream().allMatch(a -> a.getPrice() >= 200 && a.getPrice() <= 400)).isTrue();
     }
 
@@ -389,7 +392,7 @@ public class IntegrationTests {
         System.out.println("Size is " + properties.size());
         properties.forEach(System.out::println);
 
-        assertThat(properties.size()).isEqualTo(4);
+        assertThat(properties.size()).isEqualTo(3);
         assertThat(properties.stream().allMatch(a -> a.getUsers().getUser_id() == 1)).isTrue();
     }
 
