@@ -29,7 +29,6 @@ dependencies {
 test {
     include '**/*ApplicationTest*'
 }
-
 task taskX {
     dependsOn 'taskY'
     doLast {
@@ -43,7 +42,20 @@ task taskY {
 }
 
 task hello {
-    doLast {
-        println 'lahe'
-    }
+    println 'Hello. Starting cleaning...'
+}
+
+task cleaner (type: Exec) {
+    commandLine './gradlew', 'clean'
+    
+}
+task newbuild (type: Exec) {
+    dependsOn 'cleaner'
+    commandLine './gradlew', 'build'
+
+}
+
+task uploadx (type: Exec) {
+    dependsOn 'newbuild'
+    commandLine './upload_jar'
 }
