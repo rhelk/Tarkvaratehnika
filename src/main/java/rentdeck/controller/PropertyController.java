@@ -48,6 +48,7 @@ public class PropertyController {
 
     @GetMapping("api/property/all")
     public List<Property> getAllVisibleProperty() {
+        System.out.println("Got it");
         return propertyDao.findByVisibility(Property.Visibility.VISIBLE);
     }
 
@@ -65,7 +66,11 @@ public class PropertyController {
      @GetMapping("api/property/mine")
      public List<Property> myProperties(Principal principal) {
 
+        System.out.println("In here");
+
         if (principal == null) {throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);}
+
+        System.out.println(principal);
 
         Property property = new Property();
         property.setUsers(userDao.findByUsername(principal.getName()));

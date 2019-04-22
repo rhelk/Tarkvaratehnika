@@ -1,5 +1,6 @@
 create sequence users_sequence start with 1;
 create sequence property_sequence start with 1;
+create sequence rent_sequence start with 1;
 
 create table users (
  user_id BIGINT NOT NULL PRIMARY KEY,
@@ -33,4 +34,16 @@ CREATE TABLE authorities (
   authority VARCHAR(50) DEFAULT 'ROLE_USER',
   FOREIGN KEY (username)
     REFERENCES users (username) ON DELETE CASCADE
+);
+
+CREATE TABLE rent (
+  rent_id BIGINT PRIMARY KEY,
+  property_id BIGINT NOT NULL,
+  owner_id BIGINT NOT NULL,
+  renter BIGINT NOT NULL,
+  state VARCHAR(30) NOT NULL,
+  start DATE,
+  end DATE,
+  FOREIGN KEY(renter) REFERENCES users(user_id),
+  FOREIGN KEY(owner_id) REFERENCES users(user_id),
 );
