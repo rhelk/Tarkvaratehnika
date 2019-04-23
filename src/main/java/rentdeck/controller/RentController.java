@@ -59,7 +59,7 @@ public class RentController {
         return result;
     }
 
-    @GetMapping("api/rent/dates/{id]")
+    @GetMapping("api/rent/dates/{id}")
     public List<Rent> datesLocked(@PathVariable Long id) {
 
         System.out.println("In this");

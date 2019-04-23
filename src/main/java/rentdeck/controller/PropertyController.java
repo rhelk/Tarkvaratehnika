@@ -29,6 +29,7 @@ public class PropertyController {
 
     @Autowired
     private PropertyDao propertyDao;
+
     @Autowired
     private UserDao userDao;
 
