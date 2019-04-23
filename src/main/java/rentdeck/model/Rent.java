@@ -2,12 +2,16 @@ package rentdeck.model;
 
 import lombok.Data;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import java.sql.Date;
 
@@ -16,7 +20,7 @@ import java.sql.Date;
 public class Rent {
 
     public enum State {
-        TO_RENT, DENY, CONFIRM, DONE,
+        TO_RENT, DENY_RENT, CONFIRM_RENT, INFORM_RENT, DONE
     }
 
     @Id
@@ -24,8 +28,13 @@ public class Rent {
     @SequenceGenerator(name = "r_seq", sequenceName = "rent_sequence", allocationSize = 1)
     private Long rent_id;
 
-    public Long renter;
-    public Long property_id;
+    public Long renter_id;
+//    public Long property_id;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "property_id")
+    Property property;
+
     public Long owner_id;
 
     @Enumerated(EnumType.STRING)
@@ -36,4 +45,17 @@ public class Rent {
     public Date start;
     public Date end;
 
+    public Rent makeClone() {
+        Rent result = new Rent();
+
+        result.setRent_id(this.rent_id);
+        result.setRenter_id(this.renter_id);
+        result.setOwner_id(this.owner_id);
+        result.setState(this.state);
+        result.setProperty(this.property);
+        result.setStart(this.start);
+        result.setEnd(this.end);
+
+        return result;
+    }
 }

@@ -24,8 +24,8 @@ insert into property (property_id, title, description, address, county, municipa
                       'https://firebasestorage.googleapis.com/v0/b/tarkvaratehnika-1551709647803.appspot.com/o/images%2Fvbgfhbgfnjfksdjkfjlkdmhkbgfkhmlkgfmhgflkhmlkgf.jpg?alt=media&token=ea650c20-420e-47b4-889b-a8237f160de4', 3, 2, 1, 500);
 INSERT INTO authorities VALUES ('peresau', 'ROLE_USER');
 INSERT INTO authorities VALUES ('jj', 'ROLE_ADMIN');
-INSERT INTO Rent (rent_id, property_id, owner_id, renter, state, start, end)
-       VALUES (next value for rent_sequence, 1, 2, 1, 'CONFIRM', '2019-6-20', '2019-6-30');
+INSERT INTO Rent (rent_id, property_id, owner_id, renter_id, state, start, end)
+       VALUES (next value for rent_sequence, 1, 2, 1, 'CONFIRM_RENT', '2019-6-20', '2019-6-30');
 
 -- rent_id BIGINT PRIMARY KEY,
 --   property_id BIGINT NOT NULL,

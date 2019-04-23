@@ -42,7 +42,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/register").permitAll()
                 .antMatchers("/api/property/rent").authenticated()
                 .antMatchers("/api/property/**").permitAll()
-                .antMatchers("/api/rent").permitAll()
+                .antMatchers("/api/rent*/**").authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
