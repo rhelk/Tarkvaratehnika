@@ -59,6 +59,14 @@ public class RentController {
         return result;
     }
 
+    @PostMapping("api/rent/to_rent")
+    public Rent initiateRent(@RequestBody Rent rent, Principal principal) {
+        rent.setOwner_id(rent.getProperty().getUsers().getUser_id());
+        rent.setRenter_id(userDao.findByUsername(principal.getName()).getUser_id());
+        rent.setState(Rent.State.TO_RENT);
+        return rentDao.save(rent);
+    }
+
     @GetMapping("api/rent/dates/{id}")
     public List<Rent> datesLocked(@PathVariable Long id) {
 
@@ -76,10 +84,10 @@ public class RentController {
         if (userDao.findByUsername(principal.getName()).getUser_id() != rent.getOwner_id())
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
-        List<Rent> sameProperty  = rentDao.findByProperty_id(rent.getProperty().getProperty_id());
-        sameProperty.forEach(rent1 -> {
-            if (rent.getState() == Rent.State.TO_RENT) rentDao.delete(rent);
-        });
+//        List<Rent> sameProperty  = rentDao.findByProperty_id(rent.getProperty().getProperty_id());
+//        sameProperty.forEach(rent1 -> {
+//            if (rent.getState() == Rent.State.TO_RENT) rentDao.delete(rent);
+//        });
 
         if (rent.state == Rent.State.TO_RENT) {
             rent.setState(Rent.State.CONFIRM_RENT);
