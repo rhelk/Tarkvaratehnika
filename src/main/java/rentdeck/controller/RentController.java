@@ -2,6 +2,8 @@ package rentdeck.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,8 +36,11 @@ public class RentController {
     @Autowired
     UserDao userDao;
 
+    @Autowired
+    public JavaMailSender emailSender;
+
     @GetMapping("api/rent")
-    public List<Rent> getAllRentRequests(Principal principal) {
+    public List<Rent> getAllRentRequests(Principal principal) throws Exception {
 
         Users user = userDao.findByUsername(principal.getName());
 
@@ -57,6 +62,8 @@ public class RentController {
         });
 
         return result;
+//        sendEmail("rohelk@ttu.ee", "prooviks", "See siin");
+//        return null;
     }
 
     @PostMapping("api/rent/to_rent")
@@ -84,17 +91,16 @@ public class RentController {
         if (userDao.findByUsername(principal.getName()).getUser_id() != rent.getOwner_id())
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
-//        List<Rent> sameProperty  = rentDao.findByProperty_id(rent.getProperty().getProperty_id());
-//        sameProperty.forEach(rent1 -> {
-//            if (rent.getState() == Rent.State.TO_RENT) rentDao.delete(rent);
-//        });
-
         if (rent.state == Rent.State.TO_RENT) {
             rent.setState(Rent.State.CONFIRM_RENT);
             rentDao.save(rent);
 
             List<Rent> Others = rentDao.findDateConflicts(rent.start, rent.end);
-            Others.forEach(rent1 -> rentDao.delete(rent));
+            Others.forEach(rent1 -> {
+                rent.setState(Rent.State.DENY_RENT);
+                rentDao.save(rent);
+            });
+
 
 
 
@@ -114,6 +120,16 @@ public class RentController {
             rent.setState(Rent.State.DENY_RENT);
             rentDao.save(rent);
         }
+
+    }
+
+    private void sendEmail(String destination, String subject, String contents) throws Exception{
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(destination);
+        message.setSubject(subject);
+        message.setText(contents);
+        emailSender.send(message);
 
     }
 
