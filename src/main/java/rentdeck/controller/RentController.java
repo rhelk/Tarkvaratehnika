@@ -2,6 +2,8 @@ package rentdeck.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,29 +36,13 @@ public class RentController {
     @Autowired
     UserDao userDao;
 
+    @Autowired
+    public JavaMailSender emailSender;
+
     @GetMapping("api/rent")
     public List<Rent> getAllRentRequests(Principal principal) {
-
         Users user = userDao.findByUsername(principal.getName());
-
-       return rentDao.findAllByUserId(user.getUser_id());
-//        List<Rent> result = new ArrayList<>();
-//
-//        // INFORM_RENT is state after Renter has acknowledges confirmal of rent,
-//        // but before owner knows that.
-//        rents.forEach(rent -> {
-//
-//            result.add(rent.makeClone());
-//
-//            if (rent.getState() == Rent.State.INFORM_RENT
-//                    && rent.getOwner_id() == user.getUser_id()) {
-//                rent.setState(Rent.State.DONE);
-//                rentDao.save(rent);
-//            }
-//
-//        });
-//
-//        return result;
+        return rentDao.findAllByUserId(user.getUser_id());
     }
 
     @PostMapping("api/rent/to_rent/{property_id}")
@@ -67,6 +53,9 @@ public class RentController {
         rent.setState(Rent.State.TO_RENT);
         rent.setProperty(propertyDao.findById(property_id)
                 .orElseThrow(() -> new ResponseStatusException((HttpStatus.NOT_FOUND))));
+
+//        sendEmail("rohelk@ttu.ee", "prooviks", "See siin");
+//        return null;
 
         return rentDao.save(rent);
     }
@@ -79,7 +68,7 @@ public class RentController {
         return rentDao.findAllLaterThanToday(id);
     }
 
-    @GetMapping("api/rent/confirm/{rent_id]")
+    @PostMapping("api/rent/confirm/{rent_id]")
     public void confirmRent(@PathVariable Long rent_id, Principal principal) {
 
         Rent rent = rentDao.findById(rent_id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -105,7 +94,7 @@ public class RentController {
         }
     }
 
-    @GetMapping("api/rent/deny/{rent_id]")
+    @PostMapping("api/rent/deny/{rent_id]")
     public void denyRent(@PathVariable Long rent_id, Principal principal) {
 
         Rent rent = rentDao.findById(rent_id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -118,6 +107,16 @@ public class RentController {
             rent.setState(Rent.State.DENY_RENT);
             rentDao.save(rent);
         } else throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+
+    }
+
+    private void sendEmail(String destination, String subject, String contents) throws Exception{
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(destination);
+        message.setSubject(subject);
+        message.setText(contents);
+        emailSender.send(message);
 
     }
 
