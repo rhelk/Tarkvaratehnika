@@ -39,31 +39,35 @@ public class RentController {
 
         Users user = userDao.findByUsername(principal.getName());
 
-        List<Rent> rents = rentDao.findAllByUserId(user.getUser_id());
-        List<Rent> result = new ArrayList<>();
-
-        // INFORM_RENT is state after Renter has acknowledges confirmal of rent,
-        // but before owner knows that.
-        rents.forEach(rent -> {
-
-            result.add(rent.makeClone());
-
-            if (rent.getState() == Rent.State.INFORM_RENT
-                    && rent.getOwner_id() == user.getUser_id()) {
-                rent.setState(Rent.State.DONE);
-                rentDao.save(rent);
-            }
-
-        });
-
-        return result;
+       return rentDao.findAllByUserId(user.getUser_id());
+//        List<Rent> result = new ArrayList<>();
+//
+//        // INFORM_RENT is state after Renter has acknowledges confirmal of rent,
+//        // but before owner knows that.
+//        rents.forEach(rent -> {
+//
+//            result.add(rent.makeClone());
+//
+//            if (rent.getState() == Rent.State.INFORM_RENT
+//                    && rent.getOwner_id() == user.getUser_id()) {
+//                rent.setState(Rent.State.DONE);
+//                rentDao.save(rent);
+//            }
+//
+//        });
+//
+//        return result;
     }
 
-    @PostMapping("api/rent/to_rent")
-    public Rent initiateRent(@RequestBody Rent rent, Principal principal) {
+    @PostMapping("api/rent/to_rent/{property_id}")
+    public Rent initiateRent(@RequestBody Rent rent, @PathVariable Long property_id, Principal principal) {
+
         rent.setOwner_id(rent.getProperty().getUsers().getUser_id());
         rent.setRenter_id(userDao.findByUsername(principal.getName()).getUser_id());
         rent.setState(Rent.State.TO_RENT);
+        rent.setProperty(propertyDao.findById(property_id)
+                .orElseThrow(() -> new ResponseStatusException((HttpStatus.NOT_FOUND))));
+
         return rentDao.save(rent);
     }
 
@@ -113,7 +117,7 @@ public class RentController {
         if (rent.state == Rent.State.TO_RENT) {
             rent.setState(Rent.State.DENY_RENT);
             rentDao.save(rent);
-        }
+        } else throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 
     }
 
