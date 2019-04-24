@@ -60,12 +60,12 @@ public class RentController {
         return rentDao.save(rent);
     }
 
-    @GetMapping("api/rent/dates/{id}")
-    public List<Rent> datesLocked(@PathVariable Long id) {
+    @GetMapping("api/rent/dates/{property_id}")
+    public List<Rent> datesLocked(@PathVariable Long property_id) {
 
         System.out.println("In this");
 
-        return rentDao.findAllLaterThanToday(id);
+        return rentDao.findAllLaterThanToday(property_id);
     }
 
     @PostMapping("api/rent/confirm/{rent_id]")

@@ -29,6 +29,6 @@ public interface RentDao extends JpaRepository<Rent, Long> {
 
     @Query("SELECT r FROM Rent r WHERE r.end > CURRENT_DATE AND r.property.property_id = ?1 " +
             "AND r.state IN ('CONFIRM_RENT', 'INFORM_RENT', 'DONE')")
-    List<Rent> findAllLaterThanToday(Long rent_id);
+    List<Rent> findAllLaterThanToday(Long property_id);
 
 }
