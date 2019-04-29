@@ -42,7 +42,7 @@ public class RentController {
     @GetMapping("api/rent")
     public List<Rent> getAllRentRequests(Principal principal) {
         Users user = userDao.findByUsername(principal.getName());
-        return rentDao.findAllByUserId(user.getUser_id());
+        return rentDao.findAllRent(user.getUser_id(), user.getUsername());
     }
 
     @PostMapping("api/rent/to_rent/{property_id}")
@@ -51,7 +51,8 @@ public class RentController {
         rent.setProperty(propertyDao.findById(property_id)
                 .orElseThrow(() -> new ResponseStatusException((HttpStatus.NOT_FOUND))));
         rent.setOwner_id(rent.getProperty().getUsers().getUser_id());
-        rent.setRenter_id(userDao.findByUsername(principal.getName()).getUser_id());
+//        rent.setRenter_id(userDao.findByUsername(principal.getName()).getUser_id());
+        rent.setRenter_username(principal.getName());
         rent.setState(Rent.State.TO_RENT);
 
 //        sendEmail("rohelk@ttu.ee", "prooviks", "See siin");
