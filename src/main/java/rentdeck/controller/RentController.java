@@ -87,10 +87,10 @@ public class RentController {
             rentDao.save(rent);
 
             List<Rent> Others = rentDao.findDateConflicts(rent.start, rent.end);
-            Others.forEach(rent1 -> rentDao.delete(rent));
-
-
-
+            Others.forEach(rent1 -> {
+                if (rent1.getState() == Rent.State.TO_RENT)
+                    rent1.setState(Rent.State.DENY_RENT);
+            });
         }
     }
 
