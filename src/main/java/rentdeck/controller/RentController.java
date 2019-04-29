@@ -48,11 +48,11 @@ public class RentController {
     @PostMapping("api/rent/to_rent/{property_id}")
     public Rent initiateRent(@RequestBody Rent rent, @PathVariable Long property_id, Principal principal) {
 
+        rent.setProperty(propertyDao.findById(property_id)
+                .orElseThrow(() -> new ResponseStatusException((HttpStatus.NOT_FOUND))));
         rent.setOwner_id(rent.getProperty().getUsers().getUser_id());
         rent.setRenter_id(userDao.findByUsername(principal.getName()).getUser_id());
         rent.setState(Rent.State.TO_RENT);
-        rent.setProperty(propertyDao.findById(property_id)
-                .orElseThrow(() -> new ResponseStatusException((HttpStatus.NOT_FOUND))));
 
 //        sendEmail("rohelk@ttu.ee", "prooviks", "See siin");
 //        return null;
