@@ -7,6 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.test.context.junit4.SpringRunner;
 import rentdeck.controller.IntegrationTests;
 import rentdeck.controller.PropertyControllerTest;
+import rentdeck.controller.RentController;
+import rentdeck.controller.RentControllerTest;
 import rentdeck.controller.UserControllerTest;
 
 
@@ -15,6 +17,7 @@ import rentdeck.controller.UserControllerTest;
 @Suite.SuiteClasses({
         PropertyControllerTest.class,
         UserControllerTest.class,
+        RentControllerTest.class,
         IntegrationTests.class
 })
 public class ApplicationTest {

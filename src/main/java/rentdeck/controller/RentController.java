@@ -18,10 +18,7 @@ import rentdeck.model.Rent;
 import rentdeck.model.Users;
 
 import java.security.Principal;
-import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -48,6 +45,8 @@ public class RentController {
     @PostMapping("api/rent/to_rent/{property_id}")
     public Rent initiateRent(@RequestBody Rent rent, @PathVariable Long property_id, Principal principal) {
 
+        System.out.println("prop id is " + property_id);
+
         rent.setProperty(propertyDao.findById(property_id)
                 .orElseThrow(() -> new ResponseStatusException((HttpStatus.NOT_FOUND))));
         rent.setOwner_id(rent.getProperty().getUsers().getUser_id());
@@ -69,13 +68,14 @@ public class RentController {
         return rentDao.findAllLaterThanToday(property_id);
     }
 
-    @PostMapping("api/rent/confirm/{rent_id]")
+    @PostMapping("api/rent/confirm/{rent_id}")
     public void confirmRent(@PathVariable Long rent_id, Principal principal) {
 
         Rent rent = rentDao.findById(rent_id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         // Make sure requester is actually owner of the property in question
-        if (userDao.findByUsername(principal.getName()).getUser_id() != rent.getOwner_id())
+        if (userDao.findByUsername(principal.getName()).getUser_id().longValue()
+                != rent.getOwner_id().longValue())
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
 //        List<Rent> sameProperty  = rentDao.findByProperty_id(rent.getProperty().getProperty_id());
@@ -95,7 +95,7 @@ public class RentController {
         }
     }
 
-    @PostMapping("api/rent/deny/{rent_id]")
+    @PostMapping("api/rent/deny/{rent_id}")
     public void denyRent(@PathVariable Long rent_id, Principal principal) {
 
         Rent rent = rentDao.findById(rent_id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
