@@ -6,6 +6,9 @@ import register from "./views/register"
 import home from "./views/home.vue"
 import changeProperty from './views/changeProperty.vue'
 import myRooms from './views/myRooms.vue'
+import user from './views/user.vue'
+import myRentObj from './views/rentRequests.vue'
+
 
 
 export default [
@@ -18,4 +21,7 @@ export default [
   {path: '/', component: home},
   {path: '/change/:id', component: changeProperty},
   {path: '/my/rooms', component: myRooms},
+  {path: '/user', component: user},
+  {path: '/rentout', component: myRentObj},
+
 ]
