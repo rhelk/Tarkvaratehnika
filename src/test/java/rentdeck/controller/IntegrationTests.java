@@ -72,7 +72,7 @@ public class IntegrationTests {
     @Test
     public void aloginTest() throws Exception {
 
-        String loginJson = "{ \"username\": \"peresau\", \"password\": \"04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb\" }";
+        String loginJson = "{ \"username\": \"peresau@toores.ee\", \"password\": \"04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb\" }";
 
         MvcResult mvcResult = mockMvc.perform(post("/api/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -135,7 +135,7 @@ public class IntegrationTests {
                 .andReturn();
 
         Users users = new ObjectMapper().readValue(mvcResult.getResponse().getContentAsString(), Users.class);
-        assertThat(users.getUsername()).isEqualTo("peresau");
+        assertThat(users.getUsername()).isEqualTo("peresau@toores.ee");
     }
 
     @Test
