@@ -1,7 +1,7 @@
 insert into users values (next value for users_sequence,
-                    'Karl', 'Peresau', 'peresau', '$2a$10$BQM1ZoLmDfkR9H2YCDkjDuWs3UTtJHyQY/5K1luYtkp0VuQ45KIZC', TRUE);
+                    'Karl', 'Peresau', 'peresau@toores.ee', '$2a$10$BQM1ZoLmDfkR9H2YCDkjDuWs3UTtJHyQY/5K1luYtkp0VuQ45KIZC', TRUE);
 insert into users values (next value for users_sequence,
-                    'Jill', 'Jacobs', 'jj', '$2a$10$L5svqV.HSC1Nz5uGseDHPOubETI45TN9L8JJDLZPo091jsA6oH2Wa', TRUE);
+                    'Jill', 'Jacobs', 'jj@toores.ee', '$2a$10$L5svqV.HSC1Nz5uGseDHPOubETI45TN9L8JJDLZPo091jsA6oH2Wa', TRUE);
 insert into property (property_id, title, description, address, county, municipality, settlement,
                       street, pic_url, room_count, bed_count, owner_id, price)
        values (next value for property_sequence, 'Time of your life', 'Something this', 'uus tn. 5',
@@ -21,14 +21,11 @@ insert into property (property_id, title, description, address, county, municipa
                       street, pic_url, room_count, bed_count, owner_id, price)
        values (next value for property_sequence, 'Good place for a company', 'Some description', 'Vanalinn',
                       'Harjumaa', 'Tallinn', 'Mustamäe', 'Vilde tee',
-                      'https://firebasestorage.googleapis.com/v0/b/tarkvaratehnika-1551709647803.appspot.com/o/images%2Fvbgfhbgfnjfksdjkfjlkdmhkbgfkhmlkgfmhgflkhmlkgf.jpg?alt=media&token=ea650c20-420e-47b4-889b-a8237f160de4', 3, 2, 2, 500);
-INSERT INTO authorities VALUES ('peresau', 'ROLE_USER');
-INSERT INTO authorities VALUES ('jj', 'ROLE_ADMIN');
+                      'https://firebasestorage.googleapis.com/v0/b/tarkvaratehnika-1551709647803.appspot.com/o/images%2Fvbgfhbgfnjfksdjkfjlkdmhkbgfkhmlkgfmhgflkhmlkgf.jpg?alt=media&token=ea650c20-420e-47b4-889b-a8237f160de4', 3, 2, 1, 500);
+INSERT INTO authorities VALUES ('peresau@toores.ee', 'ROLE_USER');
+INSERT INTO authorities VALUES ('jj@toores.ee', 'ROLE_ADMIN');
 INSERT INTO Rent (rent_id, property_id, owner_id, renter_username, state, start, end)
-       VALUES (next value for rent_sequence, 2, 1, 'peresau', 'TO_RENT', '2089-06-20', '2089-06-30');
-
--- INSERT INTO Rent (rent_id, property_id, owner_id, renter_username, state, start, end)
---        VALUES (next value for rent_sequence, 4, 1, 'jj', 'CONFIRM_RENT', '2019-6-20', '2019-6-30');
+       VALUES (next value for rent_sequence, 1, 2, 'peresau@toores.ee', 'TO_RENT', '2019-6-20', '2019-6-30');
 
 -- rent_id BIGINT PRIMARY KEY,
 --   property_id BIGINT NOT NULL,
