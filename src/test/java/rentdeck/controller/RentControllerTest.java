@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import rentdeck.dao.PropertyDao;
 import rentdeck.dao.RentDao;
 import rentdeck.dao.UserDao;
+import rentdeck.model.DateRanges;
 import rentdeck.model.Property;
 import rentdeck.model.Rent;
 import rentdeck.model.Users;
@@ -55,6 +56,8 @@ public class RentControllerTest {
 
     private Rent mockedRent;
 
+    private DateRanges mockedRanges = Mockito.mock(DateRanges.class);
+
     private Principal mockedPrincipal = Mockito.mock(Principal.class);
 
     private Users mockedUser = Mockito.mock(Users.class);
@@ -77,6 +80,7 @@ public class RentControllerTest {
         mockedProperty.setProperty_id(-1L);
         mockedProperty.setUsers(new Users());
         mockedProperty.getUsers().setUser_id(-2L);
+        mockedProperty.getUsers().setUsername("testing");
 
     }
 
@@ -104,7 +108,7 @@ public class RentControllerTest {
 
         String json = "{\"start\":\"2019-05-21\",\"end\":\"2019-06-30\"}";
 
-        System.out.println(json);
+        when(mockedPrincipal.getName()).thenReturn("asha");
 
         when(propertyDao.findById(1L)).thenReturn(java.util.Optional.of(mockedProperty));
 

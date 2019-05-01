@@ -392,7 +392,7 @@ public class IntegrationTests {
         System.out.println("Size is " + properties.size());
         properties.forEach(System.out::println);
 
-        assertThat(properties.size()).isEqualTo(3);
+        assertThat(properties.size()).isEqualTo(2);
         assertThat(properties.stream().allMatch(a -> a.getUsers().getUser_id() == 1)).isTrue();
     }
 

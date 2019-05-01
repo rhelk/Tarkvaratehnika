@@ -14,10 +14,12 @@ import org.springframework.web.server.ResponseStatusException;
 import rentdeck.dao.PropertyDao;
 import rentdeck.dao.RentDao;
 import rentdeck.dao.UserDao;
+import rentdeck.model.DateRanges;
 import rentdeck.model.Rent;
 import rentdeck.model.Users;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -45,12 +47,14 @@ public class RentController {
     @PostMapping("api/rent/to_rent/{property_id}")
     public Rent initiateRent(@RequestBody Rent rent, @PathVariable Long property_id, Principal principal) {
 
-        System.out.println("prop id is " + property_id);
-
         rent.setProperty(propertyDao.findById(property_id)
                 .orElseThrow(() -> new ResponseStatusException((HttpStatus.NOT_FOUND))));
+
         rent.setOwner_id(rent.getProperty().getUsers().getUser_id());
-//        rent.setRenter_id(userDao.findByUsername(principal.getName()).getUser_id());
+
+        if (rent.getProperty().getUsers().getUsername().equals(principal.getName()))
+            throw new ResponseStatusException((HttpStatus.NOT_FOUND));
+
         rent.setRenter_username(principal.getName());
         rent.setState(Rent.State.TO_RENT);
 
@@ -61,11 +65,20 @@ public class RentController {
     }
 
     @GetMapping("api/rent/dates/{property_id}")
-    public List<Rent> datesLocked(@PathVariable Long property_id) {
+    public List<DateRanges> datesLocked(@PathVariable Long property_id) {
 
-        System.out.println("In this");
+        List<Rent> rents = rentDao.findAllLaterThanToday(property_id);
+        List<DateRanges> dateRanges = new ArrayList<>();
 
-        return rentDao.findAllLaterThanToday(property_id);
+        rents.forEach(rent -> {
+            DateRanges singleRange = new DateRanges();
+            singleRange.setStart(rent.getStart());
+            singleRange.setEnd(rent.getEnd());
+            dateRanges.add(singleRange);
+        });
+
+        return dateRanges;
+
     }
 
     @PostMapping("api/rent/confirm/{rent_id}")
@@ -76,12 +89,7 @@ public class RentController {
         // Make sure requester is actually owner of the property in question
         if (userDao.findByUsername(principal.getName()).getUser_id().longValue()
                 != rent.getOwner_id().longValue())
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-
-//        List<Rent> sameProperty  = rentDao.findByProperty_id(rent.getProperty().getProperty_id());
-//        sameProperty.forEach(rent1 -> {
-//            if (rent.getState() == Rent.State.TO_RENT) rentDao.delete(rent);
-//        });
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
         if (rent.state == Rent.State.TO_RENT) {
             rent.setState(Rent.State.CONFIRM_RENT);
@@ -89,10 +97,11 @@ public class RentController {
 
             List<Rent> Others = rentDao.findDateConflicts(rent.start, rent.end);
             Others.forEach(rent1 -> {
-                if (rent1.getState() == Rent.State.TO_RENT)
+                if (rent1.getState() == Rent.State.TO_RENT) {
                     rent1.setState(Rent.State.DENY_RENT);
+                }
             });
-        }
+        } else throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("api/rent/deny/{rent_id}")
@@ -100,13 +109,22 @@ public class RentController {
 
         Rent rent = rentDao.findById(rent_id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
+
         // Make sure requester is actually owner of the property in question
-        if (userDao.findByUsername(principal.getName()).getUser_id() != rent.getOwner_id())
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        if (userDao.findByUsername(principal.getName()).getUser_id().longValue()
+                != rent.getOwner_id().longValue())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
         if (rent.state == Rent.State.TO_RENT) {
             rent.setState(Rent.State.DENY_RENT);
             rentDao.save(rent);
+
+            List<Rent> Others = rentDao.findDateConflicts(rent.start, rent.end);
+            Others.forEach(rent1 -> {
+                if (rent1.getState() == Rent.State.TO_RENT) {
+                    rent1.setState(Rent.State.DENY_RENT);
+                }
+            });
         } else throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 
     }

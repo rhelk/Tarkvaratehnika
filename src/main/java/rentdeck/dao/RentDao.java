@@ -2,6 +2,7 @@ package rentdeck.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import rentdeck.model.DateRanges;
 import rentdeck.model.Property;
 import rentdeck.model.Rent;
 
@@ -28,11 +29,15 @@ public interface RentDao extends JpaRepository<Rent, Long> {
     List<Rent> findByProperty_id(Long property_id);
 
     @Query("SELECT r FROM Rent r WHERE (?1 >= r.start AND ?1 <= r.end) " +
-            "OR (?2 >= r.start AND ?2 <= r.end)")
+            "OR (?2 >= r.start AND ?2 <= r.end) OR (?1 < r.start AND ?2 > r.end)")
     List<Rent> findDateConflicts(Date start, Date end);
 
+//    @Query("SELECT r.start, r.end FROM Rent r WHERE r.end > CURRENT_DATE AND r.property.property_id = ?1 " +
+//            "AND r.state = 'CONFIRM_RENT'")
+//    List<Rent> findAllLaterThanToday(Long property_id);
+
     @Query("SELECT r FROM Rent r WHERE r.end > CURRENT_DATE AND r.property.property_id = ?1 " +
-            "AND r.state IN ('CONFIRM_RENT', 'INFORM_RENT', 'DONE')")
+            "AND r.state = 'TO_RENT'")
     List<Rent> findAllLaterThanToday(Long property_id);
 
 }

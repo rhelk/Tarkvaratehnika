@@ -20,7 +20,7 @@ import java.sql.Date;
 public class Rent {
 
     public enum State {
-        TO_RENT, DENY_RENT, CONFIRM_RENT, INFORM_RENT, DONE
+        TO_RENT, DENY_RENT, CONFIRM_RENT
     }
 
     @Id
