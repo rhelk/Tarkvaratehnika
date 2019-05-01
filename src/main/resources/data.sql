@@ -1,7 +1,7 @@
 insert into users values (next value for users_sequence,
-                    'Karl', 'Peresau', 'peresau', '$2a$10$BQM1ZoLmDfkR9H2YCDkjDuWs3UTtJHyQY/5K1luYtkp0VuQ45KIZC', TRUE);
+                    'Karl', 'Peresau', 'peresau@gmail.com', '$2a$10$BQM1ZoLmDfkR9H2YCDkjDuWs3UTtJHyQY/5K1luYtkp0VuQ45KIZC', TRUE);
 insert into users values (next value for users_sequence,
-                    'Jill', 'Jacobs', 'jj', '$2a$10$L5svqV.HSC1Nz5uGseDHPOubETI45TN9L8JJDLZPo091jsA6oH2Wa', TRUE);
+                    'Jill', 'Jacobs', 'jj@gmail.com', '$2a$10$L5svqV.HSC1Nz5uGseDHPOubETI45TN9L8JJDLZPo091jsA6oH2Wa', TRUE);
 insert into property (property_id, title, description, address, county, municipality, settlement,
                       street, pic_url, room_count, bed_count, owner_id, price)
        values (next value for property_sequence, 'Time of your life', 'Something this', 'uus tn. 5',
@@ -22,10 +22,10 @@ insert into property (property_id, title, description, address, county, municipa
        values (next value for property_sequence, 'Good place for a company', 'Some description', 'Vanalinn',
                       'Harjumaa', 'Tallinn', 'Mustamäe', 'Vilde tee',
                       'https://firebasestorage.googleapis.com/v0/b/tarkvaratehnika-1551709647803.appspot.com/o/images%2Fvbgfhbgfnjfksdjkfjlkdmhkbgfkhmlkgfmhgflkhmlkgf.jpg?alt=media&token=ea650c20-420e-47b4-889b-a8237f160de4', 3, 2, 1, 500);
-INSERT INTO authorities VALUES ('peresau', 'ROLE_USER');
-INSERT INTO authorities VALUES ('jj', 'ROLE_ADMIN');
+INSERT INTO authorities VALUES ('peresau@gmail.com', 'ROLE_USER');
+INSERT INTO authorities VALUES ('jj@gmail.com', 'ROLE_ADMIN');
 INSERT INTO Rent (rent_id, property_id, owner_id, renter_username, state, start, end)
-       VALUES (next value for rent_sequence, 1, 2, 'peresau', 'CONFIRM_RENT', '2019-6-20', '2019-6-30');
+       VALUES (next value for rent_sequence, 1, 2, 'peresau@gmail.com', 'TO_RENT', '2019-6-20', '2019-6-30');
 
 -- rent_id BIGINT PRIMARY KEY,
 --   property_id BIGINT NOT NULL,
