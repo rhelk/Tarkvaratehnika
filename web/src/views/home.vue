@@ -13,7 +13,6 @@
                     style="text-shadow: 1px 1px 2px #333;"
                     class="d-block img-fluid w-100"
                     @sliding-start="onSlideStart"
-                    @sliding-end="onSlideEnd"
             >
                 <b-carousel-slide
                         caption="Start here"
@@ -145,9 +144,7 @@
             onSlideStart(slide) {
                 this.sliding = true
             },
-            onSlideEnd(slide) {
-                this.sliding = false
-            }
+
 
 
         }
