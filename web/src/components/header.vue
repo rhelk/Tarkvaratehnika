@@ -14,6 +14,7 @@
         <router-link  to='/all' exact> All properties </router-link>
         <router-link v-if="isAuthenticated" to='/property/add' exact> Add property</router-link>
         <router-link v-if="isAuthenticated" to='/my/rooms' exact> My properties</router-link>
+        <router-link v-if="isAuthenticated" to='/user' exact> My rent requests</router-link>
         <router-link v-if="!isAuthenticated" to="/login" replace>Login</router-link>
         <router-link v-if="isAuthenticated" to="/login" v-on:click.native="logout()" replace>Logout</router-link>
       </b-navbar-nav>
