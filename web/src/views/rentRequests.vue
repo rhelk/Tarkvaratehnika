@@ -48,7 +48,6 @@
             return {
                 rentObjects: [],
                 myUserId: this.$store.getters.getUser_id,
-// Contact renter at: {{obj.renter_username}}
 
             }
         },

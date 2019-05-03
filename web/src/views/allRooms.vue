@@ -16,10 +16,10 @@
     </div>
     <div class="container" style="margin-top: 20px">
       <div class="row">
-        <div class="col-md-4" v-for="room in rooms">
+        <div class="col-lg-4 col-md-6 col-xs-6"  v-for="room in rooms">
           <div class="thumbnail">
             <router-link v-bind:to="/room/ + room.property_id">
-              <img :src="room.pic_url">
+              <img class="img-responsive" :src="room.pic_url">
               <div class="caption">
                 <p>
                   <router-link v-bind:to="/room/ + room.property_id"><h2>{{room.title}}</h2></router-link>
@@ -76,12 +76,6 @@
         const that = this;
         if (this.id === undefined || this.id === "") {
           this.$store.dispatch('doGet', {url: "property/all"}).then(data => {
-
-            // Example, replace 200 and 400 with values you want. Will need some way to access those variables however
-            // Maybe can be in data part or something.
-            //let filteredData = data.data.filter(single => single.price >= 200 && single.price <= 300);
-            //console.log('Filtered is ' + filteredData);
-            //console.log('F1 ' + filteredData[0].price + '  F2 ' + filteredData[1].price);
 
             that.rooms = data.data;
             that.rooms2 = data.data;

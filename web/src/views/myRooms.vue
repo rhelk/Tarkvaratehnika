@@ -5,7 +5,7 @@
             <b-button variant="dark" style="margin-bottom: 20px" v-on:click.prevent="rentRequests">Rent Requests
             </b-button>
             <div class="row">
-                <div class="col-md-4" v-for="room in rooms">
+                <div class="col-lg-4 col-md-6 col-xs-6" v-for="room in rooms">
                     <div class="thumbnail">
                         <router-link v-bind:to="/room/ + room.property_id">
                             <img :src="room.pic_url">
