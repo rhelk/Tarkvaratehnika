@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -126,6 +127,19 @@ public class RentController {
                 }
             });
         } else throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+
+    }
+
+    @DeleteMapping("api/rent/{rent_id}")
+    public void cancelRentRequest(@PathVariable Long rent_id, Principal principal) {
+
+        Rent rent = rentDao.findById(rent_id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (userDao.findByUsername(principal.getName()).getUser_id().longValue()
+                != rent.getOwner_id().longValue())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        if (rent.getState() == Rent.State.TO_RENT) rentDao.delete(rent);
 
     }
 
