@@ -65,7 +65,7 @@ public class Property {
     @Range(min = 5, max = 99999999)
     Long price;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Enumerated(EnumType.STRING)
     Visibility visibility = Visibility.VISIBLE;
 
