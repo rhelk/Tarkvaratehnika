@@ -135,8 +135,7 @@ public class RentController {
 
         Rent rent = rentDao.findById(rent_id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (userDao.findByUsername(principal.getName()).getUser_id().longValue()
-                != rent.getOwner_id().longValue())
+        if (userDao.findByUsername(principal.getName()).equals(rent.renter_username))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
         if (rent.getState() == Rent.State.TO_RENT) rentDao.delete(rent);
