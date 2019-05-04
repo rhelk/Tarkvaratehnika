@@ -54,8 +54,8 @@
             return {
                 date: '',
                 disabledDates: [], //['2019-05-05', '2019-05-07']
-                checkIn: this.startingDateValue,
-                checkOut: this.endingDateValue,
+                checkIn: "",
+                checkOut: "",
                 userCanRent: true,
                 hasClicked: false,
                 roomDetails: [],
@@ -98,7 +98,7 @@
                     this.$router.push({path: `/login`});
                     this.$router.go();
                 } else {
-                    //const that = this;
+                    if(this.checkIn !=="" && this.checkOut !== ""){
                     this.$store.dispatch('doPost', {
                         url: 'rent/to_rent/' + this.id, body:
                             {
@@ -109,7 +109,11 @@
                     }).then(data => {
                         this.$router.push({path: `/all`});
 
-                    })
+                    })}
+                    else{
+                        alert("Please enter rental period");
+                        this.hasClicked = false;
+                    }
                 }
 
 
