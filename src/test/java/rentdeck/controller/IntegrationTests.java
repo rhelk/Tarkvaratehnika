@@ -52,18 +52,18 @@ public class IntegrationTests {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    public void AuthCheckFailureTest() throws Exception {
-        mockMvc.perform(get("/api/user/authCheck"))
-                .andExpect(status().is(401));
+//    @Test
+//    public void AuthCheckFailureTest() throws Exception {
+//        mockMvc.perform(get("/api/user/authCheck"))
+//                .andExpect(status().is(401));
+//
+//    }
 
-    }
-
     @Test
-    public void RentNoAuthTest() throws Exception {
-        mockMvc.perform(post("/api/property/rent")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("1"))
+    public void HiddenNoAuthTest() throws Exception {
+
+        mockMvc.perform(post("/api/property/hidden/{property_id}", 1L)
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(401));
     }
 
@@ -334,14 +334,13 @@ public class IntegrationTests {
     }
 
     @Test
-    public void rentIntegerationTest() throws Exception{
+    public void hiddenIntegerationTest() throws Exception{
 
         int before = propertyDao.findByVisibility(Property.Visibility.VISIBLE).size();
 
-        mockMvc.perform(post("/api/property/rent")
+        mockMvc.perform(post("/api/property/hidden/{property_id}", 2L)
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", authString)
-                .content("1"))
+                .header("Authorization", authString))
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));
 
@@ -352,21 +351,37 @@ public class IntegrationTests {
     }
 
     @Test
+    public void visibleIntegerationTest() throws Exception{
+
+        mockMvc.perform(post("/api/property/hidden/{property_id}", 2L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", authString))
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
+
+        int before = propertyDao.findByVisibility(Property.Visibility.VISIBLE).size();
+
+        mockMvc.perform(post("/api/property/visible/{property_id}", 2L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", authString))
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
+
+        int after = propertyDao.findByVisibility(Property.Visibility.VISIBLE).size();
+
+        assertThat(before).isEqualTo(after - 1);
+
+    }
+
+    @Test
     public void rentWrongIdTest() throws Exception {
 
         int before = propertyDao.findByVisibility(Property.Visibility.VISIBLE).size();
 
-        mockMvc.perform(post("/api/property/rent")
+        mockMvc.perform(post("/api/property/hidden/{property_id}", -3L)
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", authString)
-                .content("-1"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("false"));
-
-        int after = propertyDao.findByVisibility(Property.Visibility.VISIBLE).size();
-
-        assertThat(before).isEqualTo(after);
-
+                .header("Authorization", authString))
+                .andExpect(status().isNotFound());
     }
 
     @Test

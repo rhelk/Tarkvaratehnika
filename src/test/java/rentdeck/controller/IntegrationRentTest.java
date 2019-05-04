@@ -215,7 +215,7 @@ public class IntegrationRentTest {
         List<DateRanges> rents = Arrays.asList(new ObjectMapper()
                 .readValue(mvcResult.getResponse().getContentAsString(), DateRanges[].class));
 
-        assertThat(rents.get(0).getStart().toString()).isEqualTo("2089-06-20");
+        assertThat(rents.size()).isEqualTo(0);
     }
 
 }

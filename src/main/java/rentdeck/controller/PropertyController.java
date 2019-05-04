@@ -80,11 +80,28 @@ public class PropertyController {
 
      }
 
-    @PostMapping("api/property/rent")
-    public Boolean rentProperty(@RequestBody String id, Principal principal) {
-        if (principal == null) throw new ResponseStatusException((HttpStatus.FORBIDDEN));
-        id = id.replaceAll("[{}=\"]","");
-        return propertyDao.setHidden(Long.valueOf(id)) == 1;
+    @PostMapping("api/property/hidden/{property_id}")
+    public Boolean hideProperty(@PathVariable Long property_id, Principal principal) {
+
+        Property property = propertyDao.findById(property_id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (!property.getUsers().getUsername().equals(principal.getName()))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        return propertyDao.setHidden(property_id) == 1;
+    }
+
+    @PostMapping("api/property/visible/{property_id}")
+    public Boolean showProperty(@PathVariable Long property_id, Principal principal) {
+
+        Property property = propertyDao.findById(property_id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (!property.getUsers().getUsername().equals(principal.getName()))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        return propertyDao.setVisible(property_id) == 1;
     }
 
 }

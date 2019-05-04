@@ -20,4 +20,8 @@ public interface PropertyDao extends JpaRepository<Property, Long> {
     @Query("UPDATE Property SET Visibility = 'HIDDEN' WHERE property_id = ?1")
     Integer setHidden(long id);
 
+    @Transactional
+    @Modifying
+    @Query("UPDATE Property SET Visibility = 'VISIBLE' WHERE property_id = ?1")
+    Integer setVisible(Long property_id);
 }
