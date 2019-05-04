@@ -10,6 +10,12 @@
                         <router-link v-bind:to="/room/ + room.property_id">
                             <img :src="room.pic_url">
                         </router-link>
+                        <b-button  v-if="room.visibility === 'VISIBLE'" style="margin-top: 10px; margin-right: 5px"
+                                  variant="dark" v-on:click.prevent="hide(room.property_id)">Deactivate
+                        </b-button>
+                        <b-button v-if="room.visibility === 'HIDDEN'" style="margin-top: 10px" variant="dark"
+                                  v-on:click.prevent="visible(room.property_id)">Make active
+                        </b-button>
                         <div class="caption">
                             <p style="margin-top: 20px">
                                 <router-link v-bind:to="/change/ + room.property_id"><b>
@@ -42,17 +48,10 @@
             }
         },
         created() {
-            const that = this;
-            this.$store.dispatch('doGet', {url: 'property/mine'}).then(data => {
-                console.log(that.$store.getters.getUser_id);
-                if (data.data.length !== 0) {
-                    that.rooms = data.data;
-                } else {
-                    this.user_has_properties = false;
-                }
-            })
+            this.getProperties();
 
         },
+
         beforeCreate() {
             if (!this.$store.getters.isLoggedIn) {
                 this.$router.push({path: `/login`});
@@ -60,9 +59,38 @@
 
             }
         },
+
         methods: {
             rentRequests: function () {
                 this.$router.push({path: `/rentout/`});
+            },
+
+            getProperties: function (){
+                const that = this;
+                this.$store.dispatch('doGet', {url: 'property/mine'}).then(data => {
+                    if (data.data.length !== 0) {
+                        that.rooms = data.data;
+                    } else {
+                        this.user_has_properties = false;
+                    }
+                })
+
+            },
+            hide: function (propertyId) {
+                this.$store.dispatch('doPost', {
+                    url: 'property/hidden/' + propertyId
+                }).then(data => {
+                    this.getProperties();
+                    this.$router.push({path: `/my/rooms`});
+                })
+            },
+            visible: function (propertyId) {
+                this.$store.dispatch('doPost', {
+                    url: 'property/visible/' + propertyId
+                }).then(data => {
+                    this.getProperties()
+                    this.$router.push({path: `/my/rooms`});
+                })
             }
         }
     }
