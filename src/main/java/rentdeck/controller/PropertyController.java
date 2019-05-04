@@ -75,6 +75,7 @@ public class PropertyController {
 
         Property property = new Property();
         property.setUsers(userDao.findByUsername(principal.getName()));
+        property.setVisibility(null);
 
         return propertyDao.findAll(Example.of(property, ExampleMatcher.matchingAll().withIgnoreCase()));
 
