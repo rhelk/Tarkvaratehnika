@@ -14,7 +14,7 @@
             <div id="price" class="col-lg-4 col-md-8 col-xs-12">
                 <h2>Price</h2>
                 <p>Price per night: {{roomDetails.price}}</p>
-                <HotelDatePicker v-if="userCanRent" style="margin-bottom: 30px" format="DD/MM/YYYY"
+                <HotelDatePicker style="margin-bottom: 30px" format="DD/MM/YYYY"
                                  @check-in-changed="setCheckinDate"
                                  @check-out-changed="setCheckOutDate"
                                  :disabledDates="disabledDates"
@@ -23,7 +23,7 @@
                 </HotelDatePicker>
                 <b-button v-if="userCanRent" v-bind:disabled="hasClicked" variant="dark" class="my-2 my-sm-0"
                           type="submit"
-                          v-on:click.prevent="rentProperty">Rent
+                          v-on:click.prevent="rentProperty">Request rental
                 </b-button>
             </div>
         </div>
@@ -64,6 +64,7 @@
         },
         created() {
             const that = this;
+            //if (this.$store.getters.isLoggedIn) {
             //DISABLE DATES
             this.$store.dispatch('doGet', {url: 'rent/dates/' + this.id}).then(data => {
                 for (let i = 0; i < data.data.length; i++) {
@@ -78,6 +79,7 @@
                     }
                 }
             });
+            //}
 
             //GET PROPERTY DATA
             this.$store.dispatch('doGet', {url: 'property/get/' + this.id}).then(data => {
