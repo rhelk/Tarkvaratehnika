@@ -127,7 +127,7 @@
                         this.$router.push({path: `/all/${this.search}`});
                         //this.$router.go();
                     } else {
-                        //do nothing
+                        alert("There are no results that match your criteria")
                     }
                 })
 
