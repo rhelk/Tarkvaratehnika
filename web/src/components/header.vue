@@ -43,7 +43,7 @@
             //this.$router.go();
           }
           else{
-            //do nothing
+            alert("There are no results that match your criteria")
           }
         })
       },

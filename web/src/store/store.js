@@ -98,6 +98,13 @@ export const store = new Vuex.Store({
           .catch(reason => reject(reason))
       }))
     },
+    doDelete: (context, payload) => {
+      return new Promise(((resolve, reject) => {
+        axios.delete(context.getters.getApiAddress + payload.url, payload.body)
+            .then(resp => resolve(resp))
+            .catch(reason => reject(reason))
+      }))
+    },
     doGet: (context, payload) => {
       return new Promise(((resolve, reject) => {
         axios.get(context.getters.getApiAddress + payload.url)
