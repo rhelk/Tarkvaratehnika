@@ -20,6 +20,7 @@ import rentdeck.model.Rent;
 import rentdeck.model.Users;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +56,8 @@ public class RentController {
     @PostMapping("api/rent/to_rent/{property_id}")
     public Rent initiateRent(@RequestBody Rent rent, @PathVariable Long property_id, Principal principal) throws Exception {
 
-        if (rent.start == null || rent.end == null || rent.start.compareTo(rent.end) >= 0)
+        if (rent.start == null || rent.end == null ||
+                rent.start.toLocalDate().compareTo(rent.end.toLocalDate()) >= 0)
             throw new ResponseStatusException((HttpStatus.BAD_REQUEST));
 
         rent.setProperty(propertyDao.findById(property_id)
@@ -185,7 +187,8 @@ public class RentController {
         if (!principal.getName().equals(rent.renter_username))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
-        if (rent.getState() == Rent.State.TO_RENT) {
+        if (rent.getState() == Rent.State.TO_RENT || (rent.getState() == Rent.State.CONFIRM_RENT
+                && rent.getStart().toLocalDate().compareTo(LocalDateTime.now().toLocalDate()) < 0)) {
             rentDao.delete(rent);
 
             String emailContent = "You have removed your request to rent property titled \"" +
