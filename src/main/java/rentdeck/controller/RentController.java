@@ -188,7 +188,7 @@ public class RentController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
         if (rent.getState() == Rent.State.TO_RENT || (rent.getState() == Rent.State.CONFIRM_RENT
-                && rent.getStart().toLocalDate().compareTo(LocalDateTime.now().toLocalDate()) < 0)) {
+                && rent.getStart().toLocalDate().compareTo(LocalDateTime.now().toLocalDate()) > 0)) {
             rentDao.delete(rent);
 
             String emailContent = "You have removed your request to rent property titled \"" +
