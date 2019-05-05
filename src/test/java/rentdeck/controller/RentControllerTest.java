@@ -66,21 +66,21 @@ public class RentControllerTest {
 
     public RentControllerTest() {
 
+        mockedProperty = new Property();
+//        mockedProperty.setAddress("abba 1");
+        mockedProperty.setPrice(300L);
+        mockedProperty.setProperty_id(-1L);
+        mockedProperty.setTitle("somewhat");
+        mockedProperty.setUsers(new Users());
+        mockedProperty.getUsers().setUser_id(-2L);
+        mockedProperty.getUsers().setUsername("asha");
+
         mockedRent = new Rent();
         mockedRent.setRenter_username("A");
         mockedRent.setState(Rent.State.TO_RENT);
-        mockedRent.setProperty(new Property());
-        mockedRent.setOwner_id(1L);
-        mockedRent.setStart(Date.valueOf("2019-05-21"));
-        mockedRent.setEnd(Date.valueOf("2019-06-30"));
-
-        mockedProperty = new Property();
-        mockedProperty.setAddress("abba 1");
-        mockedProperty.setPrice(300L);
-        mockedProperty.setProperty_id(-1L);
-        mockedProperty.setUsers(new Users());
-        mockedProperty.getUsers().setUser_id(-2L);
-        mockedProperty.getUsers().setUsername("testing");
+        mockedRent.setProperty(mockedProperty);
+        mockedRent.setStart(Date.valueOf("2089-06-30"));
+        mockedRent.setEnd(Date.valueOf("2089-07-22"));
 
     }
 
@@ -108,7 +108,7 @@ public class RentControllerTest {
 
         String json = "{\"start\":\"2019-05-21\",\"end\":\"2019-06-30\"}";
 
-        when(mockedPrincipal.getName()).thenReturn("asha");
+        when(mockedPrincipal.getName()).thenReturn("not Asha");
 
         when(propertyDao.findById(1L)).thenReturn(java.util.Optional.of(mockedProperty));
 
@@ -119,8 +119,7 @@ public class RentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
                 .principal(mockedPrincipal))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("rent_id").value(-1L));
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -144,9 +143,6 @@ public class RentControllerTest {
         when(rentDao.findById(1L)).thenReturn(capsuledRent);
 
         when(mockedPrincipal.getName()).thenReturn("asha");
-        when(userDao.findByUsername("asha")).thenReturn(mockedUser);
-        when(mockedUser.getUser_id()).thenReturn(1L);
-        when(mockedUser.getUsername()).thenReturn("testing");
 
         when(rentDao.findDateConflicts(any(Date.class), any(Date.class)))
                 .thenReturn(new ArrayList<>());
@@ -167,9 +163,6 @@ public class RentControllerTest {
         when(rentDao.findById(1L)).thenReturn(capsuledRent);
 
         when(mockedPrincipal.getName()).thenReturn("asha");
-        when(userDao.findByUsername("asha")).thenReturn(mockedUser);
-        when(mockedUser.getUser_id()).thenReturn(1L);
-        when(mockedUser.getUsername()).thenReturn("testing");
 
         when(rentDao.save(any(Rent.class))).thenReturn(mockedRent);
 
