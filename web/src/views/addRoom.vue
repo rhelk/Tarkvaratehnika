@@ -185,7 +185,6 @@
               pic_url: this.roomProperty.pic_url,
             }
         }).then(data => {
-          console.log("tehtud");
           that.submitted = true;
         })
       },
@@ -201,7 +200,6 @@
         } else {
           this.roomProperty.pic_name = e.target.files[0];
         }
-        console.log(this.roomProperty.pic_name)
 
       },
       handleFileUploadSubmit(e) {
@@ -223,11 +221,9 @@
           console.log(error);
         }, () => {
           // Do something once upload is complete
-          console.log('success');
           uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
             //after uploading picture, get picture url and then post it to database
             const self = this;
-            console.log('File available at', downloadURL);
             self.roomProperty.pic_url = downloadURL;
             this.post();
           });

@@ -71,8 +71,6 @@
 
       fetchData() {
         this.id = this.$route.params.id;
-        console.log("here");
-        console.log(this.id);
         const that = this;
         if (this.id === undefined || this.id === "") {
           this.$store.dispatch('doGet', {url: "property/all"}).then(data => {

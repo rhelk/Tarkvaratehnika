@@ -113,13 +113,10 @@
         that.roomProperty.settlement = data.data.settlement;
         that.roomProperty.street = data.data.street;
         that.roomProperty.pic_url = data.data.pic_url;
-        //console.log(data.data.title);
         if (data.data.users.user_id === this.$store.getters.getUser_id) {
           that.userCanChange = true;
-          //console.log(that.userCanChange)
         } else if (data.data.users.user_id !== this.$store.getters.getUser_id) {
           this.$router.push({path: `/my/rooms`});
-          //this.$router.go();
         }
       })
 
@@ -239,11 +236,9 @@
           console.log(error);
         }, () => {
           // Do something once upload is complete
-          console.log('success');
           uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
             //after uploading picture, get picture url and then post it to database
             const self = this;
-            console.log('File available at', downloadURL);
             self.roomProperty.pic_url = downloadURL;
             this.post();
           });

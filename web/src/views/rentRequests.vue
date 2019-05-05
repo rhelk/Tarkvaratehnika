@@ -56,7 +56,6 @@
             const that = this;
             this.$store.dispatch('doGet', {url: 'rent'}).then(data => {
                 that.rentObjects = data.data;
-                console.log(data.data)
             })
 
         },
@@ -69,12 +68,10 @@
         },
         methods: {
             confirmRequest: function (rent_id) {
-                console.log(rent_id);
                 this.$store.dispatch('doPost', {
                     url: 'rent/confirm/' + rent_id
 
                 }).then(data => {
-                    console.log("tehtud");
                     this.$store.dispatch('doGet', {url: 'rent'}).then(data => {
                         this.rentObjects = data.data;
                     })
@@ -86,7 +83,6 @@
                     url: 'rent/deny/' + rent_id
 
                 }).then(data => {
-                    console.log("tehtud");
                     this.$store.dispatch('doGet', {url: 'rent'}).then(data => {
                         this.rentObjects = data.data;
                     })

@@ -10,7 +10,7 @@
                         <router-link v-bind:to="/room/ + room.property_id">
                             <img :src="room.pic_url">
                         </router-link>
-                        <b-button  v-if="room.visibility === 'VISIBLE'" style="margin-top: 10px; margin-right: 5px"
+                        <b-button v-if="room.visibility === 'VISIBLE'" style="margin-top: 10px; margin-right: 5px"
                                   variant="dark" v-on:click.prevent="hide(room.property_id)">Deactivate
                         </b-button>
                         <b-button v-if="room.visibility === 'HIDDEN'" style="margin-top: 10px" variant="dark"
@@ -65,7 +65,7 @@
                 this.$router.push({path: `/rentout/`});
             },
 
-            getProperties: function (){
+            getProperties: function () {
                 const that = this;
                 this.$store.dispatch('doGet', {url: 'property/mine'}).then(data => {
                     if (data.data.length !== 0) {
