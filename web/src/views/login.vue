@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <h2>Login</h2>
+    <h2 style="margin: 12px">Login</h2>
     <form>
-      <div class="form-group col-md-4">
+      <div class="form-group col-md-8">
         <label for="formUsername">Email:</label>
         <input type="text"
                name="email"
@@ -13,7 +13,7 @@
                v-validate="'required'">
         <span v-show="errors.has('email')" class="text-danger">{{ errors.first('email') }}</span>
       </div>
-      <div class="form-group col-md-4">
+      <div class="form-group col-md-8">
         <label for="formPassword">Password:</label>
         <input type="password"
                name="password"
@@ -24,8 +24,8 @@
                v-validate="'required'">
         <span v-show="errors.has('password')" class="text-danger">{{ errors.first('password') }}</span>
       </div>
-      <button class="btn btn-primary" v-on:click.prevent="validateBeforeSubmit">Login</button>
-      <router-link to="/register" class="btn btn-link">Register</router-link>
+      <b-button style="margin-left: 15px" variant="dark" v-on:click.prevent="validateBeforeSubmit">Login</b-button>
+      <router-link to="/register" class="btn btn-link" style="color: black">Register</router-link>
     </form>
   </div>
 </template>
@@ -69,5 +69,6 @@
 </script>
 
 <style scoped>
+
 
 </style>
