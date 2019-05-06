@@ -20,9 +20,11 @@
                                     Requested period: {{obj.start}} to {{obj.end}}<br>
                                 </p>
                                 <p v-if="obj.state === 'TO_RENT'" style="margin-left: 10px">
-                                    <b-button variant="dark" v-on:click.prevent="confirmRequest(obj.rent_id)">Confirm
+                                    <b-button v-if="new Date(obj.start) > new Date()" variant="dark"
+                                              v-on:click.prevent="confirmRequest(obj.rent_id)">Confirm
                                     </b-button>
-                                    <b-button variant="dark" v-on:click.prevent="denyRequest(obj.rent_id)"
+                                    <b-button v-if="(new Date(obj.start))> new Date()" variant="dark"
+                                              v-on:click.prevent="denyRequest(obj.rent_id)"
                                               style="margin-left: 15px">Deny
                                     </b-button>
                                 </p>
