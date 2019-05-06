@@ -98,7 +98,8 @@
                     this.$router.push({path: `/login`});
                     this.$router.go();
                 } else {
-                    if(this.checkIn !== "" || this.checkOut !== "" || this.checkIn===this.checkOut){
+                    if(this.checkIn !== "" || this.checkOut !== "" ){
+                        console.log(this.checkIn);
                     this.$store.dispatch('doPost', {
                         url: 'rent/to_rent/' + this.id, body:
                             {
