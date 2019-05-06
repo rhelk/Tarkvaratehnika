@@ -80,7 +80,8 @@ public class RentController {
         System.out.println("Email to: " + ownerUsername);
         System.out.println("Email subject: " + E_TO_RENT_SUBJ);
         System.out.println("Email content: " + emailContent);
-//        sendEmail(ownerUsername, E_TO_RENT_SUBJ, emailContent);
+
+        sendEmail(ownerUsername, E_TO_RENT_SUBJ, emailContent);
 
         return rent;
     }
@@ -130,11 +131,11 @@ public class RentController {
                     System.out.println("Email Subject: " + E_DENY_RENT_SUBJ);
                     System.out.println("Email content: " + emailContent);
 
-//                    try {
-//                        sendEmail(rent1.getRenter_username(), E_DENY_RENT_SUBJ, emailContent);
-//                    } catch (Exception e) {
-//                        System.out.println("Error sending email inside lambda: " + e.toString());
-//                    }
+                    try {
+                        sendEmail(rent1.getRenter_username(), E_DENY_RENT_SUBJ, emailContent);
+                    } catch (Exception e) {
+                        System.out.println("Error sending email inside lambda: " + e.toString());
+                    }
                 }
             });
 
@@ -146,13 +147,13 @@ public class RentController {
             System.out.println("Email Subject: " + E_CONFIRM_RENT_SUBJ);
             System.out.println("Email content: " + emailContent);
 
-//            sendEmail(rent.getRenter_username(), E_CONFIRM_RENT_SUBJ, emailContent);
+            sendEmail(rent.getRenter_username(), E_CONFIRM_RENT_SUBJ, emailContent);
 
         } else throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("api/rent/deny/{rent_id}")
-    public void denyRent(@PathVariable Long rent_id, Principal principal) {
+    public void denyRent(@PathVariable Long rent_id, Principal principal) throws Exception {
 
         Rent rent = rentDao.findById(rent_id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -169,11 +170,11 @@ public class RentController {
             String emailContent = "Owner of property titled \"" +
                     rent.getProperty().getTitle() + "\" has rejected your rent request.";
 
-            System.out.println("Email to: " +rent.getRenter_username());
-            System.out.println("Email subject: " +E_DENY_RENT_SUBJ);
-            System.out.println("Email content: " +emailContent);
+//            System.out.println("Email to: " +rent.getRenter_username());
+//            System.out.println("Email subject: " +E_DENY_RENT_SUBJ);
+//            System.out.println("Email content: " +emailContent);
 
-//            sendEmail(rent.getRenter_username(), E_DENY_RENT_SUBJ, emailContent);
+            sendEmail(rent.getRenter_username(), E_DENY_RENT_SUBJ, emailContent);
 
         } else throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 
@@ -198,7 +199,7 @@ public class RentController {
             System.out.println("Email subject: " + E_CANCEL_RENT_SUBJ_RENTER);
             System.out.println("Email content: " + emailContent);
 
-//            sendEmail(rent.getRenter_username(), E_CANCEL_RENT_SUBJ_RENTER, emailContent);
+            sendEmail(rent.getRenter_username(), E_CANCEL_RENT_SUBJ_RENTER, emailContent);
 
             emailContent = "rent request to your property titled \"" +
                     rent.getProperty().getTitle() + "\" has been cancelled.";
@@ -207,19 +208,12 @@ public class RentController {
             System.out.println("Email subject: " + E_CANCEL_RENT_SUBJ_OWNER);
             System.out.println("Email content: " + emailContent);
 
-//            sendEmail(rent.getProperty().getUsers().getUsername(),
-//                    E_CANCEL_RENT_SUBJ_OWNER, emailContent);
+            sendEmail(rent.getProperty().getUsers().getUsername(),
+                    E_CANCEL_RENT_SUBJ_OWNER, emailContent);
 
         }
 
     }
-
-//    @DeleteMapping("api/confirmed_rent/{rent_id}")
-//    public void deleteRent(@PathVariable Long rent_id, Principal principal) throws Exception {
-//
-//    }
-
-
 
     private void sendEmail(String destination, String subject, String contents) throws Exception{
 
