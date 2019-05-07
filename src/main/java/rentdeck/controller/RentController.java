@@ -139,9 +139,8 @@ public class RentController {
                 }
             });
 
-            String emailContent = "Someone has made request to rent your property titled \"" +
-                    rent.getProperty().getTitle() + "\" between " + rent.getStart().toString() +
-                    " and " + rent.getEnd().toString();
+            String emailContent = "Your rent request of property titled \"" +
+                    rent.getProperty().getTitle() + "\" has been accepted.";
 
             System.out.println("Email to: " + rent.getRenter_username());
             System.out.println("Email Subject: " + E_CONFIRM_RENT_SUBJ);
