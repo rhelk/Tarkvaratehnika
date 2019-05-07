@@ -5,6 +5,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -47,7 +48,10 @@ public class Rent {
 
     //SQL Date so accuracy is day
 
+    @Column(name = "rent_start")
     public Date start;
+
+    @Column(name = "rent_end")
     public Date end;
 
     public Rent makeClone() {

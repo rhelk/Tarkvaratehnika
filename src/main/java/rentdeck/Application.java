@@ -30,13 +30,6 @@ Application {
 //            }
 
             System.out.println("Finish");
-            System.out.println();
-
-//            Aadressi osad:
-//            county
-//            municipality
-//            settelment
-//            street
 
         };
     }
