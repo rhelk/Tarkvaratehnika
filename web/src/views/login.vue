@@ -10,7 +10,8 @@
                id="formUsername"
                placeholder="ex: example@example.com"
                v-model="input.username"
-               v-validate="'required'">
+               v-validate="'required|email'"
+               v-bind:class="{error: loginError}">
         <span v-show="errors.has('email')" class="text-danger">{{ errors.first('email') }}</span>
       </div>
       <div class="form-group col-md-8">
@@ -21,12 +22,14 @@
                id="formPassword"
                placeholder="Password"
                v-model="input.password"
-               v-validate="'required'">
+               v-validate="'required'"
+               v-bind:class="{error: loginError}">
         <span v-show="errors.has('password')" class="text-danger">{{ errors.first('password') }}</span>
       </div>
       <b-button style="margin-left: 15px" variant="dark" v-on:click.prevent="validateBeforeSubmit">Login</b-button>
       <router-link to="/register" class="btn btn-link" style="color: black">Register</router-link>
     </form>
+    <p v-if="loginError" class="error">Bad login information!</p>
   </div>
 </template>
 
@@ -41,7 +44,7 @@
           username: "",
           password: ""
         },
-        submitted: false
+        loginError: false
       }
     },
     methods: {
@@ -52,6 +55,7 @@
         });
       },
       login() {
+        const that = this;
         // console.log(username, password);
         this.$store.dispatch('login', {
           username: this.input.username,
@@ -60,8 +64,11 @@
           .then((resp) => {
             this.$router.push('/')
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err);
+            that.loginError = true;
+            that.input.username = "";
+            that.input.password = ""
           })
       }
     }
@@ -69,6 +76,12 @@
 </script>
 
 <style scoped>
-
+  input.error {
+    background-color: #db3646d4;
+  }
+  p.error {
+    color: #db3646d4;
+    margin-top: 10px;
+  }
 
 </style>

@@ -71,7 +71,8 @@
         this.$validator.validateAll().then((result) => {
           if (result)
             this.register()
-        });      },
+        });
+      },
       register() {
         this.$store.dispatch('register', {
           first_name: this.user.firstName,
