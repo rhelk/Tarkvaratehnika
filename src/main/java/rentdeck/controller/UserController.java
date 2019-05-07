@@ -17,6 +17,7 @@ import rentdeck.dao.UserDao;
 import rentdeck.util.JsonWebToken;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
@@ -34,7 +35,7 @@ public class UserController {
     private UserDao userDao;
 
     @PostMapping("api/register")
-    public Users addUser(@RequestBody Users users, HttpServletResponse res) {
+    public Users addUser(@Valid @RequestBody Users users, HttpServletResponse res) {
 
         String token = JsonWebToken.genJWT(users.getUsername());
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
