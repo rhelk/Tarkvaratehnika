@@ -60,7 +60,6 @@ public class Property {
     @JoinColumn(name = "owner_id")
     Users users;
 
-    // Price is in cents
     @NotNull
     @Range(min = 5, max = 99999999)
     Long price;
