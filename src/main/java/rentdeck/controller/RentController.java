@@ -200,8 +200,13 @@ public class RentController {
 
             sendEmail(rent.getRenter_username(), E_CANCEL_RENT_SUBJ_RENTER, emailContent);
 
-            emailContent = "rent request to your property titled \"" +
-                    rent.getProperty().getTitle() + "\" has been cancelled.";
+            if (rent.getState() == Rent.State.TO_RENT) {
+                emailContent = "rent request to your property titled \"" +
+                        rent.getProperty().getTitle() + "\" has been cancelled.";
+            } else {
+                emailContent = "Previously confirmed rent to your property titled \"" +
+                        rent.getProperty().getTitle() + "\" has been cancelled.";
+            }
 
             System.out.println("Email to: " + rent.getProperty().getUsers().getUsername());
             System.out.println("Email subject: " + E_CANCEL_RENT_SUBJ_OWNER);
