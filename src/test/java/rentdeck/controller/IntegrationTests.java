@@ -274,7 +274,7 @@ public class IntegrationTests {
         results = Arrays.asList(mapper.readValue(mvcResult.getResponse().getContentAsString(), Property[].class));
 
         assertThat(results.size()).isEqualTo(4);
-        assertThat(results.get(0).getBed_count()).isEqualTo(2);
+        assertThat(results.get(0).getBed_count()).isEqualTo((short)2);
         assertThat(results.get(2).getProperty_id()).isEqualTo(3);
 
         //room_count
@@ -301,8 +301,8 @@ public class IntegrationTests {
 
         Property property = new Property();
         property.setPrice(300L);
-        property.setBed_count(7);
-        property.setRoom_count(5);
+        property.setBed_count((short)7);
+        property.setRoom_count((short)5);
         property.setPic_url("url");
         property.setTitle("Something");
 
