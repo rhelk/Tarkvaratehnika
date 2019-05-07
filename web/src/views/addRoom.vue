@@ -21,14 +21,14 @@
         <small><label><b>Count of rooms</b></label></small>
         <b-form-input data-vv-name="rooms" type="number" v-model="roomProperty.room_count" placeholder="Count of rooms"
                       required
-                      v-validate="{ required: true, min_value:1}"
+                      v-validate="{ required: true, min_value:1, max_value:999}"
                       :state="validateState('roomProperty.room_count')"/>
         <b-form-text><span style="color: red">{{ errors.first('rooms') }}</span></b-form-text>
 
         <small><label><b>Count of beds</b></label></small>
         <b-form-input data-vv-name="beds" type="number" v-model="roomProperty.bed_count" placeholder="Count of beds"
                       required
-                      v-validate="{ required: true, min_value:1}"
+                      v-validate="{ required: true, min_value:1, max_value:999}"
                       :state="validateState('roomProperty.bed_count')"/>
         <b-form-text><span style="color: red">{{ errors.first('beds') }}</span></b-form-text>
 
@@ -36,7 +36,7 @@
         <small><label><b>Price for one night</b></label></small>
         <b-form-input data-vv-name="price" type="number" v-model="roomProperty.price" placeholder="Price for one nigh"
                       required
-                      v-validate="{ required: true, min_value:5}"
+                      v-validate="{ required: true, min_value:5, max_value:99999999}"
                       :state="validateState('roomProperty.price')"/>
         <b-form-text><span style="color: red">{{ errors.first('price') }}</span></b-form-text>
 

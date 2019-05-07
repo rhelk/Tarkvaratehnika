@@ -21,10 +21,11 @@
                                 </p>
                                 <p v-if="obj.state === 'TO_RENT'" style="margin-left: 10px">
                                     <b-button v-if="new Date(obj.start) > new Date()" variant="dark"
-                                              v-on:click.prevent="confirmRequest(obj.rent_id)">Confirm
+                                              v-on:click.prevent="confirmRequest(obj.rent_id)"
+                                              v-bind:disabled="hasClicked">Confirm
                                     </b-button>
                                     <b-button v-if="(new Date(obj.start))> new Date()" variant="dark"
-                                              v-on:click.prevent="denyRequest(obj.rent_id)"
+                                              v-on:click.prevent="denyRequest(obj.rent_id)" v-bind:disabled="hasClicked"
                                               style="margin-left: 15px">Deny
                                     </b-button>
                                 </p>
@@ -48,6 +49,7 @@
     export default {
         data() {
             return {
+                hasClicked: false,
                 rentObjects: [],
                 myUserId: this.$store.getters.getUser_id,
 
@@ -70,23 +72,27 @@
         },
         methods: {
             confirmRequest: function (rent_id) {
+                this.hasClicked = true;
                 this.$store.dispatch('doPost', {
                     url: 'rent/confirm/' + rent_id
 
                 }).then(data => {
                     this.$store.dispatch('doGet', {url: 'rent'}).then(data => {
                         this.rentObjects = data.data;
+                        this.hasClicked = false;
                     })
                 })
             },
 
             denyRequest: function (rent_id) {
+                this.hasClicked = true;
                 this.$store.dispatch('doPost', {
                     url: 'rent/deny/' + rent_id
 
                 }).then(data => {
                     this.$store.dispatch('doGet', {url: 'rent'}).then(data => {
                         this.rentObjects = data.data;
+                        this.hasClicked = false;
                     })
                 })
             },
