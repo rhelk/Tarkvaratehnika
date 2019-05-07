@@ -1,7 +1,8 @@
 <template>
   <div class="container">
+    <h2 style="margin: 12px">Register new account</h2>
     <form>
-      <div class="form-group col-md-4">
+      <div class="form-group col-md-8">
         <label for="formFristName">First Name:</label>
         <input type="text"
                name="First name"
@@ -12,7 +13,7 @@
                v-validate="'required|min:2'">
         <span v-show="errors.has('First name')" class="text-danger">{{ errors.first('First name') }}</span>
       </div>
-      <div class="form-group col-md-4">
+      <div class="form-group col-md-8">
         <label for="formLastName">Last Name:</label>
         <input type="text"
                name="Last name"
@@ -23,7 +24,7 @@
                v-validate="'required|min:2'">
         <span v-show="errors.has('Last name')" class="text-danger">{{ errors.first('Last name') }}</span>
       </div>
-      <div class="form-group col-md-4">
+      <div class="form-group col-md-8">
         <label for="formUsername">Email:</label>
         <input type="text"
                name="email"
@@ -34,7 +35,7 @@
                v-validate="'required|email'">
         <span v-show="errors.has('email')" class="text-danger">{{ errors.first('email') }}</span>
       </div>
-      <div class="form-group col-md-4">
+      <div class="form-group col-md-8">
         <label for="formPassword">Password:</label>
         <input type="password"
                name="password"
@@ -45,8 +46,8 @@
                v-validate="'required|min:8'">
         <span v-show="errors.has('password')" class="text-danger">{{ errors.first('password') }}</span>
       </div>
-      <button class="btn btn-primary" :disabled="errors.any()" type="submit" v-on:click.prevent="validateBeforeSubmit" >Register</button>
-      <router-link to="/login" class="btn btn-link">Cancel</router-link>
+      <b-button style="margin-left: 15px" variant="dark" :disabled="errors.any()" type="submit" v-on:click.prevent="validateBeforeSubmit" >Register</b-button>
+      <router-link to="/login" class="btn btn-link" style="color: black">Cancel</router-link>
     </form>
   </div>
 </template>

@@ -41,10 +41,10 @@ CREATE TABLE rent (
   property_id BIGINT NOT NULL,
   owner_id BIGINT NOT NULL,
   renter_username VARCHAR(50) NOT NULL,
---   renter_id BIGINT NOT NULL,
   state VARCHAR(30) NOT NULL,
   rent_start DATE,
   rent_end DATE,
   FOREIGN KEY(renter_username) REFERENCES users(username),
   FOREIGN KEY(owner_id) REFERENCES users(user_id),
 );
+--   renter_id BIGINT NOT NULL,

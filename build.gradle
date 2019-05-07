@@ -52,7 +52,7 @@ task cleaner (type: Exec) {
 }
 task newbuild (type: Exec) {
     dependsOn 'cleaner'
-    commandLine './gradlew', 'build'
+    commandLine './gradlew', 'build', '-x', 'test'
 
 }
 

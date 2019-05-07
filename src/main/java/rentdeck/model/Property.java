@@ -50,11 +50,11 @@ public class Property {
 
     @NotNull
     @Range(min = 1, max = 999)
-    Integer room_count;
+    Short room_count;
 
     @NotNull
     @Range(min = 1, max = 999)
-    Integer bed_count;
+    Short bed_count;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_id")
