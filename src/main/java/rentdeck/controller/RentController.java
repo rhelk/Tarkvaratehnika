@@ -139,9 +139,8 @@ public class RentController {
                 }
             });
 
-            String emailContent = "Someone has made request to rent your property titled \"" +
-                    rent.getProperty().getTitle() + "\" between " + rent.getStart().toString() +
-                    " and " + rent.getEnd().toString();
+            String emailContent = "Your rent request of property titled \"" +
+                    rent.getProperty().getTitle() + "\" has been accepted.";
 
             System.out.println("Email to: " + rent.getRenter_username());
             System.out.println("Email Subject: " + E_CONFIRM_RENT_SUBJ);
@@ -201,8 +200,13 @@ public class RentController {
 
             sendEmail(rent.getRenter_username(), E_CANCEL_RENT_SUBJ_RENTER, emailContent);
 
-            emailContent = "rent request to your property titled \"" +
-                    rent.getProperty().getTitle() + "\" has been cancelled.";
+            if (rent.getState() == Rent.State.TO_RENT) {
+                emailContent = "rent request to your property titled \"" +
+                        rent.getProperty().getTitle() + "\" has been cancelled.";
+            } else {
+                emailContent = "Previously confirmed rent to your property titled \"" +
+                        rent.getProperty().getTitle() + "\" has been cancelled.";
+            }
 
             System.out.println("Email to: " + rent.getProperty().getUsers().getUsername());
             System.out.println("Email subject: " + E_CANCEL_RENT_SUBJ_OWNER);
