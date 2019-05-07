@@ -23,6 +23,8 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 @CrossOrigin
 @RestController
@@ -46,6 +48,10 @@ public class RentController {
 
     @Autowired
     public JavaMailSender emailSender;
+
+    public static int quickServiceThreads = 20;
+
+    private ScheduledExecutorService quickService = Executors.newScheduledThreadPool(quickServiceThreads);
 
     @GetMapping("api/rent")
     public List<Rent> getAllRentRequests(Principal principal) {
@@ -232,7 +238,16 @@ public class RentController {
         message.setTo(destination);
         message.setSubject(subject);
         message.setText(contents);
-        emailSender.send(message);
+        quickService.submit(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    emailSender.send(message);
+                }catch(Exception e){
+                    System.out.println("Error occured sending email");
+                }
+            }
+        });
 
     }
 
