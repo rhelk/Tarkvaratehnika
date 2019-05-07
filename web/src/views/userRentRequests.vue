@@ -24,14 +24,16 @@
                                         <b>Status: Your rent request is currently under review</b><br>
                                         <b-button style="margin-top: 5px" variant="dark"
                                                   v-on:click.prevent="deleteRequest(obj.rent_id)"
-                                                  v-if="(new Date(obj.start))> new Date()">Delete request
+                                                  v-if="(new Date(obj.start) > new Date())" v-bind:disabled="hasClicked"
+                                        >Delete request
                                         </b-button>
                                     </p>
                                     <p v-if="obj.state === 'CONFIRM_RENT'" style="margin-left: 10px">
                                         <b>Status: Your rent request has been confirmed</b><br>
                                         <b-button style="margin-top: 5px" variant="dark"
                                                   v-on:click.prevent="deleteRequest(obj.rent_id)"
-                                                  v-if="(new Date(obj.start))> new Date()">Delete request
+                                                  v-if="(new Date(obj.start) > new Date())" v-bind:disabled="hasClicked"
+                                        >Delete request
                                         </b-button>
                                     </p>
                                     <p v-if="obj.state === 'DENY_RENT'" style="margin-left: 10px">
@@ -52,6 +54,7 @@
     export default {
         data() {
             return {
+                hasClicked: false,
                 rentObjects: [],
                 myUserId: this.$store.getters.getUser_id,
 
@@ -77,11 +80,13 @@
 
             },
             deleteRequest(rentId) {
+                this.hasClicked = true;
                 this.$store.dispatch('doDelete', {
                     url: 'rent/' + rentId
 
                 }).then(data => {
                     this.getProperties();
+                    this.hasClicked = false;
                     this.$router.push({path: `/user`});
 
                 })
