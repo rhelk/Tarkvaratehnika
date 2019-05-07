@@ -191,8 +191,15 @@ public class RentController {
                 && rent.getStart().toLocalDate().compareTo(LocalDateTime.now().toLocalDate()) > 0)) {
             rentDao.delete(rent);
 
-            String emailContent = "You have removed your request to rent property titled \"" +
-                    rent.getProperty().getTitle() + "\"";
+            String emailContent;
+
+            if (rent.getState() == Rent.State.TO_RENT) {
+                emailContent = "You have removed your request to rent property titled \"" +
+                        rent.getProperty().getTitle() + "\"";
+            } else {
+                emailContent = "You have removed your approved rent to property titled \"" +
+                        rent.getProperty().getTitle() + "\"";
+            }
 
             System.out.println("Email to: " + rent.getRenter_username());
             System.out.println("Email subject: " + E_CANCEL_RENT_SUBJ_RENTER);
