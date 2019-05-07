@@ -49,9 +49,9 @@ public class RentController {
     @Autowired
     public JavaMailSender emailSender;
 
-    public static int quickServiceThreads = 20;
+    public static int serviceThreads = 20;
 
-    private ScheduledExecutorService quickService = Executors.newScheduledThreadPool(quickServiceThreads);
+    private ScheduledExecutorService threadService = Executors.newScheduledThreadPool(serviceThreads);
 
     @GetMapping("api/rent")
     public List<Rent> getAllRentRequests(Principal principal) {
@@ -238,7 +238,7 @@ public class RentController {
         message.setTo(destination);
         message.setSubject(subject);
         message.setText(contents);
-        quickService.submit(new Runnable() {
+        threadService.submit(new Runnable() {
             @Override
             public void run() {
                 try{
