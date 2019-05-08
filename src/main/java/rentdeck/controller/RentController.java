@@ -31,11 +31,15 @@ import java.util.concurrent.ScheduledExecutorService;
 public class RentController {
 
     private final String E_TO_RENT_SUBJ = "[RentDeck] You have received request to Rent one of your properties";
-    private final String E_DENY_RENT_SUBJ = "[RentDeck] A request to rent has been denied.";
-    private final String E_CONFIRM_RENT_SUBJ = "[RentDeck] A request to rent has been accepted.";
+    private final String E_DENY_RENT_SUBJ = "[RentDeck] A request to rent has been denied";
+    private final String E_CONFIRM_RENT_SUBJ = "[RentDeck] A request to rent has been accepted";
 
     private final String E_CANCEL_RENT_SUBJ_RENTER = "[RentDeck] You have cancelled a rent request";
     private final String E_CANCEL_RENT_SUBJ_OWNER = "[RentDeck] Rent request to your property has been withdrawn";
+
+    private final String E_CANCEL_CONFIRMED_SUBJ_RENTER = "[RentDeck] You have cancelled earlier approved rent";
+    private final String E_CANCEL_CONFIRMED_SUBJ_OWNER = "[RentDeck] Earlier approved rent has been cancelled";
+
 
     @Autowired
     RentDao rentDao;
@@ -175,10 +179,6 @@ public class RentController {
             String emailContent = "Owner of property titled \"" +
                     rent.getProperty().getTitle() + "\" has rejected your rent request.";
 
-//            System.out.println("Email to: " +rent.getRenter_username());
-//            System.out.println("Email subject: " +E_DENY_RENT_SUBJ);
-//            System.out.println("Email content: " +emailContent);
-
             sendEmail(rent.getRenter_username(), E_DENY_RENT_SUBJ, emailContent);
 
         } else throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
@@ -200,36 +200,34 @@ public class RentController {
             String emailContent;
 
             if (rent.getState() == Rent.State.TO_RENT) {
+
                 emailContent = "You have removed your request to rent property titled \"" +
                         rent.getProperty().getTitle() + "\"";
+                sendEmail(rent.getRenter_username(), E_CANCEL_RENT_SUBJ_RENTER, emailContent);
+
             } else {
+
                 emailContent = "You have removed your approved rent to property titled \"" +
                         rent.getProperty().getTitle() + "\"";
+                sendEmail(rent.getRenter_username(), E_CANCEL_CONFIRMED_SUBJ_RENTER, emailContent);
             }
-
-            System.out.println("Email to: " + rent.getRenter_username());
-            System.out.println("Email subject: " + E_CANCEL_RENT_SUBJ_RENTER);
-            System.out.println("Email content: " + emailContent);
-
-            sendEmail(rent.getRenter_username(), E_CANCEL_RENT_SUBJ_RENTER, emailContent);
 
             if (rent.getState() == Rent.State.TO_RENT) {
+
                 emailContent = "rent request to your property titled \"" +
                         rent.getProperty().getTitle() + "\" has been cancelled.";
+                sendEmail(rent.getProperty().getUsers().getUsername(),
+                        E_CANCEL_RENT_SUBJ_OWNER, emailContent);
+
             } else {
+
                 emailContent = "Previously confirmed rent to your property titled \"" +
                         rent.getProperty().getTitle() + "\" has been cancelled.";
+                sendEmail(rent.getProperty().getUsers().getUsername(),
+                        E_CANCEL_CONFIRMED_SUBJ_OWNER, emailContent);
+
             }
-
-            System.out.println("Email to: " + rent.getProperty().getUsers().getUsername());
-            System.out.println("Email subject: " + E_CANCEL_RENT_SUBJ_OWNER);
-            System.out.println("Email content: " + emailContent);
-
-            sendEmail(rent.getProperty().getUsers().getUsername(),
-                    E_CANCEL_RENT_SUBJ_OWNER, emailContent);
-
         }
-
     }
 
     private void sendEmail(String destination, String subject, String contents) throws Exception{
