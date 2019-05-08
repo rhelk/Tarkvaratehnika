@@ -36,7 +36,8 @@ public class UserController {
 
     @PostMapping("api/register")
     public Users addUser(@RequestBody Users users, HttpServletResponse res) {
-        System.out.println(users);
+
+        if (users.getUser_id() != null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         String token = JsonWebToken.genJWT(users.getUsername());
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
 
