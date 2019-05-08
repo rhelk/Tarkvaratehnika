@@ -37,7 +37,7 @@ public class UserController {
     @PostMapping("api/register")
     public Users addUser(@RequestBody Users users, HttpServletResponse res) {
 
-        if (users.getUser_id() != null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        if (users.getUser_id() != null || userDao.findByUsername(users.getUsername()) != null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 
         if (users.getFirst_name() == null || users.getFirst_name().trim().length() < 2
                 || users.getLast_name() == null || users.getLast_name().trim().length() < 2)
@@ -45,6 +45,7 @@ public class UserController {
 
         if (users.getPassword() == null || users.getPassword().trim().length() < 1)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+
         String token = JsonWebToken.genJWT(users.getUsername());
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
 

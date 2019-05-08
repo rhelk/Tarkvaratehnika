@@ -3,11 +3,11 @@
     <h2 style="margin: 12px">Register new account</h2>
     <form>
       <div class="form-group col-md-8">
-        <label for="formFristName">First Name:</label>
+        <label for="formFirstName">First Name:</label>
         <input type="text"
                name="First name"
                class="form-control"
-               id="formFristName"
+               id="formFirstName"
                placeholder="First name"
                v-model="user.firstName"
                v-validate="'required|min:2'">
@@ -32,8 +32,10 @@
                id="formUsername"
                placeholder="ex: example@example.com"
                v-model="user.username"
-               v-validate="'required|email'">
+               v-validate="'required|email'"
+               v-bind:class="{error: registerError}">
         <span v-show="errors.has('email')" class="text-danger">{{ errors.first('email') }}</span>
+        <p v-if="registerError" class="error">This email already exists!</p>
       </div>
       <div class="form-group col-md-8">
         <label for="formPassword">Password:</label>
@@ -64,7 +66,7 @@
           username: '',
           password: ''
         },
-        submitted: false
+        registerError: false
       }
     },
     methods: {
@@ -75,18 +77,31 @@
         });
       },
       register() {
+        const that = this;
         this.$store.dispatch('register', {
           first_name: this.user.firstName,
           last_name: this.user.lastName,
           username: this.user.username,
           password: sha.sha256(this.user.password)
         })
-          .then((resp) => {
+          .then(() => {
             this.$router.push('/')
           })
-          .catch(err => console.log(err))
+          .catch(() => {
+            that.registerError = true;
+          })
 
       }
     }
   };
 </script>
+<style scoped>
+  input.error {
+    background-color: #db3646d4;
+  }
+  p.error {
+    color: #db3646d4;
+    margin-top: 10px;
+  }
+
+</style>
