@@ -89,14 +89,13 @@ public class PropertyControllerTest {
     @Test
     public void addPropertyTest() throws Exception {
 
-        String propJson = "{\"property_id\":-1,\"title\":\"testing\",\"description\":null,\"address\":\"abba 1\",\"pic_url\":\"somethingsae\",\"room_count\":9,\"bed_count\":9,\"users\":null,\"price\":700}";
+        String propJson = "{\"title\":\"testing\",\"description\":null,\"address\":\"abba 1\",\"pic_url\":\"somethingsae\",\"room_count\":9,\"bed_count\":9,\"users\":null,\"price\":700}";
 
         Principal mockedPrincipal = Mockito.mock(Principal.class);
         when(mockedPrincipal.getName()).thenReturn("asha");
 
-        System.out.println(propJson);
-        System.out.println(new ObjectMapper().readValue(propJson, Property.class));
-
+        mockedProperty.setProperty_id(-1L);
+        when(propertyDao.findById(-1L)).thenReturn(Optional.ofNullable(mockedProperty));
         when(propertyDao.save(any(Property.class))).thenReturn(mockedProperty);
 
         mockMvc.perform(post("/api/secure/property/add")

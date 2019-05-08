@@ -35,11 +35,20 @@ public class PropertyController {
 
     @PostMapping("api/secure/property/add")
     public Property addProperty(@Valid @RequestBody Property property, Principal principal) {
-        if (principal != null){
-            property.setUsers(userDao.findByUsername(principal.getName()));
-            return propertyDao.save(property);
-        }
-        return null;
+
+         if (property.getProperty_id() != null) {
+
+             Property checking = propertyDao.findById(property.getProperty_id())
+                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+
+             if (property.getUsers() == null
+                     || !property.getUsers().getUsername().equals(principal.getName())
+                     || !checking.getUsers().getUsername().equals(principal.getName()))
+                 return null;
+
+         } else property.setUsers(userDao.findByUsername(principal.getName()));
+
+         return propertyDao.save(property);
     }
 
     @GetMapping("api/property/get/{id}")
