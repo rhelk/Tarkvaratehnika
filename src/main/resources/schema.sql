@@ -47,6 +47,4 @@ CREATE TABLE rent (
   FOREIGN KEY(renter_username) REFERENCES users(username),
   FOREIGN KEY(owner_id) REFERENCES users(user_id),
   FOREIGN KEY(property_id) REFERENCES property(property_id)
-
 );
---   renter_id BIGINT NOT NULL,

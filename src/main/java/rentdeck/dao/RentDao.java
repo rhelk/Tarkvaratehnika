@@ -14,15 +14,11 @@ public interface RentDao extends JpaRepository<Rent, Long> {
     @Query("SELECT count(r)>0 FROM Rent r WHERE r.property.property_id = ?1 AND r.state <> 'DONE'")
     Boolean checkExists( Property property);
 
-//    @Query("SELECT r FROM Rent r WHERE (r.owner_id = ?1 AND r.state IN ('TO_RENT', 'INFORM_RENT')) " +
-//            "OR (r.renter_id = ?1 AND r.state IN ('DENY_RENT', 'CONFIRM_RENT'))")
-//    List<Rent> findAllByStateNotDone(long user_id);
-
     @Query("SELECT r FROM Rent r WHERE (r.owner_id = ?1 AND r.state IN ('TO_RENT', 'INFORM_RENT')) " +
             "OR (r.renter_username = ?2 AND r.state IN ('DENY_RENT', 'CONFIRM_RENT'))")
     List<Rent> findAllByStateNotDone(long user_id, String renter_username);
 
-    @Query("SELECT r FROM Rent r WHERE r.renter_username = ?2 OR r.owner_id = ?1")
+    @Query("SELECT r FROM Rent r WHERE r.renter_username = ?2 OR r.owner_id = ?1 ORDER BY r.rent_id DESC ")
     List<Rent> findAllRent(long user_id, String renter_username);
 
     @Query("SELECT r FROM Rent r WHERE r.property.property_id = ?1")

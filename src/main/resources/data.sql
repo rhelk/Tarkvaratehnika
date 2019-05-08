@@ -26,11 +26,3 @@ INSERT INTO authorities VALUES ('peresau@toores.ee', 'ROLE_USER');
 INSERT INTO authorities VALUES ('jj@toores.ee', 'ROLE_ADMIN');
 INSERT INTO Rent (rent_id, property_id, owner_id, renter_username, state, rent_start, rent_end)
        VALUES (next value for rent_sequence, 2, 1, 'peresau@toores.ee', 'TO_RENT', '2089-6-20', '2089-6-30');
-
--- rent_id BIGINT PRIMARY KEY,
---   property_id BIGINT NOT NULL,
---   owner_id BIGINT NOT NULL,
---   renter BIGINT NOT NULL,
---   state VARCHAR(30) NOT NULL,
---   start DATE,
---   end DATE,

@@ -31,10 +31,7 @@ public class Rent {
     @SequenceGenerator(name = "r_seq", sequenceName = "rent_sequence", allocationSize = 1)
     private Long rent_id;
 
-//    public Long renter_id;
-
     public String renter_username;
-//    public Long property_id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -46,8 +43,6 @@ public class Rent {
     @Enumerated(EnumType.STRING)
     public State state;
 
-    //SQL Date so accuracy is day
-
     @Column(name = "rent_start")
     public Date start;
 
@@ -58,7 +53,6 @@ public class Rent {
         Rent result = new Rent();
 
         result.setRent_id(this.rent_id);
-//        result.setRenter_id(this.renter_id);
         result.setRenter_username(this.renter_username);
         result.setOwner_id(this.owner_id);
         result.setState(this.state);
