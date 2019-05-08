@@ -76,7 +76,7 @@ public class PropertyController {
      @GetMapping("api/property/mine")
      public List<Property> myProperties(Principal principal) {
 
-        System.out.println("In here");
+        System.out.println("In here - /property/mine");
 
         if (principal == null) {throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);}
 

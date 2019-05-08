@@ -73,6 +73,7 @@ public class UserController {
     public Users authCheck(Principal principal) {
 //        System.out.println("authCheck");
 //        System.out.println(principal.getName());
-        return userDao.findByUsername(principal.getName());}
+        return userDao.findByUsername(principal.getName());
+    }
 
 }
