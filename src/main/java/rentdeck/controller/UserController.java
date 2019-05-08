@@ -35,10 +35,8 @@ public class UserController {
     private UserDao userDao;
 
     @PostMapping("api/register")
-    public Users addUser(@Valid @RequestBody Users users, HttpServletResponse res) {
-
-        if (users.getUser_id() != null) return null;
-
+    public Users addUser(@RequestBody Users users, HttpServletResponse res) {
+        System.out.println(users);
         String token = JsonWebToken.genJWT(users.getUsername());
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
 

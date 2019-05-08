@@ -67,8 +67,8 @@
           .catch((err) => {
             console.log(err);
             that.loginError = true;
-            that.input.username = "";
-            that.input.password = ""
+            // that.input.username = "";
+            // that.input.password = ""
           })
       }
     }
