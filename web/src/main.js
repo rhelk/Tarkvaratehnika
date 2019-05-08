@@ -24,6 +24,7 @@ Vue.use(Firebase);
 
 Vue.use(VueRouter);
 
+
 const config = {
   aria: true,
   classNames: {},

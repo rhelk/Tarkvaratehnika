@@ -24,5 +24,16 @@ insert into property (property_id, title, description, address, county, municipa
                       'https://firebasestorage.googleapis.com/v0/b/tarkvaratehnika-1551709647803.appspot.com/o/images%2Fvbgfhbgfnjfksdjkfjlkdmhkbgfkhmlkgfmhgflkhmlkgf.jpg?alt=media&token=ea650c20-420e-47b4-889b-a8237f160de4', 3, 2, 2, 500);
 INSERT INTO authorities VALUES ('peresau@toores.ee', 'ROLE_USER');
 INSERT INTO authorities VALUES ('jj@toores.ee', 'ROLE_ADMIN');
-INSERT INTO Rent (rent_id, property_id, owner_id, renter_username, state, rent_start, rent_end)
-       VALUES (next value for rent_sequence, 2, 1, 'peresau@toores.ee', 'TO_RENT', '2089-6-20', '2089-6-30');
+INSERT INTO Rent (rent_id, property_id, owner_id, renter_username, state, start, end)
+       VALUES (next value for rent_sequence, 1, 2, 'peresau@toores.ee', 'TO_RENT', '2019-5-13', '2019-5-17');
+INSERT INTO Rent (rent_id, property_id, owner_id, renter_username, state, start, end)
+       VALUES (next value for rent_sequence, 2, 1, 'jj@toores.ee', 'CONFIRM_RENT', '2019-5-04', '2019-5-08');
+INSERT INTO Rent (rent_id, property_id, owner_id, renter_username, state, start, end)
+       VALUES (next value for rent_sequence, 3, 1, 'peresau@toores.ee', 'CONFIRM_RENT', '2019-5-09', '2019-5-10');
+-- rent_id BIGINT PRIMARY KEY,
+--   property_id BIGINT NOT NULL,
+--   owner_id BIGINT NOT NULL,
+--   renter BIGINT NOT NULL,
+--   state VARCHAR(30) NOT NULL,
+--   start DATE,
+--   end DATE,
